@@ -1,0 +1,29 @@
+# Haz Tu Camino
+
+> Plataforma de orientación vocacional para estudiantes de Perú: test, fichas de carreras con universidades y mallas curriculares, y simulaciones interactivas.
+
+## Páginas principales
+
+- [Inicio](/#/): portada, cómo funciona y carreras destacadas.
+- [Carreras](/#/carreras): catálogo de 32 carreras por área.
+- [Test vocacional](/#/test): cuestionario de 32 preguntas (5 minutos).
+- [Simulaciones](/#/simulaciones): casos interactivos con video, decisiones y puntaje.
+- [Planes](/#/planes): comparación de planes Gratis y Premium.
+- [Para colegios](/#/instituciones): solicitud de demo institucional.
+- [Iniciar sesión](/#/login) y [Crear cuenta](/#/register).
+
+## Qué ofrece
+
+- Perfil de afinidad por 8 áreas profesionales.
+- 32 carreras con descripción, habilidades, lugares de trabajo y cursos.
+- Ficha por carrera con universidades, mensualidad estimada y malla curricular por universidad.
+- 8 simulaciones de profesiones (3 gratis, 5 con plan Premium).
+- Comparador de carreras (Premium).
+
+## Tecnología
+
+- Frontend: React + Vite.
+- Backend: Node.js + Express (API REST).
+- Persistencia: archivo JSON en el servidor.
+
+Nota: prototipo demostrativo. Las mensualidades y mallas son datos de ejemplo y la activación Premium es simulada (sin cobro real).

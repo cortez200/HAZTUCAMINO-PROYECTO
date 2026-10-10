@@ -1,0 +1,311 @@
+{
+  "users": {
+    "demo@haztucamino.pe": {
+      "email": "demo@haztucamino.pe",
+      "name": "Alex Quispe",
+      "nivel": "secundaria",
+      "plan": "premium",
+      "done": true,
+      "answers": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 0,
+        "12": 0,
+        "13": 0,
+        "14": 0,
+        "15": 0,
+        "16": 0,
+        "17": 0,
+        "18": 0,
+        "19": 0,
+        "20": 0,
+        "21": 0,
+        "22": 0,
+        "23": 0,
+        "24": 0,
+        "25": 0,
+        "26": 0,
+        "27": 0,
+        "28": 0,
+        "29": 0,
+        "30": 0,
+        "31": 0,
+        "32": 0
+      },
+      "unknown": [],
+      "sims": {
+        "salud-sim": 0
+      },
+      "saved": [],
+      "history": [
+        {
+          "date": "10 oct. 2026",
+          "top": [
+            {
+              "id": "salud",
+              "nombre": "Salud",
+              "pct": 0
+            },
+            {
+              "id": "tecnologia",
+              "nombre": "Tecnología e Ingeniería",
+              "pct": 0
+            },
+            {
+              "id": "ciencias",
+              "nombre": "Ciencias",
+              "pct": 0
+            }
+          ]
+        },
+        {
+          "date": "10 oct. 2026",
+          "top": [
+            {
+              "id": "arte",
+              "nombre": "Arte y Diseño",
+              "pct": 88
+            },
+            {
+              "id": "negocios",
+              "nombre": "Negocios",
+              "pct": 63
+            },
+            {
+              "id": "derecho",
+              "nombre": "Derecho y Comunicación",
+              "pct": 63
+            }
+          ]
+        },
+        {
+          "date": "10 oct. 2026",
+          "top": [
+            {
+              "id": "arte",
+              "nombre": "Arte y Diseño",
+              "pct": 75
+            },
+            {
+              "id": "derecho",
+              "nombre": "Derecho y Comunicación",
+              "pct": 75
+            },
+            {
+              "id": "ciencias",
+              "nombre": "Ciencias",
+              "pct": 63
+            }
+          ]
+        }
+      ],
+      "createdAt": "2026-10-10T04:23:34.953Z",
+      "pwdSalt": "46355f3a9c6003c44f0b45fda8bd8e08",
+      "pwdHash": "7bbcae2cec985ed98e25fb14ead6424b4343807baadd59c44eeddedc0c98a0a6e806bfb69a00dff0e369067f74f6e61d1217654890f7ab853c260ec590743887",
+      "premiumSince": "2026-10-10T17:08:16.489Z"
+    },
+    "maria@test.pe": {
+      "email": "maria@test.pe",
+      "name": "Maria Test",
+      "nivel": "secundaria",
+      "plan": "premium",
+      "done": true,
+      "answers": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 0,
+        "12": 0,
+        "13": 0,
+        "14": 0,
+        "15": 0,
+        "16": 0,
+        "17": 0,
+        "18": 0,
+        "19": 0,
+        "20": 0,
+        "21": 0,
+        "22": 0,
+        "23": 0,
+        "24": 0,
+        "25": 0,
+        "26": 0,
+        "27": 0,
+        "28": 0,
+        "29": 0,
+        "30": 0,
+        "31": 0,
+        "32": 0
+      },
+      "unknown": [],
+      "sims": {
+        "salud-sim": 4
+      },
+      "saved": [
+        "medicina"
+      ],
+      "history": [
+        {
+          "date": "9 oct. 2026",
+          "top": [
+            {
+              "id": "salud",
+              "nombre": "Salud",
+              "pct": 0
+            },
+            {
+              "id": "tecnologia",
+              "nombre": "Tecnología e Ingeniería",
+              "pct": 0
+            },
+            {
+              "id": "ciencias",
+              "nombre": "Ciencias",
+              "pct": 0
+            }
+          ]
+        },
+        {
+          "date": "9 oct. 2026",
+          "top": [
+            {
+              "id": "salud",
+              "nombre": "Salud",
+              "pct": 100
+            },
+            {
+              "id": "tecnologia",
+              "nombre": "Tecnología e Ingeniería",
+              "pct": 100
+            },
+            {
+              "id": "ciencias",
+              "nombre": "Ciencias",
+              "pct": 100
+            }
+          ]
+        },
+        {
+          "date": "9 oct. 2026",
+          "top": [
+            {
+              "id": "negocios",
+              "nombre": "Negocios",
+              "pct": 88
+            },
+            {
+              "id": "educacion",
+              "nombre": "Educación y Social",
+              "pct": 88
+            },
+            {
+              "id": "arte",
+              "nombre": "Arte y Diseño",
+              "pct": 88
+            }
+          ]
+        },
+        {
+          "date": "9 oct. 2026",
+          "top": [
+            {
+              "id": "ciencias",
+              "nombre": "Ciencias",
+              "pct": 63
+            },
+            {
+              "id": "arte",
+              "nombre": "Arte y Diseño",
+              "pct": 63
+            },
+            {
+              "id": "salud",
+              "nombre": "Salud",
+              "pct": 50
+            }
+          ]
+        },
+        {
+          "date": "9 oct. 2026",
+          "top": [
+            {
+              "id": "salud",
+              "nombre": "Salud",
+              "pct": 100
+            },
+            {
+              "id": "tecnologia",
+              "nombre": "Tecnología e Ingeniería",
+              "pct": 100
+            },
+            {
+              "id": "ciencias",
+              "nombre": "Ciencias",
+              "pct": 100
+            }
+          ]
+        }
+      ],
+      "createdAt": "2026-10-10T04:23:47.334Z",
+      "pwdSalt": "3328f63567130e3ba7924dff08917c14",
+      "pwdHash": "a82567fab7372a4e8d4f7e45d015dced60ff70eb770941c1d175518729b3e2741afbb4271869a91a03c0d20565361ba1db034224b97f135f45066b05277d846e",
+      "premiumSince": "2026-10-10T04:24:22.881Z"
+    },
+    "test1@example.com": {
+      "email": "test1@example.com",
+      "name": "Test User",
+      "nivel": "secundaria",
+      "plan": "free",
+      "done": false,
+      "answers": {},
+      "unknown": [],
+      "sims": {},
+      "saved": [],
+      "history": [],
+      "createdAt": "2026-10-10T17:19:35.902Z",
+      "pwdSalt": "3372be514c628e5b2e9af5ee9a423f82",
+      "pwdHash": "d46fe44bdb3720e647077086febef441d81050b81228d5871229b814363d4208e37e4eebe963909a3d45da6930a6ab3249d25e5ed83fc6859dfac30c3ca588f8"
+    },
+    "maria@example.com": {
+      "email": "maria@example.com",
+      "name": "Maria Lopez",
+      "nivel": "cambio",
+      "plan": "free",
+      "done": false,
+      "answers": {},
+      "unknown": [],
+      "sims": {},
+      "saved": [],
+      "history": [],
+      "createdAt": "2026-10-10T17:20:21.902Z",
+      "pwdSalt": "09aecfb3d93258b1e132f5f9e3606d68",
+      "pwdHash": "6dc52d0ffcc416075ed3cd1aa2c183bab62e0c90987f8f9f4b4a14e3b05b03e896de126654b9503434f4cab622529e3e0fc27458a7c647f36a2d2afe33fb56dd"
+    }
+  },
+  "requests": [
+    {
+      "id": "b3837f8f-6ab8-4304-904c-6053cab58768",
+      "center": "Colegio San Martin",
+      "region": "Lima",
+      "tipo": "Colegio",
+      "contacto": "dir@sanmartin.edu.pe",
+      "mensaje": "3 aulas de 5to",
+      "at": "2026-10-10T04:25:19.747Z"
+    }
+  ]
+}

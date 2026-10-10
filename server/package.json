@@ -1,0 +1,16 @@
+{
+  "name": "haz-tu-camino-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "API REST de Haz Tu Camino (orientación vocacional)",
+  "scripts": {
+    "dev": "node --disable-warning=ExperimentalWarning --env-file-if-exists=.env --watch index.js",
+    "start": "node --disable-warning=ExperimentalWarning --env-file-if-exists=.env index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "nodemailer": "^10.1.0"
+  }
+}

@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#7C3AED" />
+<title>Haz Tu Camino — Descubre qué carrera va contigo</title>
+<meta name="description" content="Test vocacional, carreras, videos y simulaciones para descubrir tu futuro profesional. Hecho en Perú." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  /* ===== TOKENS ===== */
+  :root {
+    --pri: #7C3AED;
+    --pri-d: #6D28D9;
+    --pri-soft: #EDE9FE;
+    --ink: #1E1B2E;
+    --mut: #6B7280;
+    --line: #E7E5EF;
+    --bg: #F6F6FB;
+    --card: #FFFFFF;
+    --amber: #F59E0B;
+    --danger: #DC2626;
+    --ok: #059669;
+    --radius: 18px;
+    --radius-lg: 24px;
+    --shadow: 0 6px 24px rgba(30, 27, 46, .08);
+    --shadow-lg: 0 14px 44px rgba(30, 27, 46, .14);
+    --area: #7C3AED;
+    --area-soft: #EDE9FE;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Nunito', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  img { max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; }
+  :focus-visible { outline: 3px solid var(--pri); outline-offset: 2px; border-radius: 8px; }
+
+  /* ===== LAYOUT ===== */
+  .layout { max-width: 1080px; margin: 0 auto; padding: 0 16px 96px; }
+  .page { margin-top: 20px; }
+  .grid { display: grid; gap: 16px; }
+  .g2 { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+  .center { text-align: center; }
+
+  /* ===== TOPBAR ===== */
+  .top {
+    position: sticky; top: 0; z-index: 40;
+    background: rgba(255,255,255,.92); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .top .layout { display: flex; align-items: center; gap: 18px; padding-top: 10px; padding-bottom: 10px; margin-bottom: 0; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 1.05rem; }
+  .logo .mark {
+    width: 38px; height: 38px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--pri), #A855F7);
+    display: grid; place-items: center; color: #fff; font-size: 20px;
+    box-shadow: 0 4px 12px rgba(124,58,237,.35);
+  }
+  .top nav { display: none; gap: 4px; flex: 1; margin-left: 8px; }
+  .top .tlink {
+    padding: 8px 13px; border-radius: 12px; border: 0; background: transparent;
+    font-weight: 700; font-size: .92rem; color: var(--mut); cursor: pointer;
+    display: flex; align-items: center; gap: 6px; transition: .15s;
+  }
+  .top .tlink:hover { background: var(--bg); color: var(--ink); }
+  .top .tlink.on { background: var(--pri-soft); color: var(--pri-d); }
+  .top .grow { flex: 1; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 13px; border-radius: 999px; font-weight: 800; font-size: .85rem;
+    border: 2px solid transparent; cursor: pointer; transition: .15s;
+  }
+  .pill.free { background: var(--bg); color: var(--mut); border-color: var(--line); }
+  .pill.gold { background: #FEF3C7; color: #92400E; border-color: #FCD34D; }
+  .pill:active { transform: scale(.96); }
+
+  /* ===== BOTTOM NAV (móvil) ===== */
+  .bottom {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    background: rgba(255,255,255,.96); backdrop-filter: blur(10px);
+    border-top: 1px solid var(--line);
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+    box-shadow: 0 -6px 24px rgba(30,27,46,.06);
+  }
+  .bitem {
+    border: 0; background: transparent; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 8px 2px; border-radius: 14px;
+    font-size: .68rem; font-weight: 800; color: var(--mut); transition: .15s;
+  }
+  .bitem .ico { font-size: 20px; line-height: 1; }
+  .bitem.on { color: var(--pri-d); background: var(--pri-soft); }
+
+  /* ===== CARDS ===== */
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 20px; }
+  .hero { border-radius: var(--radius-lg); padding: 28px 22px; color: #fff; position: relative; overflow: hidden; }
+  .h-pri { background: linear-gradient(135deg, #4C1D95 0%, #7C3AED 55%, #A855F7 100%); }
+  .h-area { background: linear-gradient(135deg, var(--area), #0000 140%); }
+  .chip { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 999px; font-size: .78rem; font-weight: 800; }
+
+  /* ===== BOTONES ===== */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 48px; padding: 10px 18px; border-radius: 15px; border: 0;
+    font-weight: 800; font-size: 1rem; cursor: pointer; transition: .15s;
+    text-align: center; white-space: nowrap;
+  }
+  .btn:active { transform: scale(.97); }
+  .btn:disabled { opacity: .5; pointer-events: none; }
+  .pri { background: var(--pri); color: #fff; box-shadow: 0 6px 16px rgba(124,58,237,.32); }
+  .pri:hover { background: var(--pri-d); }
+  .opt { background: var(--pri-soft); color: var(--pri-d); }
+  .line { background: #fff; color: var(--ink); border: 2px solid var(--line); }
+  .line:active { background: var(--bg); }
+  .ghost { background: transparent; color: var(--pri-d); }
+  .done { background: var(--pri-soft); color: var(--pri-d); }
+  .gold { background: linear-gradient(135deg, #F59E0B, #F97316); color: #fff; box-shadow: 0 6px 16px rgba(245,158,11,.35); }
+  .danger { background: #FEE2E2; color: var(--danger); }
+  .w100 { width: 100%; }
+  .sml { min-height: 42px; padding: 8px 14px; font-size: .9rem; border-radius: 13px; }
+  .row { display: flex; align-items: center; gap: 10px; }
+  .row.end { justify-content: flex-end; }
+  .wrap { flex-wrap: wrap; }
+
+  /* ===== FORM ===== */
+  .label { display: block; font-size: .85rem; font-weight: 800; color: var(--mut); margin: 0 0 6px; }
+  .input {
+    width: 100%; min-height: 50px; border: 2px solid var(--line); border-radius: 14px;
+    padding: 10px 14px; font-size: 1rem; font-family: inherit; background: #fff; color: var(--ink);
+    transition: .15s;
+  }
+  .input:focus { outline: none; border-color: var(--pri); box-shadow: 0 0 0 3px var(--pri-soft); }
+  .field { margin-bottom: 16px; }
+  .err { color: var(--danger); font-size: .8rem; font-weight: 700; margin-top: 5px; display: flex; align-items: center; gap: 5px; }
+  .hint { font-size: .82rem; color: var(--mut); margin-top: 4px; }
+
+  .seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .seg button {
+    min-height: 50px; border-radius: 14px; border: 2px solid var(--line); background: #fff;
+    font-weight: 800; font-size: .9rem; cursor: pointer; transition: .15s; padding: 8px;
+  }
+  .seg button.on { border-color: var(--pri); background: var(--pri-soft); color: var(--pri-d); }
+
+  /* ===== TEST ===== */
+  .test-card { max-width: 620px; margin: 0 auto; }
+  .tb { height: 12px; background: #EAE8F2; border-radius: 999px; overflow: hidden; }
+  .tb > span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--pri), #A855F7); transition: width .3s; }
+  .answer {
+    width: 100%; display: flex; align-items: center; gap: 14px; text-align: left;
+    min-height: 66px; padding: 12px 16px; border-radius: var(--radius);
+    border: 2px solid var(--line); background: #fff; cursor: pointer; transition: .15s;
+    font-weight: 700; font-size: 1rem; color: var(--ink);
+  }
+  .answer:hover { border-color: var(--pri); transform: translateY(-1px); }
+  .answer:active { transform: scale(.98); }
+  .answer .e { font-size: 26px; }
+  .answer .pts { margin-left: auto; font-size: .8rem; font-weight: 800; color: var(--mut); }
+  .mini { background: none; border: 0; color: var(--mut); font-weight: 700; font-size: .88rem; cursor: pointer; padding: 8px; text-decoration: underline; text-decoration-style: dotted; }
+  .mood { background: var(--pri-soft); border-radius: var(--radius); padding: 14px; margin: 16px 0; display: flex; gap: 12px; align-items: flex-start; }
+  .mood b { display: block; color: var(--pri-d); }
+
+  /* ===== CHART ===== */
+  .bar-row { display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: center; margin-bottom: 14px; }
+  .bar-track { height: 18px; background: #EAE8F2; border-radius: 999px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 999px; min-width: 6px; transition: width .5s; }
+  .bar-lbl { display: flex; justify-content: space-between; font-size: .82rem; font-weight: 800; margin-bottom: 4px; }
+
+  /* ===== LISTAS / FILAS ===== */
+  .list { display: grid; gap: 12px; }
+  .krow {
+    display: flex; align-items: center; gap: 14px; padding: 14px;
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    transition: .15s;
+  }
+  .krow:active { transform: scale(.99); }
+  .krow .grow { flex: 1; min-width: 0; }
+  .krow h4 { font-size: .98rem; font-weight: 800; }
+  .krow p { font-size: .85rem; color: var(--mut); }
+  .kico { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; flex-shrink: 0; font-size: 26px; background: var(--area-soft); }
+
+  .city { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); font-size: .8rem; font-weight: 700; color: var(--mut); cursor: pointer; transition: .15s; }
+  .city.on { background: var(--area-soft); border-color: var(--area); color: #fff; }
+  .city.on { color: #fff; background: var(--area); border-color: var(--area); }
+
+  .tag { display: inline-block; padding: 5px 10px; border-radius: 10px; background: var(--bg); border: 1px solid var(--line); font-size: .8rem; font-weight: 700; }
+  .ul { list-style: none; display: grid; gap: 8px; }
+  .ul li { display: flex; gap: 10px; align-items: flex-start; font-size: .92rem; }
+  .ul li::before { content: "✔"; color: var(--ok); font-weight: 900; }
+
+  /* ===== LOCK / PREMIUM ===== */
+  .lock {
+    position: relative; border-radius: var(--radius); border: 2px dashed #D6C7F5;
+    background: #F7F4FD; padding: 16px; min-height: 120px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+    text-align: center; color: #6D28D9;
+  }
+  .lock .emo { font-size: 30px; }
+  .lock .small { font-size: .85rem; font-weight: 700; color: var(--mut); }
+
+  /* ===== COMPARAR ===== */
+  .cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .cmp-block { border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; background: #fff; }
+  .cmp-block h5 { font-size: .85rem; font-weight: 800; color: #fff; background: var(--area); padding: 7px 12px; border-radius: 10px; margin-bottom: 10px; }
+  .cmp-row { border-bottom: 1px dashed var(--line); padding: 10px 0; }
+  .cmp-row:last-child { border-bottom: 0; }
+  .cmp-row .k { font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; font-weight: 800; color: var(--mut); }
+  .cmp-row .v { font-size: .9rem; font-weight: 700; margin-top: 3px; }
+
+  /* ===== MODAL / TOAST ===== */
+  .overlay { position: fixed; inset: 0; z-index: 60; background: rgba(30,27,46,.55); backdrop-filter: blur(4px); display: grid; place-items: center; padding: 18px; animation: none; }
+  .modal { width: 100%; max-width: 480px; background: #fff; border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-lg); animation: pop .2s ease-out; max-height: 90vh; overflow: auto; }
+  .modal h3 { font-size: 1.2rem; font-weight: 900; }
+  @keyframes pop { from { transform: translateY(14px); opacity: 0; } }
+  #toast {
+    position: fixed; left: 50%; bottom: 86px; transform: translateX(-50%);
+    z-index: 80; background: var(--ink); color: #fff; font-weight: 800; font-size: .9rem;
+    padding: 12px 20px; border-radius: 999px; box-shadow: var(--shadow-lg);
+    opacity: 0; pointer-events: none; transition: .25s; display: flex; gap: 8px; align-items: center;
+    max-width: calc(100vw - 32px); text-align: center;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(-6px); }
+
+  /* ===== LANDING ===== */
+  .landing { max-width: 1080px; margin: 0 auto; padding: 20px 18px 40px; }
+  .land-hero { text-align: center; padding: 26px 12px 8px; }
+  .land-hero .big { font-size: 2.5rem; font-weight: 900; letter-spacing: -.02em; line-height: 1.1; }
+  .land-hero .big em { font-style: normal; background: linear-gradient(90deg, var(--pri), #A855F7); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .land-hero p { color: var(--mut); font-size: 1.05rem; max-width: 420px; margin: 12px auto 22px; font-weight: 600; }
+  .step { display: flex; gap: 14px; align-items: flex-start; background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 16px; box-shadow: var(--shadow); }
+  .step .n { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-weight: 900; font-size: 1.1rem; flex-shrink: 0; background: var(--pri-soft); color: var(--pri-d); }
+  .step b { display: block; font-size: 1rem; }
+  .step small { color: var(--mut); font-weight: 600; font-size: .86rem; }
+  .badge { font-size: .72rem; font-weight: 800; padding: 3px 8px; border-radius: 8px; letter-spacing: .03em; }
+  .badge.free { background: var(--bg); color: var(--mut); }
+  .badge.gold { background: #FEF3C7; color: #92400E; }
+
+  footer.tiny { text-align: center; color: var(--mut); font-size: .8rem; font-weight: 700; margin-top: 34px; }
+
+  @media (min-width: 900px) {
+    .top nav { display: flex; }
+    .bottom { display: none; }
+    .layout { padding-bottom: 40px; }
+    .land-hero .big { font-size: 3.2rem; }
+    #toast { bottom: 32px; }
+  }
+</style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="toast"></div>
+
+<script>
+/* ============================================================
+   HAZ TU CAMINO — Prototipo web funcional (orientación vocacional)
+   Estructura: DATOS → STORE → UTILIDADES → ROUTER → VISTAS → BOOT
+   ============================================================ */
+
+/* ===================== DATOS ===================== */
+const AREAS = [
+  { id: 'salud',       nombre: 'Salud',                    emoji: '🩺', color: '#E11D48', soft: '#FFE4EC', frase: 'Tu talento es cuidar de las personas.' },
+  { id: 'tecnologia',  nombre: 'Tecnología e Ingeniería',  emoji: '💻', color: '#2563EB', soft: '#DBEAFE', frase: 'Te apasiona crear y resolver con tecnología.' },
+  { id: 'ciencias',    nombre: 'Ciencias',                 emoji: '🔬', color: '#7C3AED', soft: '#EDE9FE', frase: 'Tu curiosidad por el porqué es tu motor.' },
+  { id: 'negocios',    nombre: 'Negocios',                 emoji: '💼', color: '#F59E0B', soft: '#FEF3C7', frase: 'Tienes visión para emprender y liderar.' },
+  { id: 'educacion',   nombre: 'Educación y Social',       emoji: '📚', color: '#0EA5E9', soft: '#E0F2FE', frase: 'Tu vocación es enseñar y apoyar a otros.' },
+  { id: 'arte',        nombre: 'Arte y Diseño',            emoji: '🎨', color: '#EC4899', soft: '#FCE7F3', frase: 'Tu mundo se ve, se escucha y se siente distinto.' },
+  { id: 'derecho',     nombre: 'Derecho y Comunicación',   emoji: '⚖️', color: '#6366F1', soft: '#E0E7FF', frase: 'Te mueven la justicia y el poder de las palabras.' },
+  { id: 'naturaleza',  nombre: 'Naturaleza y Ambiente',    emoji: '🌱', color: '#10B981', soft: '#D1FAE5', frase: 'Tu fuerza está en proteger el planeta.' }
+];
+
+const area = (id) => AREAS.find(a => a.id === id);
+
+/* 32 carreras: 8 áreas × 4 */
+const CARRERAS = [
+  /* ——— Salud 🩺 ——— */
+  { id:'medicina', area:'salud', emoji:'🩺', nombre:'Medicina', describcion:'Diagnosticar y tratar enfermedades para mantener la salud de las personas.',
+    habilidades:['Razonamiento clínico','Sintetizar información','Trabajo bajo presión','Empatía con pacientes'],
+    lugares:['Hospitales','Clínicas privadas','Centros de salud comunitarios'],
+    cursos:['Anatomía humana','Fisiología','Farmacología básica'],
+    emprender:['Consultoría médica en línea','Talleres de prevención de salud'],
+    especializaciones:['Cardiología','Pediatría','Cirugía'] },
+  { id:'enfermeria', area:'salud', emoji:'🏥', nombre:'Enfermería', describcion:'Acompañar y cuidar a pacientes en su recuperación día a día.',
+    habilidades:['Cuidado del paciente','Observación','Organización','Comunicación clara'],
+    lugares:['Hospitales y clínicas','Hogares y cuidado domiciliario','Centros de emergencia'],
+    cursos:['Cuidados básicos de enfermería','Primeros auxilios','Administración de medicamentos'],
+    emprender:['Cuidado de adultos mayores a domicilio','Programa de vacunación comunitaria'],
+    especializaciones:['Enfermería pediátrica','Cuidados intensivos','Enfermería geriátrica'] },
+  { id:'psicologia', area:'salud', emoji:'🧠', nombre:'Psicología', describcion:'Comprender la mente y ayudar con las emociones y la conducta.',
+    habilidades:['Escucha activa','Análisis del comportamiento','Empatía','Ética'],
+    lugares:['Consultorios privados','Colegios y empresas','Centros de salud mental'],
+    cursos:['Psicología del desarrollo','Psicopatología','Técnicas de entrevista'],
+    emprender:['Coaching emocional','Talleres de bienestar empresarial'],
+    especializaciones:['Psicología clínica','Psicología educativa','Psicología organizacional'] },
+  { id:'nutricion', area:'salud', emoji:'🥗', nombre:'Nutrición', describcion:'Mejorar la salud de las personas a través de la alimentación.',
+    habilidades:['Conocimiento de alimentos','Educación a pacientes','Análisis de hábitos','Planificación'],
+    lugares:['Hospitales','Centros deportivos','Consultas privadas'],
+    cursos:['Nutrición básica','Dietética clínica','Nutrición deportiva'],
+    emprender:['Planes de alimentación en línea','Asesoría nutricional a empresas'],
+    especializaciones:['Nutrición clínica','Nutrición deportiva','Nutrición comunitaria'] },
+  /* ——— Tecnología e Ingeniería 💻 ——— */
+  { id:'ing-software', area:'tecnologia', emoji:'💻', nombre:'Ingeniería de Software', describcion:'Crear apps y programas que resuelven problemas reales.',
+    habilidades:['Programación','Lógica','Resolución de problemas','Trabajo en equipo'],
+    lugares:['Empresas de software','Startups tecnológicas','Remoto / freelance'],
+    cursos:['Lenguajes de programación','Bases de datos','Desarrollo web'],
+    emprender:['Desarrollar apps propias','Agencia de desarrollo digital'],
+    especializaciones:['Inteligencia artificial','Desarrollo móvil','Ciberseguridad'] },
+  { id:'ing-industrial', area:'tecnologia', emoji:'⚙️', nombre:'Ingeniería Industrial', describcion:'Optimizar procesos para que empresas y fábricas sean más eficientes.',
+    habilidades:['Optimización','Pensamiento analítico','Gestión de procesos','Liderazgo'],
+    lugares:['Fábricas y plantas','Empresas de logística','Consultoría de operaciones'],
+    cursos:['Gestión de procesos','Cadena de suministro','Control de calidad'],
+    emprender:['Consultoría en eficiencia','Comercio con logística propia'],
+    especializaciones:['Supply chain','Lean manufacturing','Gestión de proyectos'] },
+  { id:'ing-civil', area:'tecnologia', emoji:'🏗️', nombre:'Ingeniería Civil', describcion:'Diseñar y construir puentes, edificios y carreteras.',
+    habilidades:['Cálculo y física aplicada','Diseño de estructuras','Gestión de obra','Seguridad'],
+    lugares:['Empresas constructoras','Gobiernos locales','Consultoras de diseño'],
+    cursos:['Estática y resistencia','Diseño de concreto','Topografía'],
+    emprender:['Consultoría de diseño estructural','Rehabilitación de viviendas'],
+    especializaciones:['Estructuras','Transportes','Hidráulica'] },
+  { id:'mecatronica', area:'tecnologia', emoji:'🤖', nombre:'Mecatrónica', describcion:'Combinar mecánica, electrónica y programación para crear máquinas inteligentes.',
+    habilidades:['Mecánica y electrónica','Programación de sistemas','Automatización','Innovación'],
+    lugares:['Industria de automatización','Plantas de manufactura','Empresas de robótica'],
+    cursos:['Robótica','Sensores y actuadores','Control automático'],
+    emprender:['Sistemas de automatización para pymes','Prototipos electrónicos'],
+    especializaciones:['Robótica industrial','Automatización','Mantenimiento inteligente'] },
+  /* ——— Ciencias 🔬 ——— */
+  { id:'biologia', area:'ciencias', emoji:'🔬', nombre:'Biología', describcion:'Estudiar la vida: desde células hasta ecosistemas completos.',
+    habilidades:['Observación','Método científico','Manejo de laboratorio','Síntesis de datos'],
+    lugares:['Laboratorios','Centros de investigación','Empresas farmacéuticas'],
+    cursos:['Biología celular','Genética','Microbiología'],
+    emprender:['Consultoría ambiental','Laboratorio de análisis de alimentos'],
+    especializaciones:['Genética','Microbiología','Biología molecular'] },
+  { id:'quimica', area:'ciencias', emoji:'🧪', nombre:'Química', describcion:'Comprender las sustancias y crear nuevos materiales y productos.',
+    habilidades:['Precisión','Método científico','Pensamiento analítico','Seguridad de laboratorio'],
+    lugares:['Laboratorios','Plantas industriales','Industria de alimentos y cosmética'],
+    cursos:['Química orgánica','Química analítica','Fisicoquímica'],
+    emprender:['Producción de cosmética natural','Control de calidad de alimentos'],
+    especializaciones:['Química farmacéutica','Química ambiental','Química de materiales'] },
+  { id:'matematica', area:'ciencias', emoji:'📊', nombre:'Matemática y Estadística', describcion:'Usar números y datos para resolver problemas y decidir mejor.',
+    habilidades:['Abstracción','Razonamiento lógico','Modelado','Análisis de datos'],
+    lugares:['Bancos y finanzas','Empresas de tecnología','Centros de investigación'],
+    cursos:['Cálculo','Probabilidad','Estadística aplicada'],
+    emprender:['Análisis de datos para negocios','Asesoría en finanzas personales'],
+    especializaciones:['Ciencia de datos','Estadística aplicada','Modelado matemático'] },
+  { id:'fisica', area:'ciencias', emoji:'🔭', nombre:'Física', describcion:'Entender cómo funciona el universo: materia, energía y movimiento.',
+    habilidades:['Pensamiento abstracto','Resolución de problemas','Matemáticas avanzadas','Experimentación'],
+    lugares:['Universidades e investigación','Empresas de energía','Industria tecnológica'],
+    cursos:['Mecánica','Electromagnetismo','Física moderna'],
+    emprender:['Desarrollo de simulaciones','Asesoría en energía renovable'],
+    especializaciones:['Astrofísica','Física de materiales','Energías renovables'] },
+  /* ——— Negocios 💼 ——— */
+  { id:'administracion', area:'negocios', emoji:'💼', nombre:'Administración', describcion:'Organizar recursos, personas y procesos para que una empresa funcione.',
+    habilidades:['Liderazgo','Planificación','Gestión de equipos','Toma de decisiones'],
+    lugares:['Empresas de cualquier rubro','Pymes y startups','Organizaciones públicas'],
+    cursos:['Gestión de empresas','Contabilidad general','Liderazgo'],
+    emprender:['Emprender tu propio negocio','Consultoría de gestión para pymes'],
+    especializaciones:['Gestión de proyectos','Recursos humanos','Finanzas'] },
+  { id:'contabilidad', area:'negocios', emoji:'🧾', nombre:'Contabilidad', describcion:'Llevar las cuentas de una empresa y mantener sus finanzas en orden.',
+    habilidades:['Precisión','Manejo de números','Cumplimiento normativo','Orden'],
+    lugares:['Estudios contables','Empresas','Organismos públicos'],
+    cursos:['Contabilidad general','Costos y presupuestos','Tributación'],
+    emprender:['Servicios contables para emprendedores','Contabilidad freelance'],
+    especializaciones:['Tributación','Auditoría','Finanzas corporativas'] },
+  { id:'marketing', area:'negocios', emoji:'📈', nombre:'Marketing', describcion:'Conectar productos y marcas con las personas que los necesitan.',
+    habilidades:['Creatividad','Análisis de mercado','Comunicación','Conocimiento digital'],
+    lugares:['Agencias de publicidad','Áreas de marketing','Ventas en línea'],
+    cursos:['Investigación de mercados','Marketing digital','Marca personal'],
+    emprender:['Agencia de marketing digital','Vender productos por redes'],
+    especializaciones:['Marketing digital','Publicidad','Branding'] },
+  { id:'economia', area:'negocios', emoji:'📉', nombre:'Economía', describcion:'Analizar cómo se producen, distribuyen y usan los recursos.',
+    habilidades:['Razonamiento analítico','Datos y estadística','Visión macro y micro','Comunicación'],
+    lugares:['Bancos','Gobierno y política pública','Centros de investigación'],
+    cursos:['Microeconomía','Macroeconomía','Econometría'],
+    emprender:['Análisis económico para medios','Asesoría de inversión personal'],
+    especializaciones:['Economía financiera','Economía pública','Econometría'] },
+  /* ——— Educación y Social 📚 ——— */
+  { id:'educacion', area:'educacion', emoji:'📚', nombre:'Educación', describcion:'Enseñar y acompañar a estudiantes en su aprendizaje y desarrollo.',
+    habilidades:['Comunicación','Paciencia','Planificación de clases','Motivación'],
+    lugares:['Colegios','Institutos','Centros de capacitación'],
+    cursos:['Didáctica','Psicología del aprendizaje','Evaluación educativa'],
+    emprender:['Clases particulares en línea','Talleres de refuerzo escolar'],
+    especializaciones:['Educación inicial','Educación especial','Educación tecnológica'] },
+  { id:'trabajo-social', area:'educacion', emoji:'🤝', nombre:'Trabajo Social', describcion:'Apoyar a personas y comunidades en situación de necesidad.',
+    habilidades:['Empatía','Gestión de casos','Trabajo comunitario','Comunicación'],
+    lugares:['Obras sociales','ONG','Gobiernos locales'],
+    cursos:['Intervención social','Derechos humanos','Trabajo con familias'],
+    emprender:['Gestión de proyectos sociales','Acompañamiento comunitario'],
+    especializaciones:['Trabajo con infancia','Salud comunitaria','Inclusión social'] },
+  { id:'sociologia', area:'educacion', emoji:'🌎', nombre:'Sociología', describcion:'Estudiar cómo se organizan y relacionan las personas en sociedad.',
+    habilidades:['Investigación social','Análisis crítico','Datos y encuestas','Escritura'],
+    lugares:['Universidades','Centros de opinión y estudios','ONG'],
+    cursos:['Teoría social','Métodos de investigación','Sociología urbana'],
+    emprender:['Estudios de opinión para marcas','Consultoría social'],
+    especializaciones:['Sociología urbana','Sociología educativa','Análisis de población'] },
+  { id:'turismo', area:'educacion', emoji:'🏨', nombre:'Turismo y Hotelería', describcion:'Crear experiencias inolvidables para quienes viajan y conocen lugares.',
+    habilidades:['Atención al cliente','Organización','Conocimiento de destinos','Idiomas'],
+    lugares:['Hoteles y resorts','Agencias de viajes','Empresas de turismo'],
+    cursos:['Gestión hotelera','Marketing turístico','Atención al huésped'],
+    emprender:['Agencia de viajes boutique','Experiencias turísticas locales'],
+    especializaciones:['Gestión hotelera','Turismo sostenible','Eventos'] },
+  /* ——— Arte y Diseño 🎨 ——— */
+  { id:'diseño-grafico', area:'arte', emoji:'🎨', nombre:'Diseño Gráfico', describcion:'Comunicar ideas con imágenes, colores y tipografías.',
+    habilidades:['Creatividad','Herramientas de diseño','Composición','Atención al detalle'],
+    lugares:['Agencias de diseño','Estudio freelance','Empresas con marca propia'],
+    cursos:['Fundamentos del diseño','Tipografía','Diseño de marca'],
+    emprender:['Estudio de diseño freelance','Plantillas y recursos digitales'],
+    especializaciones:['Diseño de marca','Diseño editorial','Diseño de interfaces'] },
+  { id:'arquitectura', area:'arte', emoji:'🏛️', nombre:'Arquitectura', describcion:'Diseñar espacios donde las personas viven, trabajan y disfrutan.',
+    habilidades:['Creatividad espacial','Dibujo técnico','Planificación','Solución de problemas'],
+    lugares:['Estudios de arquitectura','Constructoras','Diseño de interiores'],
+    cursos:['Dibujo y representación','Historia del arte','Diseño arquitectónico'],
+    emprender:['Diseño de interiores freelance','Rehabilitación de espacios'],
+    especializaciones:['Diseño sostenible','Interiorismo','Urbanismo'] },
+  { id:'audiovisual', area:'arte', emoji:'🎬', nombre:'Comunicación Audiovisual', describcion:'Contar historias con videos, fotos y sonido.',
+    habilidades:['Creatividad','Manejo de cámaras','Edición de audio y video','Narrativa visual'],
+    lugares:['Productoras','Televisión y medios digitales','Agencias de contenido'],
+    cursos:['Realización audiovisual','Guion y narrativa','Edición de video'],
+    emprender:['Productora de contenido para marcas','Videos para redes sociales'],
+    especializaciones:['Edición','Producción','Animación digital'] },
+  { id:'moda', area:'arte', emoji:'👗', nombre:'Diseño de Moda', describcion:'Crear ropa y accesorios que expresan estilo e identidad.',
+    habilidades:['Creatividad','Ilustración de moda','Conocimiento de textiles','Tendencias'],
+    lugares:['Marcas de ropa','Talleres de confección','Producción de moda'],
+    cursos:['Ilustración de moda','Patronaje','Textiles'],
+    emprender:['Marca de ropa propia','Colecciones para tiendas'],
+    especializaciones:['Moda sostenible','Alta costura','Estilismo'] },
+  /* ——— Derecho y Comunicación ⚖️ ——— */
+  { id:'derecho', area:'derecho', emoji:'⚖️', nombre:'Derecho', describcion:'Conocer las leyes y defender los derechos de personas y organizaciones.',
+    habilidades:['Razonamiento jurídico','Argumentación','Expresión oral y escrita','Ética'],
+    lugares:['Estudios de abogados','Poder judicial','Empresas'],
+    cursos:['Derecho civil','Derecho penal','Derecho constitucional'],
+    emprender:['Asesoría legal para emprendedores','Contenido legal educativo'],
+    especializaciones:['Derecho corporativo','Derecho laboral','Derecho penal'] },
+  { id:'periodismo', area:'derecho', emoji:'📰', nombre:'Periodismo', describcion:'Investigar y contar noticias con datos, contexto y claridad.',
+    habilidades:['Redacción','Investigación','Curiosidad','Veracidad'],
+    lugares:['Medios de comunicación','Agencias de noticias','Redacción digital'],
+    cursos:['Redacción periodística','Géneros de la noticia','Ética del periodismo'],
+    emprender:['Medio digital propio','Comunicación para marcas'],
+    especializaciones:['Periodismo digital','Periodismo de datos','Reportería'] },
+  { id:'comunicacion', area:'derecho', emoji:'🎤', nombre:'Ciencias de la Comunicación', describcion:'Planificar la comunicación de marcas, instituciones y personas.',
+    habilidades:['Comunicación','Creatividad','Estrategia','Relaciones públicas'],
+    lugares:['Agencias de comunicación','Empresas','Instituciones públicas'],
+    cursos:['Teoría de la comunicación','Estrategias creativas','Relaciones públicas'],
+    emprender:['Agencia de comunicación','Gestión de redes para marcas'],
+    especializaciones:['Publicidad','Comunicación corporativa','Producción digital'] },
+  { id:'relaciones', area:'derecho', emoji:'🌐', nombre:'Relaciones Internacionales', describcion:'Analizar y facilitar las relaciones entre países y organismos.',
+    habilidades:['Análisis político','Idiomas','Negociación','Investigación'],
+    lugares:['Organismos internacionales','Ministerio de Relaciones Exteriores','ONG'],
+    cursos:['Política internacional','Economía global','Derecho internacional'],
+    emprender:['Consultoría internacional','Negocios de exportación'],
+    especializaciones:['Cooperación internacional','Comercio global','Análisis político'] },
+  /* ——— Naturaleza y Ambiente 🌱 ——— */
+  { id:'agronomia', area:'naturaleza', emoji:'🌾', nombre:'Agronomía', describcion:'Mejorar la producción de cultivos y el manejo de la tierra.',
+    habilidades:['Conocimiento agrícola','Manejo de suelos','Planificación','Sostenibilidad'],
+    lugares:['Empresas agroexportadoras','Campos y fincas','Organismos agrícolas'],
+    cursos:['Producción de cultivos','Suelos y fertilización','Gestión del agua'],
+    emprender:['Huertos urbanos','Asesoría agrícola a productores'],
+    especializaciones:['Agroecología','Riego tecnificado','Agronegocios'] },
+  { id:'ambiental', area:'naturaleza', emoji:'♻️', nombre:'Ingeniería Ambiental', describcion:'Proteger el ambiente y buscar soluciones a la contaminación.',
+    habilidades:['Análisis de impacto','Conocimiento científico','Gestión de residuos','Responsabilidad'],
+    lugares:['Empresas de consultoría ambiental','Ministerio del Ambiente','Industrias'],
+    cursos:['Evaluación de impacto','Gestión de residuos','Tratamiento de aguas'],
+    emprender:['Consultoría de sostenibilidad','Programas de reciclaje'],
+    especializaciones:['Gestión de residuos','Recursos hídricos','Energía renovable'] },
+  { id:'veterinaria', area:'naturaleza', emoji:'🐾', nombre:'Veterinaria', describcion:'Cuidar la salud y el bienestar de los animales.',
+    habilidades:['Diagnóstico','Manejo animal','Empatía','Precisión'],
+    lugares:['Clínicas veterinarias','Zoológicos y granjas','Industria de alimentos'],
+    cursos:['Anatomía animal','Medicina preventiva','Cirugía veterinaria'],
+    emprender:['Clínica veterinaria de barrio','Cuidado de mascotas a domicilio'],
+    especializaciones:['Pequeñas especies','Especies mayores','Fauna silvestre'] },
+  { id:'biologia-marina', area:'naturaleza', emoji:'🐬', nombre:'Biología Marina', describcion:'Estudiar la vida en el mar y cuidar los ecosistemas marinos.',
+    habilidades:['Investigación','Buceo y trabajo de campo','Análisis de datos','Conservación'],
+    lugares:['Institutos del mar','Centros de investigación','ONG de conservación'],
+    cursos:['Ecología marina','Oceanografía básica','Conservación marina'],
+    emprender:['Turismo marino responsable','Consultoría de conservación'],
+    especializaciones:['Conservación marina','Acuicultura','Genética marina'] }
+];
+
+const carrera = (id) => CARRERAS.find(c => c.id === id);
+const carrerasDe = (areaId) => CARRERAS.filter(c => c.area === areaId);
+
+/* 32 preguntas (orden mezclado, no agrupadas por área).
+   valor: 😍=2 · 🤔=1 · 👎=0 · "No conozco"=0 (marca el área como desconocida) */
+const PREGUNTAS = [
+  { id:1,  area:'salud',      t:'¿Te gustaría atender a una persona que se siente mal?' },
+  { id:2,  area:'tecnologia', t:'¿Te gustaría armar o reparar aparatos?' },
+  { id:3,  area:'ciencias',   t:'¿Te gustaría hacer experimentos en un laboratorio?' },
+  { id:4,  area:'negocios',   t:'¿Te gustaría crear y dirigir tu propio negocio?' },
+  { id:5,  area:'educacion',  t:'¿Te gustaría enseñar algo a otras personas?' },
+  { id:6,  area:'arte',       t:'¿Te gustaría dibujar, pintar o diseñar?' },
+  { id:7,  area:'derecho',    t:'¿Te gustaría defender ideas o personas en un debate?' },
+  { id:8,  area:'naturaleza', t:'¿Te gustaría cuidar plantas y cultivos?' },
+  { id:9,  area:'salud',      t:'¿Te gustaría aprender cómo funciona el cuerpo humano?' },
+  { id:10, area:'tecnologia', t:'¿Te gustaría programar una app o un videojuego?' },
+  { id:11, area:'ciencias',   t:'¿Te gustaría analizar datos para encontrar patrones?' },
+  { id:12, area:'negocios',   t:'¿Te gustaría llevar las cuentas y el presupuesto de una empresa?' },
+  { id:13, area:'educacion',  t:'¿Te gustaría escuchar y acompañar a quien tiene un problema?' },
+  { id:14, area:'arte',       t:'¿Te gustaría editar fotos y videos?' },
+  { id:15, area:'derecho',    t:'¿Te gustaría escribir noticias o artículos?' },
+  { id:16, area:'naturaleza', t:'¿Te gustaría proteger y cuidar animales?' },
+  { id:17, area:'salud',      t:'¿Te gustaría ayudar a alguien a recuperarse de una lesión?' },
+  { id:18, area:'tecnologia', t:'¿Te gustaría diseñar puentes, máquinas o edificios?' },
+  { id:19, area:'ciencias',   t:'¿Te gustaría resolver problemas de matemática difíciles?' },
+  { id:20, area:'negocios',   t:'¿Te gustaría vender y negociar con clientes?' },
+  { id:21, area:'educacion',  t:'¿Te gustaría ayudar a mejorar tu comunidad?' },
+  { id:22, area:'arte',       t:'¿Te gustaría crear música, teatro o baile?' },
+  { id:23, area:'derecho',    t:'¿Te gustaría hablar o presentar frente al público?' },
+  { id:24, area:'naturaleza', t:'¿Te gustaría trabajar al aire libre?' },
+  { id:25, area:'salud',      t:'¿Te gustaría estudiar cómo actúan las medicinas?' },
+  { id:26, area:'tecnologia', t:'¿Te gustaría automatizar tareas con robots o sensores?' },
+  { id:27, area:'ciencias',   t:'¿Te gustaría investigar cómo funciona el universo o la materia?' },
+  { id:28, area:'negocios',   t:'¿Te gustaría organizar equipos y proyectos?' },
+  { id:29, area:'educacion',  t:'¿Te gustaría entender por qué las personas piensan y actúan así?' },
+  { id:30, area:'arte',       t:'¿Te gustaría diseñar ropa, espacios o productos?' },
+  { id:31, area:'derecho',    t:'¿Te gustaría conocer las leyes y cómo se aplican?' },
+  { id:32, area:'naturaleza', t:'¿Te gustaría buscar soluciones contra la contaminación?' }
+];
+
+const OPCIONES = [
+  { id:'like', emoji:'😍', label:'Me gusta', pts: 2 },
+  { id:'duda', emoji:'🤔', label:'Tengo dudas', pts: 1 },
+  { id:'no',   emoji:'👎', label:'No me gusta', pts: 0 }
+];
+
+/* 8 simulaciones (una por área). Las 3 primeras (salud, tecnología, negocios)
+   son gratis; las otras 5 son Premium. */
+const SIMS = [
+  { id:'salud-sim', area:'salud', titulo:'Atender pacientes en una emergencia', situaciones:[
+    { t:'Llegan tres pacientes a la vez… ¿a quién ayudas primero?', ops:[
+      { v:'Atiendes al que está más grave (dolor de pecho)', pts:1, fb:'¡Exacto! Priorizar por gravedad salva vidas (triaje).' },
+      { v:'Atiendes por orden de llegada', pts:0, fb:'En emergencias se prioriza por urgencia, no por turno.' },
+      { v:'Atiendes al caso más rápido de resolver', pts:0, fb:'La rapidez no siempre indica urgencia real.' } ]},
+    { t:'Un paciente no está siguiendo su tratamiento…', ops:[
+      { v:'Preguntas por qué no lo sigue y buscas opciones', pts:1, fb:'Bien: entender la causa permite acompañar mejor.' },
+      { v:'Le reclamas por no cumplirlo', pts:0, fb:'Reclamar aleja al paciente del equipo de salud.' },
+      { v:'Lo dejas pasar', pts:0, fb:'Todo paciente merece acompañamiento.' } ]},
+    { t:'La familia está preocupada por un diagnóstico…', ops:[
+      { v:'Explicas con calma y palabras simples', pts:1, fb:'Comunicar claro reduce miedo y dudas.' },
+      { v:'Usas términos técnicos', pts:0, fb:'El tecnicismo confunde a las familias.' },
+      { v:'Evitas el tema', pts:0, fb:'La información clara es parte del cuidado.' } ]}
+  ]},
+  { id:'tec-sim', area:'tecnologia', titulo:'Encontrar el error en una secuencia lógica', situaciones:[
+    { t:'El programa no inicia en la computadora…', ops:[
+      { v:'Revisas el código paso a paso buscando el error', pts:1, fb:'Depurar por partes es el método correcto.' },
+      { v:'Reinicias la computadora', pts:0, fb:'Reiniciar no corrige un error lógico del código.' },
+      { v:'Boras todo y empiezas de cero', pts:0, fb:'Perder el trabajo no es la solución.' } ]},
+    { t:'La app funciona lento…', ops:[
+      { v:'Revisas qué parte demora más (cuello de botella)', pts:1, fb:'Medir y ubicar el cuello de botella es clave.' },
+      { v:'Agregas más funciones a la vez', pts:0, fb:'Sumar funciones empeora el rendimiento.' },
+      { v:'Ignoras el problema', pts:0, fb:'La lentitud aleja a los usuarios.' } ]},
+    { t:'El robot no sigue la línea…', ops:[
+      { v:'Pruebas el sensor paso a paso y ajustas valores', pts:1, fb:'Probar cada componente es depurar bien.' },
+      { v:'Cambias el robot completo', pts:0, fb:'Cambiar todo no enseña dónde está el fallo.' },
+      { v:'Revisas solo la vista', pts:0, fb:'El problema suele estar en el sensor o la lógica.' } ]}
+  ]},
+  { id:'neg-sim', area:'negocios', titulo:'Fijar el precio de un producto', situaciones:[
+    { t:'Debes ponerle precio a un café…', ops:[
+      { v:'Calculas costos, margen y precio de la competencia', pts:1, fb:'Un precio sano se basa en costos y mercado.' },
+      { v:'Pones el precio más barato del barrio', pts:0, fb:'Barato no siempre significa rentable.' },
+      { v:'Pones un precio alto al azar', pts:0, fb:'Sin costos calculados puedes perder dinero.' } ]},
+    { t:'Un cliente te pide una rebaja grande…', ops:[
+      { v:'Ofreces un descuento pequeño y amable', pts:1, fb:'Negociar sin dañar tu margen es buena práctica.' },
+      { v:'Aceptas sin condiciones', pts:0, fb:'Ceder todo baja tu rentabilidad.' },
+      { v:'Te niegas sin escuchar', pts:0, fb:'Escuchar es parte de vender.' } ]},
+    { t:'Tu producto no se está vendiendo…', ops:[
+      { v:'Preguntas a clientes y ajustas el producto', pts:1, fb:'Escuchar al mercado orienta mejoras.' },
+      { v:'Bajas el precio al mínimo', pts:0, fb:'El precio bajo no arregla un producto que no encaja.' },
+      { v:'Lo dejas igual', pts:0, fb:'Nada cambia si no pruebas nada.' } ]}
+  ]},
+  { id:'cie-sim', area:'ciencias', titulo:'Diseñar un experimento correcto', situaciones:[
+    { t:'Quieres saber si más luz ayuda a crecer las plantas…', ops:[
+      { v:'Haces dos grupos: con luz y sin luz (solo varías eso)', pts:1, fb:'Un buen experimento cambia una sola variable.' },
+      { v:'Cambias luz y agua a la vez', pts:0, fb:'Cambiar varias variables confunde el resultado.' },
+      { v:'Anotas solo lo que recuerdas', pts:0, fb:'Registrar datos es parte del método.' } ]},
+    { t:'Tu hipótesis no coincide con los datos…', ops:[
+      { v:'Revisas el proceso y repites el experimento', pts:1, fb:'Repetir valida y descarta errores.' },
+      { v:'Escribes un resultado falso', pts:0, fb:'Falsificar datos rompe la ciencia.' },
+      { v:'Ignoras los datos raros', pts:0, fb:'Los datos raros suelen ser pistas.' } ]},
+    { t:'Un resultado se repite y no entiendes por qué…', ops:[
+      { v:'Investigas en fuentes confiables', pts:1, fb:'Buscar conocimiento es parte de investigar.' },
+      { v:'Copias respuestas de un foro sin verificar', pts:0, fb:'Verificar la información es clave.' },
+      { v:'Lo dejas pasar', pts:0, fb:'La curiosidad mueve a la ciencia.' } ]}
+  ]},
+  { id:'edu-sim', area:'educacion', titulo:'Ayudar a un estudiante en apuros', situaciones:[
+    { t:'Un estudiante se atrasa en clase…', ops:[
+      { v:'Preguntas qué le cuesta y adaptas tu explicación', pts:1, fb:'Adaptarse a cada estudiante es enseñar.' },
+      { v:'Le dices que se esfuerce más', pts:0, fb:'Sin diagnóstico, la frase no ayuda.' },
+      { v:'Lo dejas pasar', pts:0, fb:'Detectar a tiempo previene el abandono.' } ]},
+    { t:'Dos grupos pelean en un taller…', ops:[
+      { v:'Escuchas a ambas partes y propones un acuerdo', pts:1, fb:'Mediar con escucha resuelve conflictos.' },
+      { v:'Castigas a todos por igual', pts:0, fb:'Castigar sin escuchar no educa.' },
+      { v:'Ignoras el conflicto', pts:0, fb:'Los conflictos escalan si se ignoran.' } ]},
+    { t:'Un vecino pide ayuda para un trámite…', ops:[
+      { v:'Le explicas los pasos con paciencia', pts:1, fb:'Acompañar empodera a las personas.' },
+      { v:'Le haces todo sin explicar', pts:0, fb:'Sin explicación no aprende a hacerlo solo.' },
+      { v:'Le dices que busque en internet', pts:0, fb:'Muchas personas necesitan apoyo presencial.' } ]}
+  ]},
+  { id:'art-sim', area:'arte', titulo:'Elegir el diseño más legible', situaciones:[
+    { t:'Eliges la tipografía de un afiche…', ops:[
+      { v:'Usas una letra clara con buen contraste', pts:1, fb:'La legibilidad es la base del diseño.' },
+      { v:'Usas muchas fuentes distintas', pts:0, fb:'Muchas fuentes distraen y confunden.' },
+      { v:'Letra decorativa muy pequeña', pts:0, fb:'Lo bonito no debe sacrificar la lectura.' } ]},
+    { t:'Diseñas un logo para una librería…', ops:[
+      { v:'Un símbolo simple que se entienda al instante', pts:1, fb:'Simple y memorable = buen logo.' },
+      { v:'Un dibujo con 15 colores y detalles', pts:0, fb:'El exceso de detalle complica la marca.' },
+      { v:'Copias el logo de otra marca', pts:0, fb:'Copiar no es diseñar.' } ]},
+    { t:'El cliente pide "algo más moderno"…', ops:[
+      { v:'Muestras 2 propuestas y pides su opinión', pts:1, fb:'Opciones y diálogo mejoran el diseño.' },
+      { v:'Rehaces hasta que él decide todo', pts:0, fb:'Sin criterio propio el diseño pierde valor.' },
+      { v:'Cobras extra solo por empezar de nuevo', pts:0, fb:'El proceso colaborativo se acuerda al inicio.' } ]}
+  ]},
+  { id:'der-sim', area:'derecho', titulo:'Argumentar de forma ordenada', situaciones:[
+    { t:'Defiendes un tema en clase de debate…', ops:[
+      { v:'Preparas argumentos con datos y evidencias', pts:1, fb:'Argumentar con bases gana debates.' },
+      { v:'Hablas más fuerte que los demás', pts:0, fb:'El volumen no sustituye a la razón.' },
+      { v:'Atacas a la otra persona', pts:0, fb:'Se debaten ideas, no personas.' } ]},
+    { t:'Escribes una nota sobre un tema difícil…', ops:[
+      { v:'Revisas fuentes y confirmas los datos', pts:1, fb:'Verificar es parte de informar bien.' },
+      { v:'Publicas rápido lo primero que encuentras', pts:0, fb:'Publicar sin verificar desinforma.' },
+      { v:'Inventas una opinión sin bases', pts:0, fb:'La opinión necesita sustento.' } ]},
+    { t:'Organizas una mesa redonda…', ops:[
+      { v:'Planeas preguntas y turnos claros', pts:1, fb:'Ordenar el diálogo mejora el debate.' },
+      { v:'Dejas que todos hablen de pronto', pts:0, fb:'Sin orden no hay conversación.' },
+      { v:'No te preparas', pts:0, fb:'La preparación hace la diferencia.' } ]}
+  ]},
+  { id:'nat-sim', area:'naturaleza', titulo:'Repartir el agua entre cultivos', situaciones:[
+    { t:'Riegas tus cultivos en tiempo seco…', ops:[
+      { v:'Riegas según lo que necesita cada cultivo', pts:1, fb:'Cada cultivo pide distinta cantidad de agua.' },
+      { v:'Regas todo con la misma cantidad', pts:0, fb:'El agua mal repartida daña cultivos.' },
+      { v:'Riegas a la hora de más calor', pts:0, fb:'Riego a medio día evapora y desperdicia.' } ]},
+    { t:'Notas plagas y quieres proteger tus plantas…', ops:[
+      { v:'Buscas métodos naturales o controlados', pts:1, fb:'Proteger cultivos sin dañar el ecosistema.' },
+      { v:'Usas el químico más fuerte que encuentres', pts:0, fb:'El exceso de químico contamina el suelo.' },
+      { v:'Ignoras las plagas', pts:0, fb:'Las plagas se propagan rápido.' } ]},
+    { t:'Diseñas un proyecto ambiental en tu barrio…', ops:[
+      { v:'Planteas separar residuos y reforestar zonas verdes', pts:1, fb:'Acciones simples generan gran impacto.' },
+      { v:'Solo pintas carteles', pts:0, fb:'Un letrero sin acción no cambia hábitos.' },
+      { v:'Esperas a que otros lo hagan', pts:0, fb:'El cambio empieza con iniciativa.' } ]}
+  ]}
+];
+
+const PLAN_FREE_SIMS = new Set(['salud-sim','tec-sim','neg-sim']);
+const NIVELES = [
+  { id:'secundaria', label:'Secundaria' },
+  { id:'universidad', label:'Instituto o universidad' },
+  { id:'cambio', label:'Quiero cambiar de carrera' }
+];
+const nivelLabel = (id) => (NIVELES.find(n => n.id === id) || {label:'—'}).label;
+
+/* ===================== STORE (localStorage) =====================
+   En producción esto sería un backend real con base de datos.
+   Aquí guardamos todo en localStorage con manejo de errores. */
+const MEM = {}; // respaldo en memoria si localStorage no está disponible
+function storeGet(key, def) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw == null ? def : JSON.parse(raw);
+  } catch (e) {
+    if (e instanceof SyntaxError) return def;
+    return MEM[key] !== undefined ? MEM[key] : def;
+  }
+}
+function storeSet(key, val) {
+  try {
+    localStorage.setItem(key, JSON.stringify(val));
+  } catch (e) {
+    MEM[key] = val; // localStorage no disponible: seguimos en memoria
+  }
+}
+
+const K_USERS = 'htc_users', K_SESSION = 'htc_session', K_REQ = 'htc_requests';
+
+/* Hash simple de contraseña (solo para el prototipo).
+   PRODUCCIÓN: nunca guardes contraseñas en el cliente; usa un backend. */
+function hashPwd(str) {
+  let h = 5381;
+  for (let i = 0; i < String(str).length; i++) h = ((h << 5) + h + str.charCodeAt(i)) | 0;
+  return 'h' + (h >>> 0).toString(36);
+}
+
+function seed() {
+  if (storeGet(K_USERS, null) != null) return;
+  const users = {
+    'demo@haztucamino.pe': { name:'Alex', email:'demo@haztucamino.pe', pwd: hashPwd('demo123'), nivel:'secundaria', plan:'free', done:false, ans:{}, unknown:[], sims:{}, saved:[], history:[] }
+  };
+  storeSet(K_USERS, users);
+  storeSet(K_REQ, []);
+}
+
+function users() { return storeGet(K_USERS, {}); }
+function saveUsers(u) { storeSet(K_USERS, u); }
+function sessEmail() { return storeGet(K_SESSION, null); }
+function setSession(email) { storeSet(K_SESSION, email); navigate('dashboard'); }
+
+function account() {
+  const email = sessEmail();
+  if (!email) return null;
+  const u = users()[email];
+  return u ? { ...u } : null;
+}
+function saveAccount(acc) {
+  const us = users();
+  us[acc.email] = acc;
+  saveUsers(us);
+}
+function reqs() { return storeGet(K_REQ, []); }
+
+/* ===================== UTILIDADES ===================== */
+const $ = (id) => document.getElementById(id);
+const appEl = () => $('app');
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const areaCss = (a) => `<span style="color:${a.color}">${a.emoji}</span>`;
+const isFree = () => { const a = account(); return !a || a.plan !== 'premium'; };
+
+let toastTimer = null;
+function toast(msg, emoji = '✅') {
+  const el = $('toast');
+  el.textContent = emoji + ' ' + msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+function modal(html) {
+  const el = document.createElement('div');
+  el.className = 'overlay';
+  el.innerHTML = `<div class="modal" role="dialog" aria-modal="true">${html}</div>`;
+  el.addEventListener('click', (e) => { if (e.target === el) el.remove(); });
+  document.body.appendChild(el);
+  return el;
+}
+
+function upsell(msg = 'Este contenido es parte del plan Premium.') {
+  const el = modal(`
+    <div class="row" style="gap:14px;align-items:flex-start">
+      <div style="font-size:40px">🔒</div>
+      <div>
+        <h3>Esto es Premium</h3>
+        <p style="color:var(--mut);font-weight:600;margin-top:6px;font-size:.95rem">${esc(msg)}</p>
+      </div>
+    </div>
+    <div class="grid" style="margin-top:20px">
+      <button class="btn gold w100" onclick="go('planes')">Ver planes Premium</button>
+      <button class="btn line w100" onclick="this.closest('.overlay').remove()">Seguir explorando</button>
+    </div>`);
+}
+
+function navigate(to) { location.hash = '#/' + to; }
+function go(route) { navigate(route); window.scrollTo({ top: 0 }); }
+
+/* Renderiza shell con topbar (desktop) y bottom nav (móvil) */
+function shell(inner, active) {
+  const a = account();
+  const planTag = a.plan === 'premium'
+    ? '<button class="pill gold" onclick="go(\'planes\')">⭐ Premium</button>'
+    : '<button class="pill free" onclick="go(\'planes\')">Plan Gratis</button>';
+  const tabs = [
+    ['dashboard','🏠','Inicio'], ['test','🧭','Test'], ['carreras','💼','Carreras'],
+    ['simulaciones','🎮','Simulaciones'], ['videos','📺','Videos'], ['guardadas','⭐','Guardadas'], ['planes','🎁','Planes']
+  ];
+  const tlink = (h, i, l) => `<button class="tlink ${active===h?'on':''}" onclick="go('${h}')"><span>${i}</span> ${l}</button>`;
+  return `
+  <header class="top">
+    <div class="layout">
+      <button class="logo" onclick="go('dashboard')"><span class="mark">🧭</span><span>Haz Tu Camino</span></button>
+      <nav>${tabs.map(t => tlink(t[0], t[1], t[2])).join('')}</nav>
+      <div class="grow"></div>
+      ${planTag}
+      <a class="pill free" href="#/perfil" aria-label="Perfil" style="background:var(--pri-soft);color:var(--pri-d);border-color:transparent">👤 ${esc(a.name.split(' ')[0])}</a>
+      <button class="pill free" onclick="logout()" title="Cerrar sesión">Salir</button>
+    </div>
+  </header>
+  <div class="layout"><main class="page fade">${inner}</main></div>
+  <nav class="bottom" aria-label="Navegación principal">
+    ${[['dashboard','🏠','Inicio'],['test','🧭','Test'],['carreras','💼','Carreras'],['simulaciones','🎮','Simulaciones'],['perfil','👤','Perfil']]
+      .map(b => `<button class="bitem ${active===b[0]?'on':''}" onclick="go('${b[0]}')"><span class="ico">${b[1]}</span>${b[2]}</button>`).join('')}
+  </nav>`;
+}
+
+/* ===================== ROUTER ===================== */
+function parse() {
+  const h = location.hash.replace(/^#\/?/, '');
+  const [path, qs] = h.split('?');
+  return { seg: path.split('/').filter(Boolean), q: new URLSearchParams(qs || '') };
+}
+function render() {
+  const { seg, q } = parse();
+  const acc = account();
+  const root = path => ['dashboard','test','carreras','simulaciones','videos','guardadas','perfil','planes','resultados','comparar'].includes(path);
+  if (root(seg[0] || '') && !acc) { navigate('login'); return; }
+  if (acc && (seg[0] === 'login' || seg[0] === 'register')) { navigate('dashboard'); return; }
+  const route = seg[0] || (acc ? 'dashboard' : 'home');
+  const map = {
+    login: () => vLogin(false),
+    register: () => vLogin(true),
+    home: () => vLanding(),
+    dashboard: () => vDashboard(),
+    test: () => { tIdx = -1; vTest(); },
+    resultados: () => vResultados(),
+    carreras: () => vCarreras(seg[1], q.get('a')),
+    compare: () => vCarreras(seg[1], q.get('a')),
+    carrera: () => vCarrera(seg[1]),
+    comparar: () => vComparar(q.get('c')),
+    simulaciones: () => vSims(),
+    simulacion: () => vSim(seg[1]),
+    videos: () => vVideos(q.get('area')),
+    guardadas: () => vGuardadas(),
+    perfil: () => vPerfil(),
+    planes: () => vPlanes()
+  };
+  (map[route] || vLanding)();
+}
+window.addEventListener('hashchange', render);
+
+/* ===================== VISTAS ===================== */
+function vLanding() {
+  const a = account();
+  appEl().innerHTML = `
+  <div class="landing">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 2px 0">
+      <div class="logo"><span class="mark">🧭</span><span>Haz Tu Camino</span></div>
+      ${a ? `<button class="btn sml opt" onclick="go('dashboard')">Mi panel →</button>` : `<button class="btn sml line" onclick="go('login')">Entrar</button>`}
+    </div>
+    <section class="land-hero">
+      <div style="font-size:52px">🚀</div>
+      <h1 class="big">Descubre qué carrera <em>va contigo</em></h1>
+      <p>Un test corto, carreras reales y simulaciones para elegir mejor tu futuro.</p>
+      <div class="row" style="justify-content:center;flex-wrap:wrap">
+        <button class="btn pri" onclick="go('${a ? 'dashboard' : 'register'}')">Empezar gratis</button>
+        <button class="btn line" onclick="go('${a ? 'carreras' : 'login'}')">Ver carreras</button>
+      </div>
+    </section>
+    <section class="grid" style="margin-top:26px;grid-template-columns:1fr">
+      <div class="step"><span class="n">1</span><div><b>😍 Haz el test</b><small>32 preguntas rápidas de me gusta / no me gusta.</small></div></div>
+      <div class="step"><span class="n">2</span><div><b>📊 Mira tus resultados</b><small>Gráfico de tus 8 áreas y carreras compatibles.</small></div></div>
+      <div class="step"><span class="n">3</span><div><b>🎮 Prueba profesiones</b><small>Mini simulaciones reales con puntaje de afinidad.</small></div></div>
+    </section>
+    <footer class="tiny">Hecho en Perú · 2026 · Prototipo demo</footer>
+  </div>`;
+}
+
+let loginErr = {}, loginMode = false, loginLevel = 'secundaria';
+const loginDraft = { name:'', email:'', pass:'' };
+function vLogin(register) {
+  loginMode = !!register;
+  const err = loginErr || {};
+  const card = `
+    <div style="display:grid;place-items:center;min-height:100vh;padding:24px 16px">
+      <div style="width:100%;max-width:420px">
+        <div class="logo" style="justify-content:center;margin-bottom:10px"><span class="mark">🧭</span><span style="font-size:1.2rem">Haz Tu Camino</span></div>
+        <div class="card" style="margin-top:14px">
+          <h2 style="font-weight:900;font-size:1.5rem">${register ? 'Crea tu cuenta' : 'Bienvenido de nuevo'}</h2>
+          <p style="color:var(--mut);font-weight:600;margin:4px 0 18px;font-size:.95rem">${register ? 'Empieza tu recorrido vocacional.' : 'Ingresa para continuar tu recorrido.'}</p>
+          ${register ? `
+          <div class="field">
+            <label class="label" for="i-name">Nombre</label>
+            <input class="input" id="i-name" placeholder="Cómo te llamas" autocomplete="name" value="${esc(loginDraft.name)}" oninput="loginDraft.name=this.value" />
+            ${err.name ? `<div class="err">⚠ ${esc(err.name)}</div>` : ''}
+          </div>` : ''}
+          <div class="field">
+            <label class="label" for="i-mail">Correo</label>
+            <input class="input" id="i-mail" type="email" placeholder="tu@correo.com" autocomplete="email" value="${esc(loginDraft.email)}" oninput="loginDraft.email=this.value" />
+            ${err.email ? `<div class="err">⚠ ${esc(err.email)}</div>` : ''}
+          </div>
+          <div class="field">
+            <label class="label" for="i-pass">Contraseña</label>
+            <input class="input" id="i-pass" type="password" placeholder="Mínimo 6 caracteres" autocomplete="${register ? 'new-password' : 'current-password'}" value="${esc(loginDraft.pass)}" oninput="loginDraft.pass=this.value" />
+            ${err.pass ? `<div class="err">⚠ ${esc(err.pass)}</div>` : ''}
+          </div>
+          ${register ? `
+          <div class="field">
+            <div class="label">¿En qué etapa estás?</div>
+            <div class="seg">${NIVELES.map(n => `<button type="button" data-nivel="${n.id}" class="${loginLevel===n.id?'on':''}" onclick="pickNivel('${n.id}')">${n.label}</button>`).join('')}</div>
+            ${err.nivel ? `<div class="err">⚠ ${esc(err.nivel)}</div>` : ''}
+          </div>` : ''}
+          <button class="btn pri w100" onclick="doAuth()">${register ? 'Crear cuenta' : 'Ingresar'}</button>
+          ${register ? '' : `
+          <div class="hint" style="margin-top:14px;display:flex;gap:8px;align-items:center;justify-content:space-between;background:var(--pri-soft);padding:10px 12px;border-radius:12px">
+            <span>Demo: demo@haztucamino.pe / demo123</span>
+            <button class="btn sml opt" onclick="fillDemo()">Usar</button>
+          </div>`}
+        </div>
+        <p class="center" style="margin-top:16px;font-weight:700;color:var(--mut);font-size:.92rem">
+          ${register ? '¿Ya tienes cuenta?' : '¿Aún no tienes cuenta?'}
+          <a href="#/${register?'login':'register'}" style="color:var(--pri-d);text-decoration:underline">${register?'Ingresa':'Regístrate'}</a>
+        </p>
+      </div>
+    </div>`;
+  appEl().innerHTML = card;
+}
+window.pickNivel = (id) => { loginLevel = id; vLogin(loginMode); };
+window.fillDemo = () => { appEl().querySelector('#i-mail').value = 'demo@haztucamino.pe'; appEl().querySelector('#i-pass').value = 'demo123'; };
+
+function doAuth() {
+  const register = loginMode;
+  const name = (appEl().querySelector('#i-name')?.value || '').trim();
+  const email = (appEl().querySelector('#i-mail')?.value || '').trim().toLowerCase();
+  const pass = appEl().querySelector('#i-pass')?.value || '';
+  const errs = {};
+  if (register) {
+    if (name.length < 2) errs.name = 'Escribe tu nombre.';
+    if (!nivelLabel(loginLevel) || !loginLevel) errs.nivel = 'Elige tu etapa.';
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.email = 'Correo no válido.';
+  if (pass.length < 6) errs.pass = 'La contraseña debe tener al menos 6 caracteres.';
+  if (Object.keys(errs).length) { loginErr = errs; vLogin(register); return; }
+
+  const us = users();
+  if (register) {
+    if (us[email]) { loginErr = { email: 'Ya existe una cuenta con ese correo.' }; vLogin(true); return; }
+    us[email] = { name, email, pwd: hashPwd(pass), nivel: loginLevel, plan: 'free', done:false, ans:{}, unknown:[], sims:{}, saved:[], history:[] };
+    saveUsers(us);
+    toast('Cuenta creada. ¡Bienvenido!', '🎉');
+  } else {
+    if (!us[email]) { loginErr = { email: 'No encontramos una cuenta con ese correo.' }; vLogin(false); return; }
+    if (us[email].pwd !== hashPwd(pass)) { loginErr = { pass: 'Contraseña incorrecta.' }; vLogin(false); return; }
+    toast('¡Hola de nuevo!', '👋');
+  }
+  loginErr = {};
+  setSession(email);
+}
+
+function logout() {
+  if (!confirm('¿Quieres cerrar sesión?')) return;
+  storeSet(K_SESSION, null);
+  navigate('home');
+}
+
+function vDashboard() {
+  const a = account();
+  const simsDone = Object.keys(a.sims).length;
+  const pct = Math.min(100, (a.done ? 40 : 0) + simsDone * 7.5);
+  const bigCard = !a.done
+    ? `<button class="hero h-pri w100" style="text-align:left;border:0;cursor:pointer" onclick="go('test')">
+         <div style="font-size:44px">🧭</div>
+         <div style="font-size:.85rem;font-weight:800;opacity:.85;margin-top:8px">Paso 1 · 5 min</div>
+         <h2 style="font-size:1.6rem;font-weight:900;margin-top:2px">Hacer mi test vocacional</h2>
+         <p style="opacity:.85;font-weight:600;font-size:.95rem;margin-top:6px">32 preguntas para descubrir tus áreas de mayor afinidad.</p>
+         <span class="chip" style="background:#fff;color:var(--pri-d);margin-top:14px">Comenzar test →</span>
+       </button>`
+    : `<button class="hero h-pri w100" style="text-align:left;border:0;cursor:pointer" onclick="go('resultados')">
+         <div style="font-size:44px">📊</div>
+         <div style="font-size:.85rem;font-weight:800;opacity:.85;margin-top:8px">Tu perfil está listo</div>
+         <h2 style="font-size:1.6rem;font-weight:900;margin-top:2px">Ver mis resultados</h2>
+         <p style="opacity:.85;font-weight:600;font-size:.95rem;margin-top:6px">Revisa tus áreas, carreras y repite el test cuando quieras.</p>
+         <span class="chip" style="background:#fff;color:var(--pri-d);margin-top:14px">Ver resultados →</span>
+       </button>`;
+  const accesos = [
+    ['carreras','💼','Carreras','Explora 32 carreras'],
+    ['simulaciones','🎮','Simulaciones','Prueba 8 profesiones'],
+    ['videos','📺','Videos','Mira "un día en"'],
+    ['guardadas','⭐','Guardadas', a.saved.length + ' guardadas']
+  ];
+  appEl().innerHTML = shell(`
+    <h1 style="font-size:1.5rem;font-weight:900">Hola, ${esc(a.name)} 👋</h1>
+    <p style="color:var(--mut);font-weight:600;font-size:.95rem">¿Cómo vas con tu futuro profesional?</p>
+
+    <div class="grid" style="margin-top:18px;grid-template-columns:1fr">${bigCard}</div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="row" style="justify-content:space-between">
+        <b style="font-weight:900">Tu progreso</b>
+        <span style="font-weight:900;color:var(--pri-d)">${Math.round(pct)}%</span>
+      </div>
+      <div class="tb" style="margin-top:8px"><span style="width:${pct}%"></span></div>
+      <div class="row" style="justify-content:space-between;margin-top:10px;color:var(--mut);font-size:.82rem;font-weight:700">
+        <span>${a.done?'✔ Test completado':'Test pendiente'}</span>
+        <span>${simsDone}/8 simulaciones</span>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:16px">
+      ${accesos.map(x => `
+        <button class="card" style="text-align:left;border-radius:var(--radius);cursor:pointer" onclick="go('${x[0]}')">
+          <div style="font-size:34px">${x[1]}</div>
+          <div style="font-weight:900;margin-top:8px">${x[2]}</div>
+          <div style="color:var(--mut);font-size:.82rem;font-weight:600">${x[3]}</div>
+        </button>`).join('')}
+    </div>
+
+    ${a.done ? `
+    <div class="card" style="margin-top:16px;background:var(--pri-soft);border-color:#D6C7F5">
+      <div class="row" style="gap:12px"><span style="font-size:26px">🎯</span>
+        <div><b>Tu próxima meta</b>
+          <div style="color:var(--mut);font-size:.9rem;font-weight:600">${simsDone===0?'Prueba una simulación de tu Top 3.':simsDone<8?'Completa una simulación más.':'¡Completaste todas! Revisa tus carreras guardadas.'}</div>
+        </div>
+      </div>
+    </div>` : ''}
+  `, 'dashboard');
+}
+
+/* ===== TEST VOCACIONAL ===== */
+let tIdx = -1; // índice de pregunta activa durante la sesión del test (-1 = auto reanudar)
+function vTest() {
+  const a = account();
+  if (a.done && Object.keys(a.ans).length === PREGUNTAS.length) { tIdx = -1; navigate('resultados'); return; }
+  let idx = tIdx >= 0 ? tIdx : PREGUNTAS.findIndex(p => a.ans[p.id] == null);
+  if (idx < 0 || idx >= PREGUNTAS.length) idx = 0;
+  const cur = PREGUNTAS[idx];
+  const n = idx + 1;
+  const ar = area(cur.area);
+  const answered = Object.keys(a.ans).length;
+  document.documentElement.style.setProperty('--area', ar.color);
+  appEl().innerHTML = shell(`
+    <div class="test-card">
+      <div class="row" style="justify-content:space-between;font-size:.85rem;font-weight:800;color:var(--mut)">
+        <span>Pregunta ${n} de ${PREGUNTAS.length}</span>
+        <span>${Math.round(answered / PREGUNTAS.length * 100)}% respondido</span>
+      </div>
+      <div class="tb" style="margin:6px 0 18px"><span style="width:${answered / PREGUNTAS.length * 100}%"></span></div>
+
+      <div class="card" style="text-align:center;padding:26px 20px">
+        <div style="width:72px;height:72px;margin:0 auto;border-radius:22px;display:grid;place-items:center;font-size:38px;background:${ar.soft}">${ar.emoji}</div>
+        <div class="chip" style="margin-top:12px;background:${ar.soft};color:${ar.color}">${ar.nombre}</div>
+        <h2 style="font-weight:900;font-size:1.25rem;margin-top:12px;line-height:1.35">${cur.t}</h2>
+      </div>
+
+      ${n === 9 ? `<div class="mood"><span style="font-size:26px">💪</span><div><b>¡Vas muy bien!</b>Sigue así, ya pasaste la primera mitad.</div></div>` : ''}
+
+      <div class="grid" style="margin-top:16px">
+        ${OPCIONES.map(o => `<button class="answer" onclick="answerTest(${cur.id},'${o.id}')">
+          <span class="e">${o.emoji}</span><span>${o.label}</span><span class="pts">${o.pts} pts</span>
+        </button>`).join('')}
+      </div>
+      <div class="center" style="margin-top:6px">
+        <button class="mini" onclick="answerTest(${cur.id},'unknown')">No conozco esa actividad</button>
+      </div>
+
+      <div class="row" style="justify-content:space-between;margin-top:16px">
+        <button class="btn line" ${n===1?'disabled':''} onclick="prevQ()">← Atrás</button>
+        <span class="hint" style="margin:0">Se guarda solo 🔒</span>
+      </div>
+    </div>
+  `, 'test');
+}
+
+let lastQ = -1;
+function answerTest(qid, opt) {
+  const a = account();
+  const q = PREGUNTAS.find(p => p.id === qid);
+  let pts;
+  if (opt === 'unknown') {
+    if (!a.unknown.includes(q.area)) a.unknown.push(q.area);
+    pts = 0;
+  } else {
+    pts = OPCIONES.find(o => o.id === opt).pts;
+  }
+  a.ans[qid] = pts;
+  a.unknown = a.unknown.filter((v, i) => a.unknown.indexOf(v) === i);
+  saveAccount(a);
+  const pos = PREGUNTAS.findIndex(p => p.id === qid);
+  if (pos + 1 >= PREGUNTAS.length) {
+    finishTest(a);
+  } else {
+    tIdx = pos + 1;
+    lastQ = qid;
+    vTest();
+  }
+}
+function prevQ() {
+  const pos = tIdx >= 0 ? tIdx : 0;
+  if (pos > 0) { tIdx = pos - 1; vTest(); }
+}
+
+function finishTest(a) {
+  a.done = true;
+  if (!a.history) a.history = [];
+  const res = areaScores(a);
+  a.history = [ { date: new Date().toLocaleDateString('es-PE', { day:'numeric', month:'short', year:'numeric' }), top: res.slice(0,3) }, ...a.history ].slice(0, 12);
+  saveAccount(a);
+  toast('¡Test completado!', '🎉');
+  navigate('resultados');
+}
+
+function areaScores(acc) {
+  return AREAS.map(ar => {
+    const qs = PREGUNTAS.filter(p => p.area === ar.id);
+    let sum = 0, count = 0;
+    qs.forEach(p => { if (acc.ans[p.id] != null) { sum += acc.ans[p.id]; count++; } });
+    const pct = Math.round((sum / 8) * 100);
+    return { ...ar, pct, respondidas: count };
+  }).sort((x, y) => y.pct - x.pct);
+}
+
+/* ===== RESULTADOS ===== */
+function vResultados() {
+  const a = account();
+  const res = areaScores(a);
+  const top3 = res.slice(0, 3);
+  appEl().innerHTML = shell(`
+    <h1 style="font-size:1.4rem;font-weight:900">Tus resultados 📊</h1>
+    <p style="color:var(--mut);font-weight:600">Esto es lo que dice tu perfil.</p>
+
+    <div class="card" style="margin-top:16px">
+      <b style="font-weight:900">Afinidad por área</b>
+      <div style="margin-top:14px">
+        ${res.map(r => `
+          <div>
+            <div class="bar-lbl"><span style="color:${r.color}">${r.emoji} ${r.nombre}</span><span style="color:var(--ink)">${r.pct}%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:${Math.max(4,r.pct)}%;background:${r.color}"></div></div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    ${a.unknown && a.unknown.length ? `
+    <div class="mood" style="margin-top:14px"><span style="font-size:26px">🔍</span>
+      <div><b>Áreas por descubrir</b>
+        ${a.unknown.map(id => `<span class="tag" style="margin-right:6px">${areaCss(area(id))} ${area(id).nombre}</span>`).join('')}
+        <div class="hint" style="margin-top:6px">Elegiste "no conozco" en algunas. Explóralas en Carreras.</div>
+      </div>
+    </div>` : ''}
+
+    <h2 style="font-weight:900;font-size:1.1rem;margin-top:22px">Tu Top 3 vocacional 🏆</h2>
+    <div class="list" style="margin-top:10px">
+      ${top3.map((r, i) => `
+        <div class="card" style="border-color:${r.color}44;border-left:6px solid ${r.color}">
+          <div class="row" style="gap:12px"><span style="font-size:34px">${r.emoji}</span>
+            <div class="grow"><b style="font-weight:900">#${i+1} · ${r.nombre}</b>
+              <div style="color:var(--mut);font-weight:600;font-size:.9rem">${r.frase} <span class="badge" style="background:${r.soft};color:${r.color}">${r.pct}%</span></div>
+            </div>
+          </div>
+          <div style="margin-top:12px" class="row wrap">
+            ${carrerasDe(r.id).map(c => `<span class="tag" style="cursor:pointer;background:${r.soft};border-color:transparent;color:${r.color}" onclick="go('carrera/${c.id}')">${c.emoji} ${c.nombre}</span>`).join('')}
+          </div>
+        </div>`).join('')}
+    </div>
+
+    <h2 style="font-weight:900;font-size:1.1rem;margin-top:22px">Carreras compatibles 💡</h2>
+    <div class="list" style="margin-top:10px">
+      ${top3.flatMap(r => carrerasDe(r.id)).map(c => carreraRow(c, true)).join('')}
+    </div>
+
+    <div class="row wrap" style="justify-content:center;margin-top:22px">
+      <button class="btn opt" onclick="go('test')">🔄 Repetir test</button>
+      <button class="btn line" onclick="go('carreras')">Ver todas las carreras</button>
+    </div>
+  `, 'resultados');
+}
+
+function carreraRow(c, withSave) {
+  const a = account();
+  const saved = a.saved.includes(c.id);
+  return `
+  <div class="krow">
+    <span class="kico" style="background:${area(c.area).soft}">${c.emoji}</span>
+    <div class="grow">
+      <h4>${c.nombre}</h4>
+      <p>${area(c.area).nombre}</p>
+    </div>
+    ${withSave ? `<button class="btn sml ${saved?'done':'opt'}" onclick="toggleSave('${c.id}')">${saved?'✔ Guardada':'Guardar'}</button>` : ''}
+    <button class="btn sml line" onclick="go('carrera/${c.id}')">Ver</button>
+  </div>`;
+}
+
+/* ===== CARRERAS ===== */
+let filterArea = 'todas', searchTerm = '';
+function vCarreras(preselectArea, cmpId) {
+  filterArea = preselectArea && area(preselectArea) ? preselectArea : 'todas';
+  const a = account();
+  let list = CARRERAS.filter(c => (filterArea === 'todas' || c.area === filterArea));
+  const q = searchTerm.trim().toLowerCase();
+  if (q) list = list.filter(c => c.nombre.toLowerCase().includes(q) || c.describcion.toLowerCase().includes(q) || area(c.area).nombre.toLowerCase().includes(q));
+  appEl().innerHTML = shell(`
+    <h1 style="font-size:1.4rem;font-weight:900">Carreras 💼</h1>
+    <p style="color:var(--mut);font-weight:600;margin-bottom:14px">Encuentra tu carrera y compáralas.</p>
+
+    <input class="input" placeholder="🔍  Buscar carrera…" value="${esc(searchTerm)}" oninput="searchTerm=this.value;vCarreras('${filterArea}')" aria-label="Buscar carrera" />
+
+    <div class="row wrap" style="margin:14px 0">
+      <button class="city ${filterArea==='todas'?'on':''}" style="--area:#7C3AED" onclick="filterArea='todas';vCarreras()">Todas</button>
+      ${AREAS.map(ar => `<button class="city ${filterArea===ar.id?'on':''}" style="--area:${ar.color}" onclick="filterArea='${ar.id}';vCarreras()">${ar.emoji} ${ar.nombre}</button>`).join('')}
+    </div>
+
+    <div class="list">
+      ${list.map(c => `
+        <div class="krow">
+          <span class="kico" style="background:${area(c.area).soft}">${c.emoji}</span>
+          <div class="grow">
+            <h4>${c.nombre}</h4>
+            <p>${area(c.area).nombre}</p>
+          </div>
+          <button class="btn sml ${a.saved.includes(c.id)?'done':'opt'}" onclick="toggleSave('${c.id}')">${a.saved.includes(c.id)?'✔':'⭐'}</button>
+          <button class="btn sml line" onclick="go('carrera/${c.id}')">Ver</button>
+        </div>
+      `).join('') || '<p class="center" style="color:var(--mut);font-weight:700">Sin resultados con esa búsqueda.</p>'}
+    </div>
+  `, 'carreras');
+}
+
+function toggleSave(id) {
+  const a = account();
+  const i = a.saved.indexOf(id);
+  if (i >= 0) { a.saved.splice(i, 1); toast('Carrera quitada de guardadas', '🗑️'); }
+  else { a.saved.push(id); toast('Carrera guardada', '⭐'); }
+  saveAccount(a);
+  render();
+}
+
+/* ===== DETALLE DE CARRERA ===== */
+function vCarrera(id) {
+  const c = carrera(id);
+  if (!c) { navigate('carreras'); return; }
+  const ar = area(c.area);
+  const a = account();
+  const prem = a.plan === 'premium';
+  const saved = a.saved.includes(c.id);
+  const freeBlock = (titulo, items, e) => `
+    <div class="card" style="margin-top:14px">
+      <b style="font-weight:900">${e} ${titulo}</b>
+      <ul class="ul" style="margin-top:10px">${items.map(i => `<li>${i}</li>`).join('')}</ul>
+    </div>`;
+  const locked = `
+    <div class="lock" style="margin-top:14px">
+      <div class="emo">🔒</div>
+      <b>Contenido Premium</b>
+      <div class="small">Cursos, emprendimiento y especializaciones son parte del plan Premium.</div>
+      <button class="btn gold sml" onclick="go('planes')">Desbloquear Premium</button>
+    </div>`;
+  document.documentElement.style.setProperty('--area', ar.color);
+  appEl().innerHTML = shell(`
+    <button class="btn sml ghost" onclick="history.length>1?history.back():go('carreras')">← Volver</button>
+
+    <div class="hero h-area" style="margin-top:12px">
+      <div class="row" style="gap:14px">
+        <span style="font-size:52px">${c.emoji}</span>
+        <div>
+          <span class="chip" style="background:rgba(255,255,255,.22)">${ar.emoji} ${ar.nombre}</span>
+          <h1 style="font-weight:900;font-size:1.6rem;margin-top:6px">${c.nombre}</h1>
+        </div>
+      </div>
+      <p style="opacity:.92;font-weight:600;margin-top:12px;font-size:1rem">${c.describcion}</p>
+    </div>
+
+    <div class="row wrap" style="margin-top:14px">
+      <button class="btn ${saved?'done':'opt'} sml" onclick="toggleSave('${c.id}')">${saved?'✔ Guardada':'⭐ Guardar'}</button>
+      <button class="btn line sml" onclick="go('comparar?c=${c.id}')">⚖️ Comparar</button>
+    </div>
+
+    ${freeBlock('Qué es', [c.describcion], '📌')}
+
+    <div class="card" style="margin-top:14px">
+      <b style="font-weight:900">🧩 Habilidades clave</b>
+      <div class="row wrap" style="margin-top:10px;gap:8px">${c.habilidades.map(h => `<span class="tag">${h}</span>`).join('')}</div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <b style="font-weight:900">📍 Dónde trabajar</b>
+      <ul class="ul" style="margin-top:10px">${c.lugares.map(l => `<li>${l}</li>`).join('')}</ul>
+    </div>
+
+    ${prem ? freeBlock('📚 Cursos típicos', c.cursos) + freeBlock('🚀 Emprendimiento', c.emprender) + freeBlock('🎓 Especializaciones', c.especializaciones) : locked}
+
+    <div class="card" style="margin-top:16px;background:var(--pri-soft);border-color:#D6C7F5">
+      <div class="row" style="gap:12px"><span style="font-size:26px">💡</span>
+        <div style="color:var(--pri-d)"><b style="font-weight:900">Frases de tu perfil:</b>
+          <div style="font-weight:600;font-size:.92rem">${ar.frase}</div>
+        </div>
+      </div>
+    </div>
+  `, 'carreras');
+}
+
+/* ===== COMPARAR (Premium) ===== */
+function vComparar(cId) {
+  const a = account();
+  if (a.plan !== 'premium') {
+    appEl().innerHTML = shell(`
+      <div style="max-width:520px;margin:10vh auto 0;text-align:center">
+        <div style="font-size:56px">🔒</div>
+        <h1 style="font-weight:900;font-size:1.5rem;margin-top:8px">Comparar carreras es Premium</h1>
+        <p style="color:var(--mut);font-weight:600;margin-top:8px">Compara habilidades, campo laboral, cursos y emprendimiento lado a lado.</p>
+        <div class="row" style="justify-content:center;margin-top:18px">
+          <button class="btn gold" onclick="go('planes')">Activar Premium</button>
+          <button class="btn line" onclick="go('carreras')">Ver carreras</button>
+        </div>
+      </div>`, 'planes');
+    return;
+  }
+  const sel = (cId && carrera(cId)) ? cId : (a.saved[0] || CARRERAS[0].id);
+  const other = CARRERAS.find(c => c.id !== sel) ? CARRERAS.find(c => c.id !== sel).id : CARRERAS[1].id;
+  const opts = c => `<option value="${c.id}" ${c.id===sel?'selected':''}>${c.nombre}</option>`;
+  const renderComp = (id1, id2) => {
+    const c1 = carrera(id1), c2 = carrera(id2);
+    const block = (c) => `
+      <div class="cmp-block">
+        <h5 style="background:${area(c.area).color}">${c.emoji} ${c.nombre}</h5>
+        ${[['Habilidades', c.habilidades], ['Dónde trabajar', c.lugares], ['Cursos', c.cursos], ['Emprendimiento', c.emprender]].map(r =>
+          `<div class="cmp-row"><div class="k">${r[0]}</div><div class="v">${r[1].join(' · ')}</div></div>`).join('')}
+      </div>`;
+    return `<div class="cmp-grid">${block(c1)}${block(c2)}</div>`;
+  };
+  appEl().innerHTML = shell(`
+    <h1 style="font-size:1.4rem;font-weight:900">Comparar carreras ⚖️</h1>
+    <p style="color:var(--mut);font-weight:600;margin-bottom:14px">Elige 2 carreras y mira las diferencias.</p>
+    <div class="row wrap">
+      <select class="input" style="flex:1;min-width:160px" onchange="go('comparar?c='+this.value)" aria-label="Carrera 1">${CARRERAS.map(opts).join('')}</select>
+      <button class="btn pri" onclick="shuffleCmp()">🔀 Cambiar</button>
+    </div>
+    <div style="margin-top:16px">${renderComp(sel, other)}</div>
+  `, 'carreras');
+}
+window.shuffleCmp = () => go('comparar');
+
+/* ===== SIMULACIONES ===== */
+function vSims() {
+  const a = account();
+  appEl().innerHTML = shell(`
+    <h1 style="font-size:1.4rem;font-weight:900">Simulaciones 🎮</h1>
+    <p style="color:var(--mut);font-weight:600;margin-bottom:14px">Prueba 3 situaciones reales de cada área y recibe tu puntaje de afinidad.</p>
+    <div class="list">
+      ${SIMS.map(s => {
+        const ar = area(s.area);
+        const free = PLAN_FREE_SIMS.has(s.id);
+        const done = a.sims[s.id] != null;
+        return `
+        <div class="krow" style="cursor:pointer" role="button" tabindex="0" onclick="startSim('${s.id}')" onkeydown="if(event.key==='Enter')startSim('${s.id}')">
+          <span class="kico" style="background:${ar.soft}">${ar.emoji}</span>
+          <div class="grow">
+            <h4>${s.titulo}</h4>
+            <p>${ar.nombre} · 3 situaciones ${!free ? '· <span class="badge gold">🔒 Premium</span>' : ''}</p>
+          </div>
+          ${done ? `<span class="badge free">✔ ${a.sims[s.id]}/3</span>` : `<button class="btn sml opt">Jugar</button>`}
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div class="card" style="margin-top:18px;background:var(--pri-soft);border-color:#D6C7F5">
+      <div class="row" style="gap:12px"><span style="font-size:26px">🎁</span>
+        <div><b style="font-weight:900">3 gratis, 5 Premium</b>
+          <div style="color:var(--mut);font-weight:600;font-size:.9rem">Salud, Tecnología y Negocios son gratis. Activa Premium para las demás.</div>
+        </div>
+      </div>
+    </div>
+  `, 'simulaciones');
+}
+
+function startSim(id) {
+  const a = account();
+  const sim = SIMS.find(s => s.id === id);
+  if (!sim) { navigate('simulaciones'); return; }
+  if (!PLAN_FREE_SIMS.has(id) && a.plan !== 'premium') { upsell('Las simulaciones de ' + area(sim.area).nombre + ' son Premium.'); return; }
+  navigate('simulacion/' + id);
+}
+
+let simState = {};
+function vSim(id) {
+  const sim = SIMS.find(s => s.id === id);
+  if (!sim) { navigate('simulaciones'); return; }
+  const ar = area(sim.area);
+  const st = simState[id] || { q: 0, pts: 0, answered: false, pick: -1 };
+  simState[id] = st;
+  const si = sim.situaciones[st.q];
+  const last = st.q === sim.situaciones.length - 1;
+  document.documentElement.style.setProperty('--area', ar.color);
+  appEl().innerHTML = shell(`
+    <div style="max-width:600px;margin:0 auto">
+      <button class="btn sml ghost" onclick="go('simulaciones')">← Volver</button>
+      <div class="hero h-area" style="margin-top:12px">
+        <div class="row"><span style="font-size:40px">${ar.emoji}</span>
+          <div><span class="chip" style="background:rgba(255,255,255,.22)">${ar.nombre}</span>
+            <h1 style="font-weight:900;font-size:1.3rem">${sim.titulo}</h1>
+          </div>
+        </div>
+        <div class="tb" style="margin-top:14px;background:rgba(255,255,255,.25)"><span style="width:${(st.q/sim.situaciones.length)*100}%"></span></div>
+        <div style="font-weight:800;font-size:.85rem;opacity:.9;margin-top:6px">Situación ${st.q+1} de ${sim.situaciones.length}</div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <h2 style="font-weight:900;font-size:1.15rem;line-height:1.4">${si.t}</h2>
+        <div class="grid" style="margin-top:16px">
+          ${si.ops.map((o, i) => `
+            <button class="answer" ${st.answered?'disabled':''} onclick="pickSim('${id}',${i})" style="${st.answered && st.pick===i ? (o.pts===1?'border-color:var(--ok);background:#ECFDF5':'border-color:var(--danger);background:#FEF2F2') : ''}">
+              <span class="e">${['A','B','C'][i]}</span><span>${o.v}</span>
+            </button>`).join('')}
+        </div>
+        ${st.answered ? `
+          <div style="margin-top:16px;border-radius:14px;padding:14px;background:${si.ops[st.pick].pts===1?'#ECFDF5':'#FEF2F2'};border:2px solid ${si.ops[st.pick].pts===1?'var(--ok)':'var(--danger)'}">
+            <b style="font-weight:900">${si.ops[st.pick].pts===1?'✅ Correcto':'💡 Recuerda'}</b>
+            <div style="font-weight:600;font-size:.95rem;margin-top:4px">${escapeHtml(si.ops[st.pick].fb)}</div>
+          </div>
+          <button class="btn pri w100" style="margin-top:16px" onclick="nextSim('${id}')">${last?'Ver mi puntaje de afinidad':'Siguiente situación'} →</button>
+        ` : ''}
+      </div>
+    </div>
+  `, 'simulaciones');
+}
+function escapeHtml(s) { return esc(s); }
+window.pickSim = (id, i) => {
+  const sim = SIMS.find(s => s.id === id);
+  const st = simState[id] || { q:0, pts:0, answered:false, pick:-1 };
+  if (st.answered) return;
+  st.answered = true; st.pick = i;
+  st.pts += sim.situaciones[st.q].ops[i].pts;
+  simState[id] = st;
+  vSim(id);
+};
+window.nextSim = (id) => {
+  const sim = SIMS.find(s => s.id === id);
+  const st = simState[id];
+  if (st.q < sim.situaciones.length - 1) { st.q++; st.answered = false; st.pick = -1; simState[id] = st; vSim(id); }
+  else { finishSim(id, st.pts); }
+};
+function finishSim(id, pts) {
+  const a = account();
+  a.sims[id] = pts;
+  saveAccount(a);
+  const ar = area(SIMS.find(s => s.id === id).area);
+  const msg = pts === 3 ? `¡Tienes una afinidad altísima con ${ar.nombre}!` :
+              pts === 2 ? `Vas muy bien, tienes buena afinidad con ${ar.nombre}.` :
+              'Esta área te desafía: explora otras opciones también.';
+  appEl().innerHTML = shell(`
+    <div style="max-width:520px;margin:8vh auto 0;text-align:center">
+      <div style="width:96px;height:96px;margin:0 auto;border-radius:28px;display:grid;place-items:center;font-size:52px;background:${ar.soft}">${ar.emoji}</div>
+      <h1 style="font-weight:900;font-size:1.6rem;margin-top:14px">Tu puntaje de afinidad</h1>
+      <div style="font-weight:900;font-size:3rem;color:${ar.color};margin-top:6px">${pts}/3</div>
+      <p style="color:var(--mut);font-weight:600;max-width:360px;margin:8px auto 0;font-size:1rem">${msg}</p>
+      <div class="row" style="justify-content:center;margin-top:20px;flex-wrap:wrap">
+        <button class="btn pri" onclick="go('simulaciones')">🎮 Más simulaciones</button>
+        <button class="btn line" onclick="go('carreras')">💼 Ver carreras</button>
+      </div>
+    </div>`, 'simulaciones');
+}
+
+/* ===== VIDEOS ===== */
+function vVideos() {
+  const a = account();
+  appEl().innerHTML = shell(`
+    <h1 style="font-size:1.4rem;font-weight:900">Videos 📺</h1>
+    <p style="color:var(--mut);font-weight:600;margin-bottom:14px">Mira "un día en la vida de" cada profesión real. Se abre YouTube.</p>
+    <div class="list">
+      ${AREAS.map(ar => `
+        <div class="card">
+          <b style="font-weight:900;color:${ar.color}">${ar.emoji} ${ar.nombre}</b>
+          <div class="list" style="margin-top:10px">
+            ${carrerasDe(ar.id).map(c => `
+            <div class="krow" style="border:1px solid var(--line);border-radius:14px;padding:12px">
+              <span class="kico" style="background:${ar.soft};font-size:22px">${c.emoji}</span>
+              <div class="grow"><h4 style="font-size:.92rem">${c.nombre}</h4><p style="font-size:.8rem">Ver videos sobre esta carrera</p></div>
+              <button class="btn sml opt" onclick="yt('${c.id}')">▶ Ver videos</button>
+            </div>`).join('')}
+          </div>
+        </div>`).join('')}
+    </div>
+  `, 'videos');
+}
+function yt(cid) {
+  const c = carrera(cid);
+  const q = encodeURIComponent('un día en la vida de un ' + c.nombre);
+  window.open('https://www.youtube.com/results?search_query=' + q, '_blank', 'noopener');
+}
+
+/* ===== GUARDADAS ===== */
+function vGuardadas() {
+  const a = account();
+  const list = CARRERAS.filter(c => a.saved.includes(c.id));
+  appEl().innerHTML = shell(`
+    <h1 style="font-size:1.4rem;font-weight:900">Guardadas ⭐</h1>
+    <p style="color:var(--mut);font-weight:600;margin-bottom:14px">${list.length ? list.length + ' carreras guardadas.' : 'Aún no guardas carreras.'}</p>
+    ${list.length ? `<div class="list">${list.map(c => `
+      <div class="krow">
+        <span class="kico" style="background:${area(c.area).soft}">${c.emoji}</span>
+        <div class="grow"><h4>${c.nombre}</h4><p>${area(c.area).nombre}</p></div>
+        <button class="btn sml danger" onclick="toggleSave('${c.id}')">Quitar</button>
+        <button class="btn sml line" onclick="go('carrera/${c.id}')">Ver</button>
+      </div>`).join('')}</div>` : `
+      <div class="card" style="text-align:center;padding:40px 20px">
+        <div style="font-size:48px">⭐</div>
+        <p style="color:var(--mut);font-weight:700">Entra a Carreras y guarda tus favoritas.</p>
+        <button class="btn pri" style="margin-top:14px" onclick="go('carreras')">Explorar carreras</button>
+      </div>`}
+  `, 'guardadas');
+}
+
+/* ===== PERFIL ===== */
+function vPerfil() {
+  const a = account();
+  const nivelSel = a.nivel || 'secundaria';
+  appEl().innerHTML = shell(`
+    <h1 style="font-size:1.4rem;font-weight:900">Mi perfil 👤</h1>
+
+    <div class="card" style="margin-top:14px">
+      <div class="row" style="justify-content:space-between"><b style="font-weight:900">Cuenta</b>
+        <span class="badge ${a.plan==='premium'?'gold':'free'}">${a.plan==='premium'?'⭐ Premium':'Gratis'}</span>
+      </div>
+      <div class="field" style="margin-top:14px">
+        <label class="label" for="pf-name">Nombre</label>
+        <input class="input" id="pf-name" value="${esc(a.name)}" />
+      </div>
+      <div class="field">
+        <div class="label">Nivel educativo</div>
+        <div class="seg">${NIVELES.map(n => `<button type="button" class="${nivelSel===n.id?'on':''}" onclick="pfNivel('${n.id}')">${n.label}</button>`).join('')}</div>
+      </div>
+      <div class="field">
+        <label class="label">Correo</label>
+        <input class="input" value="${esc(a.email)}" disabled />
+      </div>
+      <button class="btn pri w100" onclick="saveProfile()">Guardar cambios</button>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <b style="font-weight:900">Mis datos</b>
+      <div class="row" style="justify-content:space-between;margin-top:12px;font-size:.92rem"><span style="color:var(--mut);font-weight:700">Test vocacional</span><b>${a.done?'✔ Completado':'Pendiente'}</b></div>
+      <div class="row" style="justify-content:space-between;margin-top:8px;font-size:.92rem"><span style="color:var(--mut);font-weight:700">Simulaciones</span><b>${Object.keys(a.sims).length}/8</b></div>
+      <div class="row" style="justify-content:space-between;margin-top:8px;font-size:.92rem"><span style="color:var(--mut);font-weight:700">Carreras guardadas</span><b>${a.saved.length}</b></div>
+      <div class="row" style="justify-content:space-between;margin-top:8px;font-size:.92rem"><span style="color:var(--mut);font-weight:700">Plan actual</span><b>${a.plan==='premium'?'Premium':'Gratis'}</b></div>
+      <button class="btn line w100" style="margin-top:14px" onclick="go('planes')">Ver planes y activar Premium</button>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <b style="font-weight:900">Historial de resultados</b>
+      ${(a.history && a.history.length) ? `<div class="list" style="margin-top:10px">${a.history.map(h => `
+        <div style="border:1px solid var(--line);border-radius:14px;padding:12px">
+          <div style="font-size:.8rem;font-weight:800;color:var(--mut)">${h.date}</div>
+          <div class="row wrap" style="margin-top:6px;gap:6px">${h.top.map(r => `<span class="tag" style="background:${r.soft};color:${r.color}">${r.emoji} ${r.nombre} ${r.pct}%</span>`).join('')}</div>
+        </div>`).join('')}</div>` : '<p class="hint" style="margin-top:8px">Aún no completas tu test.</p>'}
+    </div>
+
+    <button class="btn danger w100" style="margin-top:18px" onclick="logout()">Cerrar sesión</button>
+  `, 'perfil');
+}
+window.pfNivel = (id) => { const a = account(); a.nivel = id; saveAccount(a); vPerfil(); };
+function saveProfile() {
+  const a = account();
+  const name = ($('pf-name')?.value || '').trim();
+  if (name.length < 2) { toast('Escribe tu nombre', '⚠️'); return; }
+  a.name = name;
+  saveAccount(a);
+  toast('Perfil actualizado');
+}
+
+/* ===== PLANES ===== */
+function vPlanes() {
+  const a = account();
+  const insForm = (a.plan === 'premium')
+    ? `<div class="card" style="margin-top:24px;background:#ECFDF5;border-color:#A7F3D0">
+         <b style="color:var(--ok)">✔ Ya eres Premium</b>
+         <p class="hint" style="margin-top:4px">Disfrutas de todo el contenido. Gracias por probar el prototipo.</p>
+       </div>`
+    : `
+    <div class="card" id="ins-form" style="margin-top:24px">
+      <b style="font-weight:900;font-size:1.05rem">🏫 Para instituciones</b>
+      <p class="hint" style="margin-bottom:14px">Colegios, universidades e institutos: déjanos tus datos y te contactamos.</p>
+      <div class="field">
+        <label class="label" for="i-nombre">Institución</label>
+        <input class="input" id="i-nombre" placeholder="Nombre de la institución" />
+      </div>
+      <div class="field">
+        <label class="label" for="i-contacto">Contacto</label>
+        <input class="input" id="i-contacto" type="email" placeholder="correo de contacto" />
+      </div>
+      <div class="field">
+        <label class="label" for="i-estudiantes">Número de estudiantes</label>
+        <input class="input" id="i-estudiantes" type="number" min="0" placeholder="p. ej. 500" />
+      </div>
+      <button class="btn pri w100" onclick="sendReq()">Enviar solicitud</button>
+    </div>`;
+  appEl().innerHTML = shell(`
+    <h1 style="font-size:1.4rem;font-weight:900">Planes 🎁</h1>
+    <p style="color:var(--mut);font-weight:600;margin-bottom:14px">Empieza gratis y hazte Premium cuando quieras.</p>
+
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+      <div class="card" style="text-align:center">
+        <div style="font-size:40px">🧡</div>
+        <h2 style="font-weight:900;margin-top:6px">Gratis</h2>
+        <p style="color:var(--mut);font-weight:600;font-size:.9rem;margin:6px 0 12px">Para empezar a descubrirte.</p>
+        <ul class="ul" style="text-align:left;font-size:.9rem"> <li>Test vocacional completo</li><li>Información básica de carreras</li><li>3 simulaciones gratis</li><li>Carreras guardadas</li></ul>
+        ${a.plan!=='premium' ? '<button class="btn line w100" style="margin-top:14px" onclick="go(\'login\')">Ya lo tienes</button>' : ''}
+      </div>
+
+      <div class="hero h-pri" style="text-align:center;display:flex;flex-direction:column">
+        <div style="font-size:40px">⭐</div>
+        <h2 style="font-weight:900;margin-top:6px">Premium</h2>
+        <div style="font-weight:900;font-size:1.3rem;margin:4px 0 8px">S/ 19.90<span style="font-size:.85rem;opacity:.85"> / mes</span></div>
+        <p style="opacity:.9;font-weight:600;font-size:.9rem">Todo gratis, sin límites.</p>
+        <ul class="ul" style="text-align:left;font-size:.9rem;flex:1"> <li>Información completa de carreras</li><li>Las 8 simulaciones</li><li>Comparar carreras lado a lado</li><li>Recomendaciones personalizadas</li></ul>
+        ${a.plan==='premium'
+          ? '<button class="btn" style="background:#fff;color:var(--pri-d);margin-top:14px" disabled>✔ Activo</button>'
+          : '<button class="btn gold w100" style="margin-top:14px" onclick="activatePremium()">Activar Premium (simulado)</button>'}
+      </div>
+
+      <div class="card" style="text-align:center">
+        <div style="font-size:40px">🏫</div>
+        <h2 style="font-weight:900;margin-top:6px">Instituciones</h2>
+        <p style="color:var(--mut);font-weight:600;font-size:.9rem;margin:6px 0 12px">Colegios, universidades e institutos.</p>
+        <ul class="ul" style="text-align:left;font-size:.9rem"> <li>Planes por volumen de estudiantes</li><li>Reportes de resultados</li><li>Orientación a docentes</li></ul>
+        <button class="btn line w100" style="margin-top:14px" onclick="obtenerInst()">Solicitar información</button>
+      </div>
+    </div>
+
+    <div class="mood" style="margin-top:16px"><span style="font-size:24px">ℹ️</span><div><b>Pago simulado</b><span style="color:var(--mut);font-weight:600"> En este prototipo no hay pagos reales: "Activar Premium" desbloquea todo sin cobrar.</span></div></div>
+
+    ${insForm}
+  `, 'planes');
+}
+
+function obtenerInst() {
+  const el = $('ins-form');
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function activatePremium() {
+  const el = modal(`
+    <div class="center">
+      <div style="font-size:46px">💳</div>
+      <h3>Pago simulado</h3>
+      <p style="color:var(--mut);font-weight:600;margin-top:8px;font-size:.95rem">Estás por activar Premium. Esto desbloquea todo el contenido.<br><b>Es una demostración: no se realizará ningún cobro.</b></p>
+      <div class="grid" style="margin-top:18px">
+        <button class="btn gold w100" onclick="confirmPremium()">Activar Premium (simulado)</button>
+        <button class="btn line w100" onclick="this.closest('.overlay').remove()">Cancelar</button>
+      </div>
+    </div>`);
+  window.__premModal = el;
+}
+function confirmPremium() {
+  const a = account();
+  a.plan = 'premium';
+  saveAccount(a);
+  window.__premModal && window.__premModal.remove();
+  toast('¡Bienvenido a Premium! (modo demo)', '⭐');
+  render();
+}
+
+function sendReq() {
+  const nombre = ($('i-nombre')?.value || '').trim();
+  const contacto = ($('i-contacto')?.value || '').trim();
+  const est = ($('i-estudiantes')?.value || '').trim();
+  if (nombre.length < 2) return toast('Escribe el nombre de la institución', '⚠️');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contacto)) return toast('Correo de contacto no válido', '⚠️');
+  if (!Number.isFinite(Number(est)) || Number(est) < 0) return toast('Indica un número de estudiantes válido', '⚠️');
+  const lista = reqs();
+  lista.push({ nombre, contacto, estudiantes: Number(est), fecha: new Date().toLocaleDateString('es-PE') });
+  storeSet(K_REQ, lista);
+  const box = $('ins-form');
+  if (box) box.outerHTML = `<div class="card" style="margin-top:24px;background:#ECFDF5;border-color:#A7F3D0">
+      <b style="color:var(--ok)">✔ Solicitud enviada</b>
+      <p class="hint" style="margin-top:4px">Gracias, ${esc(nombre)}. Te contactaremos por ${esc(contacto)}.</p></div>`;
+  toast('Solicitud enviada', '📩');
+}
+
+/* ===================== BOOT ===================== */
+seed();
+render();
+</script>
+</body>
+</html>
