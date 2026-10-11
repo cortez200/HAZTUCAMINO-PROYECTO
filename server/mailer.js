@@ -1,16 +1,27 @@
-// Envío de correos con nodemailer.
+// Envío de correos.
 //
-// Configuración por variables de entorno (SMTP real):
-//   SMTP_HOST, SMTP_PORT, SMTP_SECURE, SMTP_USER, SMTP_PASS, MAIL_FROM
+// Proveedores por HTTPS (recomendados en Render: usa el puerto 443, que no
+// está bloqueado; los puertos SMTP 25/465/587 SÍ se bloquean en el plan gratis):
+//   RESEND_API_KEY   → https://resend.com  (requiere verificar un dominio)
+//   BREVO_API_KEY    → https://brevo.com   (gratis 300/día, basta verificar
+//                                            tu correo remitente)
 //
-// Si no hay SMTP configurado, se usa el buzón de pruebas Ethereal
-// (https://ethereal.email): el correo se "envía" y se devuelve una URL
-// para verlo en el navegador. Ideal para desarrollo local.
+// Respaldo por SMTP (SMTP_HOST, SMTP_PORT, SMTP_SECURE, SMTP_USER, SMTP_PASS).
+// Si no hay nada configurado, se usa el buzón de pruebas Ethereal.
 
 import nodemailer from 'nodemailer';
 
 const FROM = process.env.MAIL_FROM || 'Haz Tu Camino <no-reply@haztucamino.pe>';
 const HAS_SMTP = Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS);
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const BREVO_API_KEY = process.env.BREVO_API_KEY;
+
+// Proveedor activo, por orden de preferencia.
+const PROVIDER = RESEND_API_KEY ? 'resend' : BREVO_API_KEY ? 'brevo' : HAS_SMTP ? 'smtp' : 'ethereal';
+console.log(`[mail] Proveedor de correo activo: ${PROVIDER}.`);
+if (PROVIDER === 'smtp') {
+  console.log('[mail] Aviso: en Render (plan gratis) los puertos SMTP 25/465/587 están bloqueados. Define RESEND_API_KEY o BREVO_API_KEY para enviar por HTTPS.');
+}
 
 // Evita que una conexión SMTP bloqueada (p. ej. en Render) cuelgue el request.
 const TIMEOUTS = {
@@ -34,7 +45,6 @@ async function getTransport() {
           auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
           ...TIMEOUTS
         });
-        console.log(`[mail] Enviando correos reales vía ${process.env.SMTP_HOST}:${port} como ${process.env.SMTP_USER}.`);
         return t;
       }
       // Sin SMTP: cuenta de pruebas desechable.
@@ -47,7 +57,7 @@ async function getTransport() {
         ...TIMEOUTS
       });
       t.__isEthereal = true;
-      console.log('[mail] Sin SMTP configurado: usando buzón de pruebas Ethereal.');
+      console.log('[mail] Sin correo configurado: usando buzón de pruebas Ethereal.');
       console.log(`[mail] Usuario Ethereal: ${test.user} / ${test.pass}`);
       return t;
     })();
@@ -55,8 +65,46 @@ async function getTransport() {
   return transportPromise;
 }
 
-/** Envía un correo. Devuelve { previewUrl? } (solo en modo Ethereal). */
+// Extrae { email, name } de "Nombre <correo@dominio>".
+function parseFrom(value) {
+  const m = /^\s*(.*?)\s*<([^>]+)>\s*$/.exec(value || '');
+  if (m && m[2]) return { name: m[1] || undefined, email: m[2].trim() };
+  return { email: String(value || '').trim() };
+}
+
+// Envío por HTTPS con Resend (puerto 443).
+async function sendViaResend({ to, subject, html, text }) {
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ from: FROM, to: [to], subject, html, text })
+  });
+  if (!res.ok) throw new Error(`Resend ${res.status}: ${await res.text()}`);
+  const data = await res.json().catch(() => ({}));
+  return { messageId: data.id || null };
+}
+
+// Envío por HTTPS con Brevo (puerto 443).
+async function sendViaBrevo({ to, subject, html, text }) {
+  const { email, name } = parseFrom(FROM);
+  const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: { 'api-key': BREVO_API_KEY, 'Content-Type': 'application/json', accept: 'application/json' },
+    body: JSON.stringify({ sender: { email, name }, to: [{ email: to }], subject, htmlContent: html, textContent: text })
+  });
+  if (!res.ok) throw new Error(`Brevo ${res.status}: ${await res.text()}`);
+  const data = await res.json().catch(() => ({}));
+  return { messageId: data.messageId || null };
+}
+
+export function mailProvider() {
+  return PROVIDER;
+}
+
+/** Envía un correo. Devuelve { messageId, previewUrl? }. */
 export async function sendMail({ to, subject, html, text }) {
+  if (PROVIDER === 'resend') return sendViaResend({ to, subject, html, text });
+  if (PROVIDER === 'brevo') return sendViaBrevo({ to, subject, html, text });
   const transport = await getTransport();
   const info = await transport.sendMail({ from: FROM, to, subject, html, text });
   const previewUrl = transport.__isEthereal ? nodemailer.getTestMessageUrl(info) : null;

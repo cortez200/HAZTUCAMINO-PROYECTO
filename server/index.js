@@ -202,7 +202,7 @@ app.post('/api/auth/register', async (req, res) => {
     existing.pwdSalt = salt; existing.pwdHash = hash;
     persist();
     // El correo se manda en segundo plano para no retrasar la respuesta.
-    sendVerificationEmail(existing, base).catch(() => { /* correo opcional */ });
+    sendVerificationEmail(existing, base).catch((e) => console.error('[auth] No se pudo enviar el correo de verificación:', e?.message || e));
     return res.status(200).json({ ok: true, email: mail, account: publicAccount(existing), verificationSent: true });
   }
 
@@ -212,7 +212,7 @@ app.post('/api/auth/register', async (req, res) => {
   persist();
   // La cuenta queda pendiente de confirmar: no se inicia sesión todavía.
   // El correo (que confirma la dirección) se envía en segundo plano.
-  sendVerificationEmail(db.users[mail], base).catch(() => { /* correo opcional */ });
+  sendVerificationEmail(db.users[mail], base).catch((e) => console.error('[auth] No se pudo enviar el correo de verificación:', e?.message || e));
   res.status(201).json({ ok: true, email: mail, account: publicAccount(db.users[mail]), verificationSent: true });
 });
 
@@ -240,7 +240,7 @@ app.post('/api/auth/resend', (req, res) => {
   if (!u) return res.status(404).json({ error: 'Ese correo no está registrado.' });
   if (u.emailVerified) return res.json({ ok: true, alreadyVerified: true });
   // Se envía en segundo plano: la respuesta no depende del servidor SMTP.
-  sendVerificationEmail(u, baseUrl(req)).catch(() => { /* correo opcional */ });
+  sendVerificationEmail(u, baseUrl(req)).catch((e) => console.error('[auth] No se pudo reenviar el correo de verificación:', e?.message || e));
   res.json({ ok: true, email: mail, verificationSent: true });
 });
 
