@@ -13,7 +13,7 @@ export default function Instituciones() {
   const [form, setForm] = useState({ center: '', region: 'Lima', tipo: 'Colegio', contacto: '', mensaje: '' });
   const [errors, setErrors] = useState({});
   const [busy, setBusy] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [sent, setSent] = useState(null);
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
@@ -26,8 +26,8 @@ export default function Instituciones() {
     if (Object.keys(errs).length) return;
     setBusy(true);
     try {
-      await api.sendInstitution(form);
-      setSent(true);
+      const res = await api.sendInstitution(form);
+      setSent({ emailSent: Boolean(res?.emailSent) });
       toast('Solicitud registrada', 'CheckCircle2');
     } catch (err) {
       toast(err.message, 'Info');
@@ -37,17 +37,7 @@ export default function Instituciones() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
-      <header style={{ borderBottom: '1px solid var(--border)', background: 'var(--surface)' }}>
-        <div style={{ maxWidth: 1080, margin: '0 auto', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Link to="/" className="brand" style={{ textDecoration: 'none', color: 'var(--text)', padding: 0 }}>
-            <span className="logo"><Icon name="Compass" size={19} color="#fff" /></span>
-            <span>Haz Tu Camino</span>
-          </Link>
-          <Link to="/" className="btn btn-ghost btn-sm"><Icon name="ArrowLeft" size={16} /> Volver</Link>
-        </div>
-      </header>
-
+    <div>
       <main style={{ maxWidth: 640, margin: '0 auto', padding: '40px 20px 64px' }}>
         <div className="center mb-24">
           <Badge tone="primary" icon="School">Para colegios e institutos</Badge>
@@ -61,7 +51,11 @@ export default function Instituciones() {
               <Icon name="CheckCircle2" size={28} />
             </div>
             <h2 style={{ fontSize: '1.35rem', fontWeight: 800 }}>¡Solicitud registrada!</h2>
-            <p className="dim mt-8">Gracias, {form.center}. Te contactaremos muy pronto.</p>
+            <p className="dim mt-8">
+              Gracias, {form.center}. {sent.emailSent
+                ? 'Te enviamos un correo de confirmación y te contactaremos muy pronto.'
+                : 'Te contactaremos muy pronto.'}
+            </p>
             <Link to="/" className="btn btn-primary mt-24" style={{ marginTop: 20 }}>Volver al inicio</Link>
           </Card>
         ) : (

@@ -8,9 +8,11 @@ import {
   AREAS, CARRERAS, PREGUNTAS, OPCIONES, SIMS, NIVELES, FREE_SIMS, UNIVERSIDADES, PLANS, FREE_TEST_LIMIT, area as findArea
 } from './data.js';
 import {
-  loadUsers, loadRequests, saveUser, saveRequest
+  loadUsers, loadRequests, saveUser, saveRequest,
+  savePurchase, loadPurchases, saveVisit, loadVisits, visitSummary,
+  deleteUser
 } from './db.js';
-import { sendMail, verificationEmail, resetEmail } from './mailer.js';
+import { sendMail, verificationEmail, resetEmail, institutionEmail, institutionAdminEmail } from './mailer.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SECRET = process.env.HTC_SECRET || 'htc-dev-secret-change-me';
@@ -61,8 +63,41 @@ function verifyAction(token, purpose) {
   if (!data.exp || data.exp < Date.now()) return null;
   return data;
 }
-const verifyUrl = (token) => `${APP_URL}/#/verificar?token=${encodeURIComponent(token)}`;
-const resetUrl = (token) => `${APP_URL}/#/restablecer?token=${encodeURIComponent(token)}`;
+/* Base de los enlaces de los correos: usa el host desde donde entró el usuario
+   (así funciona igual en :4000, :5173 o el dominio real), con APP_URL como respaldo. */
+function baseUrl(req) {
+  if (req) {
+    const proto = String(req.headers['x-forwarded-proto'] || req.protocol || 'http').split(',')[0].trim();
+    const host = String(req.headers['x-forwarded-host'] || req.headers.host || '').split(',')[0].trim();
+    if (host) return `${proto}://${host}`;
+  }
+  return APP_URL;
+}
+const verifyUrl = (base, token) => `${base}/#/verificar?token=${encodeURIComponent(token)}`;
+const resetUrl = (base, token) => `${base}/#/restablecer?token=${encodeURIComponent(token)}`;
+
+/* -------------------------- admin -------------------------- */
+const ADMIN_EMAIL = String(process.env.ADMIN_EMAIL || process.env.SMTP_USER || 'haztucamidotest@gmail.com').trim().toLowerCase();
+const ADMIN_PASSWORD = String(process.env.ADMIN_PASSWORD || 'admin123');
+
+/* Token de administrador: mismo firmado, pero marcado como admin. */
+function signAdminToken() {
+  const payload = Buffer.from(JSON.stringify({ role: 'admin', iat: Date.now() })).toString('base64url');
+  const sig = crypto.createHmac('sha256', SECRET).update(payload).digest('base64url');
+  return `${payload}.${sig}`;
+}
+function verifyAdminToken(token) {
+  const data = verifyToken(token);
+  return Boolean(data && data.role === 'admin');
+}
+function adminAuth(req, res, next) {
+  const header = req.headers.authorization || '';
+  const token = header.startsWith('Bearer ') ? header.slice(7) : null;
+  if (!verifyAdminToken(token)) {
+    return res.status(401).json({ error: 'Sesión de administrador no válida.' });
+  }
+  next();
+}
 
 /* -------------------------- helpers -------------------------- */
 const newAccount = (name, email, nivel, emailVerified = false) => ({
@@ -122,13 +157,27 @@ app.get('/api/catalog', (_req, res) => {
   });
 });
 
+/* registro de visitas (analítica simple) */
+app.post('/api/track', (req, res) => {
+  const { visitor, path, ref } = req.body || {};
+  saveVisit({
+    id: crypto.randomUUID(),
+    visitor: visitor ? String(visitor).slice(0, 80) : null,
+    path: path ? String(path).slice(0, 200) : '/',
+    ref: ref ? String(ref) : (req.headers.referer || ''),
+    ua: req.headers['user-agent'] || '',
+    at: new Date().toISOString()
+  });
+  res.json({ ok: true });
+});
+
 /* auth */
 const VERIFY_TTL = 24 * 60 * 60 * 1000;   // 24 h
 const RESET_TTL = 30 * 60 * 1000;         // 30 min
 
-async function sendVerificationEmail(u) {
+async function sendVerificationEmail(u, base) {
   const token = signAction(u.email, 'verify', VERIFY_TTL);
-  const { previewUrl } = await sendMail({ to: u.email, ...verificationEmail(u.name, verifyUrl(token)) });
+  const { previewUrl } = await sendMail({ to: u.email, ...verificationEmail(u.name, verifyUrl(base || APP_URL, token)) });
   return previewUrl || null;
 }
 
@@ -141,28 +190,30 @@ app.post('/api/auth/register', async (req, res) => {
   if (!NIVELES.some((n) => n.id === nivel)) return res.status(400).json({ error: 'Elige en qué etapa estás.' });
 
   const existing = db.users[mail];
-  let previewUrl = null;
   if (existing && existing.emailVerified) {
     return res.status(409).json({ error: 'Ya existe una cuenta con ese correo. Inicia sesión u olvidaste tu contraseña.' });
   }
+  const base = baseUrl(req);
   if (existing) {
     // Cuenta creada antes pero sin confirmar: actualiza datos y reenvía el correo.
     existing.name = String(name).trim();
     existing.nivel = nivel;
     const { salt, hash } = hashPassword(password);
     existing.pwdSalt = salt; existing.pwdHash = hash;
-    try { previewUrl = await sendVerificationEmail(existing); } catch { /* correo opcional */ }
     persist();
-    return res.status(200).json({ token: signToken(mail), account: publicAccount(existing), verificationSent: true, previewUrl });
+    // El correo se manda en segundo plano para no retrasar la respuesta.
+    sendVerificationEmail(existing, base).catch(() => { /* correo opcional */ });
+    return res.status(200).json({ ok: true, email: mail, account: publicAccount(existing), verificationSent: true });
   }
 
   const { salt, hash } = hashPassword(password);
   const account = newAccount(String(name).trim(), mail, nivel, false);
   db.users[mail] = { ...account, pwdSalt: salt, pwdHash: hash };
   persist();
-  try { previewUrl = await sendVerificationEmail(db.users[mail]); } catch { /* correo opcional */ }
-  // Se permite entrar de inmediato; el correo sirve para confirmar la dirección.
-  res.status(201).json({ token: signToken(mail), account: publicAccount(db.users[mail]), verificationSent: true, previewUrl });
+  // La cuenta queda pendiente de confirmar: no se inicia sesión todavía.
+  // El correo (que confirma la dirección) se envía en segundo plano.
+  sendVerificationEmail(db.users[mail], base).catch(() => { /* correo opcional */ });
+  res.status(201).json({ ok: true, email: mail, account: publicAccount(db.users[mail]), verificationSent: true });
 });
 
 app.post('/api/auth/login', (req, res) => {
@@ -172,19 +223,25 @@ app.post('/api/auth/login', (req, res) => {
   const u = db.users[mail];
   if (!u) return res.status(404).json({ error: 'Ese correo no está registrado. Crea una cuenta.' });
   if (!verifyPassword(password, u.pwdSalt, u.pwdHash)) return res.status(401).json({ error: 'Contraseña incorrecta.' });
+  if (!u.emailVerified) {
+    return res.status(403).json({
+      error: 'Tu correo aún no está confirmado. Revisa tu bandeja (y el spam) o reenvía el correo de confirmación.',
+      needsVerification: true, email: mail
+    });
+  }
   res.json({ token: signToken(mail), account: publicAccount(u) });
 });
 
 /* Reenvía el correo de confirmación. */
-app.post('/api/auth/resend', async (req, res) => {
+app.post('/api/auth/resend', (req, res) => {
   const mail = String(req.body?.email || '').trim().toLowerCase();
   if (!isEmail(mail)) return res.status(400).json({ error: 'Correo no válido.' });
   const u = db.users[mail];
   if (!u) return res.status(404).json({ error: 'Ese correo no está registrado.' });
   if (u.emailVerified) return res.json({ ok: true, alreadyVerified: true });
-  let previewUrl = null;
-  try { previewUrl = await sendVerificationEmail(u); } catch { return res.status(502).json({ error: 'No pudimos enviar el correo. Intenta más tarde.' }); }
-  res.json({ ok: true, email: mail, previewUrl });
+  // Se envía en segundo plano: la respuesta no depende del servidor SMTP.
+  sendVerificationEmail(u, baseUrl(req)).catch(() => { /* correo opcional */ });
+  res.json({ ok: true, email: mail, verificationSent: true });
 });
 
 /* Confirma el correo con el token del enlace. */
@@ -194,7 +251,7 @@ app.post('/api/auth/verify', (req, res) => {
   const u = db.users[data.email];
   if (!u) return res.status(404).json({ error: 'La cuenta ya no existe.' });
   if (!u.emailVerified) { u.emailVerified = true; persist(); }
-  res.json({ ok: true, email: u.email, account: publicAccount(u) });
+  res.json({ ok: true, email: u.email, account: publicAccount(u), token: signToken(u.email) });
 });
 
 /* Solicita el enlace de recuperación de contraseña. */
@@ -206,7 +263,7 @@ app.post('/api/auth/forgot', async (req, res) => {
   let previewUrl = null;
   try {
     const token = signAction(mail, 'reset', RESET_TTL);
-    ({ previewUrl } = await sendMail({ to: mail, ...resetEmail(u.name, resetUrl(token)) }));
+    ({ previewUrl } = await sendMail({ to: mail, ...resetEmail(u.name, resetUrl(baseUrl(req), token)) }));
   } catch {
     return res.status(502).json({ error: 'No pudimos enviar el correo. Intenta más tarde.' });
   }
@@ -315,6 +372,12 @@ app.post('/api/account/subscribe', auth, (req, res) => {
   req.user.planSince = now.toISOString();
   req.user.planUntil = until.toISOString();
   persist();
+  // Registra la compra para el panel de administración.
+  savePurchase({
+    id: crypto.randomUUID(), email: req.user.email, plan: plan.id,
+    planNombre: plan.nombre, amount: plan.precio || 0,
+    currency: plan.moneda || 'S/', at: now.toISOString()
+  });
   res.json({
     account: publicAccount(req.user),
     notice: `Plan ${plan.nombre} activado. Esta es una demostración: no se realizó ningún cobro real.`
@@ -330,24 +393,120 @@ app.post('/api/account/cancel', auth, (req, res) => {
   res.json({ account: publicAccount(req.user), notice: 'Volviste al plan Básico.' });
 });
 
-app.post('/api/institutions', (req, res) => {
+app.post('/api/institutions', async (req, res) => {
   const { center, region, tipo, contacto, mensaje } = req.body || {};
   if (!center || String(center).trim().length < 3) return res.status(400).json({ error: 'Indica el nombre del colegio o institución.' });
   if (!contacto || String(contacto).trim().length < 5) return res.status(400).json({ error: 'Deja un correo o teléfono de contacto.' });
-  db.requests.push({
-    id: crypto.randomUUID(), center: String(center).trim(),
+  const centerName = String(center).trim();
+  const contact = String(contacto).trim();
+  const request = {
+    id: crypto.randomUUID(), center: centerName,
     region: String(region || '').trim(), tipo: String(tipo || 'colegio').trim(),
-    contacto: String(contacto).trim(), mensaje: String(mensaje || '').trim(),
+    contacto: contact, mensaje: String(mensaje || '').trim(),
     at: new Date().toISOString()
-  });
+  };
+  db.requests.push(request);
   persist();
-  res.status(201).json({ ok: true, message: 'Solicitud registrada. Te contactaremos pronto.' });
+
+  const panelUrl = `${baseUrl(req)}/admin`;
+  const applicantEmail = isEmail(contact) ? contact : null;
+
+  // Aviso interno al equipo (siempre) + confirmación al solicitante (si dejó correo).
+  const tasks = [ sendMail({ to: ADMIN_EMAIL, ...institutionAdminEmail(request, panelUrl) }) ];
+  if (applicantEmail) tasks.push(sendMail({ to: applicantEmail, ...institutionEmail(centerName) }));
+
+  const results = await Promise.allSettled(tasks);
+  const notified = results[0].status === 'fulfilled';
+  const emailSent = applicantEmail ? results[1]?.status === 'fulfilled' : false;
+  results.forEach((r, i) => {
+    if (r.status === 'rejected') console.error('[instituciones] No se pudo enviar un correo:', r.reason?.message || r.reason);
+  });
+
+  res.status(201).json({ ok: true, notified, emailSent, message: 'Solicitud registrada. Te contactaremos pronto.' });
+});
+
+/* -------------------------- panel de administración -------------------------- */
+const ADMIN_FILE = path.join(__dirname, 'admin.html');
+app.get(['/admin', '/admin.html'], (_req, res) => res.sendFile(ADMIN_FILE));
+
+app.post('/api/admin/login', (req, res) => {
+  const email = String(req.body?.email || '').trim().toLowerCase();
+  const password = String(req.body?.password || '');
+  if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
+    return res.status(401).json({ error: 'Credenciales de administrador incorrectas.' });
+  }
+  res.json({ token: signAdminToken(), email: ADMIN_EMAIL });
+});
+
+app.get('/api/admin/stats', adminAuth, (_req, res) => {
+  const users = Object.values(db.users);
+  const purchases = loadPurchases();
+  const visits = visitSummary();
+  const buyers = new Set(purchases.map((p) => p.email));
+  const revenue = purchases.reduce((s, p) => s + (Number(p.amount) || 0), 0);
+  const testsTaken = users.reduce((s, u) => s + (Array.isArray(u.history) ? u.history.length : 0), 0);
+  res.json({
+    users: users.length,
+    verified: users.filter((u) => u.emailVerified).length,
+    premium: users.filter((u) => u.plan === 'premium' || u.plan === 'super').length,
+    demos: db.requests.length,
+    purchases: purchases.length,
+    buyers: buyers.size,
+    revenue,
+    visits: visits.total,
+    uniqueVisitors: visits.unique,
+    testsTaken
+  });
+});
+
+app.get('/api/admin/users', adminAuth, (_req, res) => {
+  const users = Object.values(db.users).map((u) => ({
+    email: u.email, name: u.name, nivel: u.nivel, plan: u.plan,
+    emailVerified: !!u.emailVerified, done: !!u.done,
+    tests: Array.isArray(u.history) ? u.history.length : 0,
+    saved: Array.isArray(u.saved) ? u.saved.length : 0,
+    sims: u.sims ? Object.keys(u.sims).length : 0,
+    createdAt: u.createdAt || null, planUntil: u.planUntil || null
+  })).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+  res.json({ users });
+});
+
+/* Elimina una cuenta registrada desde el panel admin.
+   Las compras se conservan para que sigan contando en las estadísticas. */
+app.delete('/api/admin/users/:email', adminAuth, (req, res) => {
+  const mail = String(req.params.email || '').trim().toLowerCase();
+  if (!db.users[mail]) return res.status(404).json({ error: 'Ese usuario ya no existe.' });
+  delete db.users[mail];
+  deleteUser(mail);
+  res.json({ ok: true, email: mail });
+});
+
+app.get('/api/admin/purchases', adminAuth, (_req, res) => {
+  res.json({ purchases: loadPurchases() });
+});
+
+app.get('/api/admin/visits', adminAuth, (_req, res) => {
+  res.json({ summary: visitSummary(), visits: loadVisits(500) });
+});
+
+app.get('/api/admin/demos', adminAuth, (_req, res) => {
+  const demos = [...db.requests].sort((a, b) => String(b.at).localeCompare(String(a.at)));
+  res.json({ demos });
 });
 
 /* Sirve la app compilada (client/dist) en el mismo puerto, si existe. */
 const CLIENT_DIST = path.join(__dirname, '..', 'client', 'dist');
 if (fs.existsSync(CLIENT_DIST)) {
-  app.use(express.static(CLIENT_DIST));
+  app.use(express.static(CLIENT_DIST, {
+    setHeaders(res, filePath) {
+      // Los assets llevan hash en el nombre: se pueden cachear para siempre.
+      if (/[\\/]assets[\\/]/.test(filePath)) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      } else if (/\.html$/.test(filePath)) {
+        res.setHeader('Cache-Control', 'no-cache');
+      }
+    }
+  }));
   app.get(/^(?!\/api).*/, (_req, res) => res.sendFile(path.join(CLIENT_DIST, 'index.html')));
 }
 

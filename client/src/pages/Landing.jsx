@@ -65,7 +65,7 @@ export default function Landing() {
           </div>
         </div>
         <div className="panel" style={{ overflow: 'hidden', boxShadow: 'var(--shadow-lg)' }}>
-          <Img src={HERO} alt="Estudiantes explorando su vocación" style={{ width: '100%', height: 420, objectFit: 'cover' }} icon="GraduationCap" />
+          <Img src={HERO} alt="Estudiantes explorando su vocación" style={{ width: '100%', height: 420, objectFit: 'cover' }} icon="GraduationCap" priority />
         </div>
       </section>
 

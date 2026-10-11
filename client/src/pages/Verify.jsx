@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { api } from '../lib/api.js';
-import { useToast } from '../lib/store.jsx';
+import { useAuth, useToast } from '../lib/store.jsx';
 import { Btn } from '../components/ui.jsx';
 import Icon from '../components/Icon.jsx';
 
 export default function Verify() {
   const toast = useToast();
   const nav = useNavigate();
+  const { verifySession } = useAuth();
   const [params] = useSearchParams();
   const token = params.get('token') || '';
   const [state, setState] = useState(token ? 'working' : 'invalid');
@@ -19,19 +19,20 @@ export default function Verify() {
     ran.current = true;
     (async () => {
       try {
-        await api.verifyEmail(token);
+        await verifySession(token);
         setState('ok');
-        toast('¡Correo confirmado! Ya puedes ingresar.', 'CheckCircle2');
+        toast('¡Registro confirmado! Ingresando…', 'CheckCircle2');
+        setTimeout(() => nav('/', { replace: true }), 1400);
       } catch (err) {
         setState('error');
         setMessage(err.message);
       }
     })();
-  }, [token, toast]);
+  }, [token, toast, verifySession, nav]);
 
   const view = {
-    working: { icon: 'RotateCcw', color: 'var(--primary)', title: 'Confirmando tu correo…', text: 'Un momento, estamos verificando tu enlace.' },
-    ok: { icon: 'CheckCircle2', color: 'var(--primary)', title: '¡Correo confirmado!', text: 'Tu cuenta está activa. Ya puedes iniciar sesión.' },
+    working: { icon: 'RotateCcw', color: 'var(--primary)', title: 'Confirmando tu registro…', text: 'Un momento, estamos verificando tu enlace.' },
+    ok: { icon: 'CheckCircle2', color: 'var(--primary)', title: '¡Registro confirmado!', text: 'Tu cuenta está activa. Ingresando a tu cuenta…' },
     error: { icon: 'AlertTriangle', color: '#dc2626', title: 'No pudimos confirmar', text: message || 'El enlace no es válido o ya caducó.' },
     invalid: { icon: 'AlertTriangle', color: '#dc2626', title: 'Enlace no válido', text: 'Falta el código de confirmación. Revisa el enlace del correo.' }
   }[state];
@@ -44,9 +45,10 @@ export default function Verify() {
         </div>
         <h1 style={{ fontSize: '1.4rem', fontWeight: 800 }}>{view.title}</h1>
         <p className="dim mt-8 mb-16">{view.text}</p>
-        {state === 'working'
-          ? <Btn variant="soft" disabled icon="Clock">Verificando…</Btn>
-          : <Btn variant="primary" onClick={() => nav('/login')} icon="ArrowRight">Ir a ingresar</Btn>}
+        {state === 'working' && <Btn variant="soft" disabled icon="Clock">Verificando…</Btn>}
+        {state === 'ok' && <Btn variant="primary" onClick={() => nav('/', { replace: true })} icon="ArrowRight">Entrar ahora</Btn>}
+        {state === 'error' && <Btn variant="primary" onClick={() => nav('/login')} icon="ArrowRight">Ir a ingresar</Btn>}
+        {state === 'invalid' && <Btn variant="primary" onClick={() => nav('/register')} icon="ArrowRight">Registrarme</Btn>}
       </div>
     </div>
   );

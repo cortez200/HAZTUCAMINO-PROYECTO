@@ -36,7 +36,7 @@ function AccountMenu() {
   const initial = (account.name || '?').trim().charAt(0).toUpperCase();
   return (
     <div className="menu-wrap" ref={ref}>
-      <button className="account-btn" onClick={() => setOpen((o) => !o)} aria-haspopup="menu" aria-expanded={open}>
+      <button type="button" className="account-btn" onClick={() => setOpen((o) => !o)} aria-haspopup="menu" aria-expanded={open}>
         <span className="avatar" style={{ width: 32, height: 32, fontSize: '.82rem' }}>{initial}</span>
         <span className="bold small truncate account-name">{account.name?.split(' ')[0]}</span>
         <Icon name="ChevronDown" size={15} />
@@ -50,7 +50,7 @@ function AccountMenu() {
           <Link to="/cuenta" className="menu-item" onClick={() => setOpen(false)}><Icon name="User" size={16} /> Mi cuenta</Link>
           <Link to="/resultados" className="menu-item" onClick={() => setOpen(false)}><Icon name="BarChart3" size={16} /> Mis resultados</Link>
           <Link to="/guardadas" className="menu-item" onClick={() => setOpen(false)}><Icon name="Star" size={16} /> Guardadas</Link>
-          <button className="menu-item danger" onClick={() => { setOpen(false); logout(); nav('/'); toast('Sesión cerrada', 'LogOut'); }}>
+          <button type="button" className="menu-item danger" onClick={() => { setOpen(false); logout(); nav('/'); toast('Sesión cerrada', 'LogOut'); }}>
             <Icon name="LogOut" size={16} /> Cerrar sesión
           </button>
         </div>
@@ -86,7 +86,7 @@ export default function SiteLayout({ children }) {
 
           <div className="site-actions">
             <AccountMenu />
-            <button className="btn btn-ghost btn-icon burger" aria-label="Abrir menú" aria-expanded={mobile} onClick={() => setMobile((m) => !m)}>
+            <button type="button" className="btn btn-ghost btn-icon burger" aria-label="Abrir menú" aria-expanded={mobile} onClick={() => setMobile((m) => !m)}>
               <Icon name={mobile ? 'X' : 'Menu'} size={22} />
             </button>
           </div>

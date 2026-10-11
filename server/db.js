@@ -39,6 +39,25 @@ sqlite.exec(`
     mensaje  TEXT,
     at       TEXT
   );
+
+  CREATE TABLE IF NOT EXISTS purchases (
+    id         TEXT PRIMARY KEY,
+    email      TEXT,
+    plan       TEXT,
+    plan_nombre TEXT,
+    amount     REAL,
+    currency   TEXT,
+    at         TEXT
+  );
+
+  CREATE TABLE IF NOT EXISTS visits (
+    id      TEXT PRIMARY KEY,
+    visitor TEXT,
+    path    TEXT,
+    ref     TEXT,
+    ua      TEXT,
+    at      TEXT
+  );
 `);
 
 /* Migración: añade email_verified a bases de datos creadas antes de esta columna.
@@ -121,4 +140,46 @@ export function loadUsers() {
 
 export function loadRequests() {
   return sqlite.prepare('SELECT * FROM requests ORDER BY at').all();
+}
+
+/* ---------------- borrado de usuarios (panel admin) ---------------- */
+export function deleteUser(email) {
+  sqlite.prepare('DELETE FROM users WHERE email = ?').run(email);
+}
+
+/* ---------------- compras (suscripciones a planes) ---------------- */
+const insertPurchaseStmt = sqlite.prepare(
+  'INSERT INTO purchases (id,email,plan,plan_nombre,amount,currency,at) VALUES (?,?,?,?,?,?,?)'
+);
+export function savePurchase(p) {
+  insertPurchaseStmt.run(
+    p.id, p.email, p.plan, p.planNombre || p.plan,
+    Number(p.amount) || 0, p.currency || 'S/', p.at || new Date().toISOString()
+  );
+}
+export function loadPurchases() {
+  return sqlite.prepare('SELECT * FROM purchases ORDER BY at DESC').all().map((r) => ({
+    id: r.id, email: r.email, plan: r.plan, planNombre: r.plan_nombre,
+    amount: r.amount, currency: r.currency, at: r.at
+  }));
+}
+
+/* ---------------- visitas ---------------- */
+const insertVisitStmt = sqlite.prepare(
+  'INSERT INTO visits (id,visitor,path,ref,ua,at) VALUES (?,?,?,?,?,?)'
+);
+export function saveVisit(v) {
+  insertVisitStmt.run(
+    v.id, v.visitor || null, v.path || null,
+    (v.ref || '').slice(0, 300), (v.ua || '').slice(0, 300),
+    v.at || new Date().toISOString()
+  );
+}
+export function loadVisits(limit = 500) {
+  return sqlite.prepare('SELECT * FROM visits ORDER BY at DESC LIMIT ?').all(limit);
+}
+export function visitSummary() {
+  const total = sqlite.prepare('SELECT COUNT(*) AS n FROM visits').get().n;
+  const unique = sqlite.prepare('SELECT COUNT(DISTINCT visitor) AS n FROM visits').get().n;
+  return { total, unique };
 }

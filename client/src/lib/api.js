@@ -158,4 +158,10 @@ export const api = {
       method: 'POST',
       body: payload,
     }),
+
+  track: (payload) =>
+    request('/track', {
+      method: 'POST',
+      body: payload,
+    }),
 };

@@ -161,8 +161,8 @@ export default function Simulacion() {
               <p className="dim small">{sim.caso.objetivo}</p>
             </Card>
             <Btn variant="primary" size="lg" iconRight="ArrowRight" onClick={() => setStage('caso')}>Comenzar el reto</Btn>
-            <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(sim.titulo + ' Perú')}`} target="_blank" rel="noreferrer" className="crumb" style={{ justifyContent: 'center' }}>
-              <Icon name="Youtube" size={15} /> Ver más videos en YouTube
+            <a href={`https://www.youtube.com/watch?v=${sim.video.split('/').pop()}`} target="_blank" rel="noreferrer" className="crumb" style={{ justifyContent: 'center' }}>
+              <Icon name="Youtube" size={15} /> Ver en YouTube
             </a>
           </div>
         </div>

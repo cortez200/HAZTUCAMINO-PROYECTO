@@ -6,3 +6,6 @@ server/node_modules/
 !.env.example
 client/dist/
 server/dist/
+*.sqlite
+*.sqlite-journal
+server/htc.sqlite

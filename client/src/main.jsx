@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
+import ErrorBoundary from './components/ErrorBoundary.jsx';
 import './styles.css';
 import { api } from './lib/api.js';
 import { hydrateCatalog } from './lib/data.js';
@@ -33,11 +34,33 @@ async function boot() {
     );
     return;
   }
+
+  trackVisit();
+
   root.render(
     <React.StrictMode>
-      <App />
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
     </React.StrictMode>
   );
+}
+
+function trackVisit() {
+  try {
+    let visitor = localStorage.getItem('htc_visitor');
+    if (!visitor) {
+      visitor = (window.crypto?.randomUUID?.() || String(Date.now()) + Math.random().toString(16).slice(2));
+      localStorage.setItem('htc_visitor', visitor);
+    }
+    api.track({
+      visitor,
+      path: window.location.hash || '/',
+      ref: document.referrer || '',
+    }).catch(() => {});
+  } catch {
+    // La analítica nunca debe romper la app.
+  }
 }
 
 boot();

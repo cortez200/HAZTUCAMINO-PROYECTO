@@ -43,7 +43,7 @@ export default function CarreraDetalle() {
   const score = account?.done ? areaScores(account.answers).find((s) => s.id === c.area) : null;
   const related = CARRERAS.filter((x) => x.area === c.area && x.id !== c.id);
   const sim = simDeArea(c.area);
-  const yt = `https://www.youtube.com/results?search_query=${encodeURIComponent('un día en la vida de ' + c.nombre + ' Perú')}`;
+  const vid = (c.video || '').split('/').pop();
 
   const privadas = c.universidades.filter((o) => o.tipo === 'Privada');
   const hayPublica = c.universidades.some((o) => o.tipo === 'Pública');
@@ -81,7 +81,7 @@ export default function CarreraDetalle() {
           <Link to={`/simulaciones/${sim.id}`} className="btn btn-primary"><Icon name="Gamepad2" size={16} /> Simular la carrera</Link>
         )}
         <Link to={`/comparar?c=${c.id}`} className="btn btn-outline"><Icon name="SlidersHorizontal" size={16} /> Comparar</Link>
-        <a href={yt} target="_blank" rel="noreferrer" className="btn btn-outline"><Icon name="Youtube" size={17} /> Ver videos</a>
+        <a href={`https://www.youtube.com/watch?v=${vid}`} target="_blank" rel="noreferrer" className="btn btn-outline"><Icon name="Youtube" size={17} /> Ver video</a>
       </div>
 
       {/* Datos rápidos */}
@@ -110,6 +110,22 @@ export default function CarreraDetalle() {
           <div className="tiny dim mt-8">{hayPublica ? 'Públicas y privadas' : 'Privadas'}</div>
         </Card>
       </div>
+
+      {vid && (
+        <section className="mt-32">
+          <h2 className="section-title mb-16" style={{ fontSize: '1.5rem' }}>Video: un día como {c.nombre}</h2>
+          <Card style={{ overflow: 'hidden' }}>
+            <div className="video-frame">
+              <iframe
+                src={`https://www.youtube.com/embed/${vid}?rel=0`}
+                title={`Video: ${c.nombre}`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </Card>
+        </section>
+      )}
 
       {score && (
         <Card className="card-pad mt-16" style={{ background: 'var(--area-soft)', border: 0 }}>

@@ -74,8 +74,8 @@ export default function App() {
       <AuthProvider>
         <HashRouter>
           <Routes>
-            <Route path="/login" element={<PublicOnly><Auth mode="login" /></PublicOnly>} />
-            <Route path="/register" element={<PublicOnly><Auth mode="register" /></PublicOnly>} />
+            <Route path="/login" element={<PublicOnly><Auth key="login" mode="login" /></PublicOnly>} />
+            <Route path="/register" element={<PublicOnly><Auth key="register" mode="register" /></PublicOnly>} />
             <Route path="/recuperar" element={<Forgot />} />
             <Route path="/restablecer" element={<Reset />} />
             <Route path="/verificar" element={<Verify />} />

@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Panel Administrativo · Haz Tu Camino</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+<style>
+  :root{
+    --surface:#ffffff; --surface-2:#f8fafc; --border:#e6ebf2; --border-2:#eef2f7;
+    --text:#0f172a; --text-2:#475569; --muted:#94a3b8;
+    --primary:#4f46e5; --primary-700:#3730a3; --primary-soft:#eef2ff;
+    --ok:#059669; --ok-soft:#ecfdf5; --warn:#d97706; --warn-soft:#fffbeb;
+    --danger:#dc2626; --danger-soft:#fef2f2; --info:#0284c7; --info-soft:#f0f9ff;
+    --shadow-sm:0 1px 2px rgba(15,23,42,.06);
+    --shadow:0 8px 24px rgba(15,23,42,.07);
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#f4f6fb;-webkit-font-smoothing:antialiased}
+  a{color:var(--primary);text-decoration:none}
+  a:hover{text-decoration:underline}
+  h1,h2,h3{margin:0}
+  .hidden{display:none !important}
+  ::selection{background:var(--primary-soft)}
+
+  /* ---------- Login ---------- */
+  #login{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(1200px 600px at 50% -10%,#e0e7ff,#f4f6fb)}
+  .login-card{width:100%;max-width:410px;background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);padding:36px 30px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:1.1rem}
+  .logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:grid;place-items:center;color:#fff;font-size:20px;box-shadow:0 6px 14px rgba(79,70,229,.35)}
+  .field{margin-top:16px}
+  label{display:block;font-size:.8rem;font-weight:700;color:var(--text-2);margin-bottom:6px}
+  .input-wrap{position:relative}
+  input{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:12px;font-size:.95rem;font-family:inherit;outline:none;transition:.15s;background:var(--surface)}
+  input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+  input[type=password]{padding-right:44px}
+  .pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:transparent;cursor:pointer;font-size:1rem;padding:6px 9px;border-radius:8px;color:var(--muted)}
+  .pw-toggle:hover{background:var(--surface-2);color:var(--text-2)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:12px 18px;font-weight:700;font-size:.92rem;cursor:pointer;font-family:inherit;transition:.15s;white-space:nowrap}
+  .btn:disabled{opacity:.6;cursor:default}
+  .btn-primary{background:var(--primary);color:#fff;box-shadow:0 6px 14px rgba(79,70,229,.25)}
+  .btn-primary:not(:disabled):hover{background:var(--primary-700)}
+  .btn-ghost{background:var(--surface-2);color:var(--text-2);border:1px solid var(--border)}
+  .btn-ghost:not(:disabled):hover{background:#eef2f7}
+  .btn-block{width:100%}
+  .err{color:var(--danger);font-size:.85rem;margin-top:12px;background:var(--danger-soft);border:1px solid #fecaca;padding:9px 12px;border-radius:10px}
+  .hint{color:var(--muted);font-size:.8rem;margin-top:16px;line-height:1.5;display:flex;gap:7px;align-items:center}
+  .subtitle{color:var(--text-2);font-size:.88rem;margin:8px 0 4px}
+
+  /* ---------- App ---------- */
+  #app{min-height:100vh}
+  .topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:11px 22px;gap:16px;flex-wrap:wrap}
+  .topbar-right{display:flex;align-items:center;gap:10px}
+  .who{display:flex;flex-direction:column;align-items:flex-end;line-height:1.25}
+  .who .name{font-size:.82rem;font-weight:700}
+  .who .stamp{font-size:.72rem;color:var(--muted)}
+  .wrap{max-width:1180px;margin:0 auto;padding:22px 20px 70px}
+
+  /* Nav */
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 22px}
+  .tab{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);color:var(--text-2);padding:9px 15px;border-radius:999px;font-weight:700;font-size:.86rem;cursor:pointer;transition:.15s}
+  .tab .ic{font-size:1rem;line-height:1;color:var(--primary)}
+  .tab:hover{border-color:#c7d2fe;background:#fbfcff}
+  .tab.on{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 6px 14px rgba(79,70,229,.25)}
+  .tab.on .ic{color:#fff}
+  .tab .badge{background:var(--surface-2);color:var(--text-2);font-size:.72rem;font-weight:800;padding:1px 8px;border-radius:999px}
+  .tab.on .badge{background:rgba(255,255,255,.25);color:#fff}
+
+  /* Headings */
+  .page-head{margin:0 0 18px}
+  .page-head h2{font-size:1.35rem;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+  .page-head h2 i{color:var(--primary)}
+  .page-head p{margin:5px 0 0;color:var(--text-2);font-size:.9rem}
+
+  /* Cards */
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:22px}
+  .card{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 16px 15px;box-shadow:var(--shadow-sm);transition:.15s}
+  .card:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
+  .card .top{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+  .card .ico{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:1.1rem;background:var(--primary-soft);color:var(--primary-700)}
+  .card .k{font-size:.75rem;font-weight:800;letter-spacing:.02em;text-transform:uppercase;color:var(--muted)}
+  .card .v{font-size:1.85rem;font-weight:800;letter-spacing:-.02em;line-height:1}
+  .card .s{font-size:.8rem;color:var(--text-2);margin-top:6px}
+  .card.ok .ico{background:var(--ok-soft);color:var(--ok)} .card.ok .v{color:var(--ok)}
+  .card.plan .ico{background:var(--primary-soft);color:var(--primary-700)} .card.plan .v{color:var(--primary-700)}
+  .card.money .ico{background:var(--warn-soft);color:var(--warn)} .card.money .v{color:#b45309}
+  .card.info .ico{background:var(--info-soft);color:var(--info)} .card.info .v{color:var(--info)}
+
+  /* Insights strip */
+  .insights{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-bottom:22px}
+  .insight{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--muted);border-radius:12px;padding:13px 15px}
+  .insight.info{border-left-color:var(--info)} .insight.info .il i{color:var(--info)}
+  .insight.ok{border-left-color:var(--ok)} .insight.ok .il i{color:var(--ok)}
+  .insight.warn{border-left-color:var(--warn)} .insight.warn .il i{color:var(--warn)}
+  .insight .il{font-size:.78rem;color:var(--text-2);font-weight:600;display:flex;gap:7px;align-items:center}
+  .insight .iv{font-size:1.3rem;font-weight:800;margin-top:3px}
+  .insight .ih{font-size:.74rem;color:var(--muted);margin-top:2px}
+
+  /* Panels */
+  .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:20px}
+  .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;border-bottom:1px solid var(--border-2);flex-wrap:wrap}
+  .panel-head h3{font-size:1rem;display:flex;align-items:center;gap:9px}
+  .panel-head h3 i{color:var(--primary)}
+  .panel-head .count{color:var(--muted);font-weight:700;font-size:.82rem}
+  .panel .body{padding:0}
+  .grid-2{display:grid;grid-template-columns:1fr;gap:20px}
+  @media(min-width:920px){ .grid-2{grid-template-columns:1fr 1fr} }
+
+  /* Search */
+  .search{position:relative;display:flex;align-items:center}
+  .search .si{position:absolute;left:12px;color:var(--muted);font-size:.9rem;pointer-events:none}
+  .search input{padding-left:34px;min-width:230px;padding-top:9px;padding-bottom:9px}
+  .toolbar{padding:14px 18px;border-bottom:1px solid var(--border-2);display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;background:var(--surface-2)}
+
+  /* Table */
+  table{width:100%;border-collapse:collapse;font-size:.88rem}
+  th,td{text-align:left;padding:12px 18px;border-bottom:1px solid var(--border-2);vertical-align:middle}
+  th{color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;font-weight:800;background:var(--surface-2)}
+  tbody tr:hover{background:#fbfcff}
+  tr:last-child td{border-bottom:0}
+  td .cell-main{font-weight:600}
+  td .cell-sub{font-size:.78rem;color:var(--muted);margin-top:2px}
+  .empty{padding:34px 18px;color:var(--muted);text-align:center}
+  .empty .eic{font-size:1.7rem;display:block;margin-bottom:8px;opacity:.55}
+  .pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;font-size:.74rem;font-weight:800;white-space:nowrap}
+  .pill.free{background:var(--surface-2);color:var(--text-2);border:1px solid var(--border)}
+  .pill.premium{background:var(--primary-soft);color:var(--primary-700)}
+  .pill.super{background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e}
+  .pill.ok{background:var(--ok-soft);color:var(--ok)}
+  .pill.no{background:var(--warn-soft);color:var(--warn)}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.82rem}
+  .msg{max-width:380px;color:var(--text-2);white-space:pre-wrap;line-height:1.45}
+  .muted{color:var(--muted)}
+  .nowrap{white-space:nowrap}
+  .avatar{width:30px;height:30px;border-radius:50%;display:inline-grid;place-items:center;font-weight:800;font-size:.78rem;color:#fff;background:linear-gradient(135deg,#6366f1,#8b5cf6);flex:0 0 auto}
+  .person{display:flex;align-items:center;gap:10px}
+
+  /* Chart */
+  .chart{display:flex;align-items:flex-end;gap:10px;height:170px;padding:18px 18px 12px}
+  .bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:7px;height:100%;min-width:0}
+  .bar .val{font-size:.74rem;font-weight:800;color:var(--text-2)}
+  .bar .col{width:100%;max-width:46px;background:linear-gradient(180deg,#818cf8,#4f46e5);border-radius:8px 8px 3px 3px;min-height:5px;transition:.35s}
+  .bar .lbl{font-size:.72rem;color:var(--muted);white-space:nowrap}
+
+  .loading{padding:46px;text-align:center;color:var(--muted)}
+  .spinner{width:22px;height:22px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .icon-btn{border:1px solid var(--border);background:var(--surface);color:var(--text-2);width:34px;height:34px;border-radius:9px;cursor:pointer;display:inline-grid;place-items:center;font-size:.95rem;transition:.15s}
+  .icon-btn:hover{border-color:#fecaca;background:var(--danger-soft);color:var(--danger)}
+  .icon-btn:disabled{opacity:.5;cursor:default}
+  .icon-btn.danger{color:var(--danger)}
+
+  .toast-host{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:50;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+  .toast{background:#0f172a;color:#fff;padding:10px 16px;border-radius:999px;font-size:.85rem;font-weight:600;box-shadow:var(--shadow);display:flex;gap:8px;align-items:center;animation:pop .2s ease}
+  .toast.ok{background:var(--ok)}
+  .toast.err{background:var(--danger)}
+  @keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @media(max-width:640px){
+    .who{display:none}
+    .wrap{padding:18px 14px 70px}
+    th,td{padding:10px 14px}
+    .tb-hide{display:none}
+  }
+</style>
+</head>
+<body>
+  <!-- LOGIN -->
+  <div id="login">
+    <form class="login-card" id="loginForm">
+      <div class="brand"><span class="logo"><i class="bi bi-compass"></i></span> Haz Tu Camino</div>
+      <h2 style="margin-top:18px;font-size:1.25rem">Panel administrativo</h2>
+      <p class="subtitle">Ingresa para ver las métricas del sitio.</p>
+      <div class="field">
+        <label for="email">Correo</label>
+        <input id="email" type="email" autocomplete="username" placeholder="tu@correo.com" required />
+      </div>
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <div class="input-wrap">
+          <input id="password" type="password" autocomplete="current-password" placeholder="••••••••" required />
+          <button type="button" class="pw-toggle" id="pwToggle" aria-label="Mostrar contraseña"><i class="bi bi-eye"></i></button>
+        </div>
+      </div>
+      <div id="loginErr" class="err hidden"></div>
+      <button class="btn btn-primary btn-block" type="submit" style="margin-top:18px" id="loginBtn"><i class="bi bi-box-arrow-in-right"></i> Ingresar</button>
+      <p class="hint"><i class="bi bi-shield-lock"></i> Acceso solo para administradores. Este panel no está enlazado en la web pública.</p>
+    </form>
+  </div>
+
+  <!-- APP -->
+  <div id="app" class="hidden">
+    <div class="topbar">
+      <div class="brand"><span class="logo"><i class="bi bi-compass"></i></span> Panel administrativo</div>
+      <div class="topbar-right">
+        <div class="who">
+          <span class="name" id="who"></span>
+          <span class="stamp" id="stamp"></span>
+        </div>
+        <button class="btn btn-ghost" id="refreshBtn" type="button"><i class="bi bi-arrow-clockwise"></i> Actualizar</button>
+        <button class="btn btn-ghost" id="logoutBtn" type="button"><i class="bi bi-box-arrow-right"></i> Salir</button>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="tabs" id="tabs"></div>
+      <div id="content" class="loading"><div class="spinner"></div>Cargando…</div>
+    </div>
+  </div>
+  <div class="toast-host" id="toastHost"></div>
+
+<script>
+(function () {
+  var TOKEN_KEY = 'htc_admin_token';
+  var EMAIL_KEY = 'htc_admin_email';
+  var TAB_KEY = 'htc_admin_tab';
+  var TABS = [
+    { id: 'resumen',  icon: 'bi-grid-1x2',        label: 'Resumen',     desc: 'Todo el panorama de Haz Tu Camino de un vistazo.' },
+    { id: 'usuarios', icon: 'bi-people',          label: 'Registrados', desc: 'Personas que crearon una cuenta en la plataforma.' },
+    { id: 'compras',  icon: 'bi-credit-card-2-front', label: 'Compras', desc: 'Suscripciones a los planes Premium y Super Premium.' },
+    { id: 'visitas',  icon: 'bi-graph-up-arrow',  label: 'Visitas',     desc: 'Cuántas veces y cuántas personas entran al sitio.' },
+    { id: 'demos',    icon: 'bi-building',        label: 'Solicitudes', desc: 'Pedidos de demostración del formulario de instituciones.' }
+  ];
+  var PLAN_LABEL = { free: 'Básico', premium: 'Premium', super: 'Super Premium' };
+  var NIVEL_LABEL = { secundaria: 'Secundaria', universidad: 'Instituto / universidad', cambio: 'Cambio de carrera' };
+
+  var state = {
+    token: localStorage.getItem(TOKEN_KEY) || null,
+    email: localStorage.getItem(EMAIL_KEY) || '',
+    tab: TABS.some(function (t) { return t.id === localStorage.getItem(TAB_KEY); }) ? localStorage.getItem(TAB_KEY) : 'resumen',
+    data: {},
+    query: ''
+  };
+
+  var el = function (id) { return document.getElementById(id); };
+  function ico(cls) { return '<i class="bi ' + cls + '"></i>'; }
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  function num(n) { return Number(n || 0).toLocaleString('es-PE'); }
+  function money(n) { return 'S/ ' + Number(n || 0).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function pct(part, total) { return total > 0 ? Math.round((part / total) * 100) + '%' : '—'; }
+  function fmtDate(v) {
+    if (!v) return '—';
+    var d = new Date(v);
+    if (isNaN(d.getTime())) return esc(v);
+    return d.toLocaleString('es-PE', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+  function fmtDay(v) {
+    var d = new Date(v);
+    return d.toLocaleDateString('es-PE', { day: '2-digit', month: 'short' });
+  }
+  function initials(name, email) {
+    var src = (name && name.trim()) || email || '?';
+    var parts = src.replace(/[^a-zA-Z0-9 ]/g, ' ').trim().split(/\s+/);
+    return ((parts[0] || '?')[0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+  }
+  function planPill(plan) {
+    var p = plan || 'free';
+    var cls = p === 'premium' ? 'premium' : p === 'super' ? 'super' : 'free';
+    return '<span class="pill ' + cls + '">' + esc(PLAN_LABEL[p] || p) + '</span>';
+  }
+  function matches(q) {
+    if (!q) return true;
+    var needle = q.toLowerCase();
+    for (var i = 1; i < arguments.length; i++) {
+      if (String(arguments[i] || '').toLowerCase().indexOf(needle) !== -1) return true;
+    }
+    return false;
+  }
+  function api(path, opts) {
+    opts = opts || {};
+    var headers = { 'Content-Type': 'application/json' };
+    if (state.token) headers.Authorization = 'Bearer ' + state.token;
+    return fetch(path, { method: opts.method || 'GET', headers: headers, body: opts.body ? JSON.stringify(opts.body) : undefined })
+      .then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (data) {
+          if (!r.ok) { var e = new Error(data.error || 'Error ' + r.status); e.status = r.status; throw e; }
+          return data;
+        });
+      });
+  }
+  function notify(msg, kind) {
+    var host = el('toastHost');
+    if (!host) return;
+    var t = document.createElement('div');
+    t.className = 'toast ' + (kind || '');
+    t.innerHTML = ico(kind === 'err' ? 'bi-exclamation-triangle' : 'bi-check-circle') + '<span>' + esc(msg) + '</span>';
+    host.appendChild(t);
+    setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 3200);
+  }
+  function showLogin() { el('app').classList.add('hidden'); el('login').classList.remove('hidden'); }
+  function showApp() {
+    el('login').classList.add('hidden');
+    el('app').classList.remove('hidden');
+    el('who').textContent = state.email || 'Administrador';
+    renderNav();
+    loadAll();
+  }
+
+  /* ---------- login ---------- */
+  el('pwToggle').addEventListener('click', function () {
+    var p = el('password');
+    var show = p.type === 'password';
+    p.type = show ? 'text' : 'password';
+    this.innerHTML = ico(show ? 'bi-eye-slash' : 'bi-eye');
+    this.setAttribute('aria-label', show ? 'Ocultar contraseña' : 'Mostrar contraseña');
+    p.focus();
+  });
+  el('loginForm').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var err = el('loginErr'); err.classList.add('hidden');
+    var btn = el('loginBtn'); btn.disabled = true; btn.innerHTML = 'Ingresando…';
+    api('/api/admin/login', { method: 'POST', body: { email: el('email').value.trim(), password: el('password').value } })
+      .then(function (r) {
+        state.token = r.token; state.email = r.email;
+        localStorage.setItem(TOKEN_KEY, r.token);
+        localStorage.setItem(EMAIL_KEY, r.email);
+        showApp();
+      })
+      .catch(function (e) { err.textContent = e.message; err.classList.remove('hidden'); })
+      .finally(function () { btn.disabled = false; btn.innerHTML = ico('bi-box-arrow-in-right') + ' Ingresar'; });
+  });
+  el('logoutBtn').addEventListener('click', function () {
+    [TOKEN_KEY, EMAIL_KEY].forEach(function (k) { localStorage.removeItem(k); });
+    state.token = null; state.email = '';
+    el('email').value = ''; el('password').value = '';
+    showLogin();
+  });
+  el('refreshBtn').addEventListener('click', function () { loadAll(); });
+
+  /* Eliminar una cuenta registrada (con confirmación). */
+  document.addEventListener('click', function (ev) {
+    var btn = ev.target.closest('.del-user');
+    if (!btn) return;
+    var email = btn.getAttribute('data-email');
+    if (!email) return;
+    if (!window.confirm('¿Eliminar la cuenta de ' + email + '?\n\nLa cuenta dejará de poder iniciar sesión. Sus compras se mantienen en el panel. Esta acción no se puede deshacer.')) return;
+    btn.disabled = true;
+    api('/api/admin/users/' + encodeURIComponent(email), { method: 'DELETE' })
+      .then(function () { notify('Cuenta eliminada: ' + email, 'ok'); loadAll(); })
+      .catch(function (e) { notify(e.message, 'err'); btn.disabled = false; });
+  });
+
+  /* ---------- nav ---------- */
+  function renderNav() {
+    var counts = navCounts();
+    el('tabs').innerHTML = TABS.map(function (t) {
+      var c = counts[t.id];
+      var badge = c == null ? '' : '<span class="badge">' + esc(num(c)) + '</span>';
+      return '<button class="tab' + (state.tab === t.id ? ' on' : '') + '" data-tab="' + t.id + '" type="button">' +
+        '<span class="ic">' + ico(t.icon) + '</span>' + esc(t.label) + badge + '</button>';
+    }).join('');
+  }
+  function navCounts() {
+    var s = state.data.stats;
+    if (!s) return {};
+    return { usuarios: s.users, compras: s.purchases, visitas: s.visits, demos: s.demos };
+  }
+  el('tabs').addEventListener('click', function (ev) {
+    var b = ev.target.closest('.tab'); if (!b) return;
+    state.tab = b.getAttribute('data-tab');
+    state.query = '';
+    localStorage.setItem(TAB_KEY, state.tab);
+    renderNav();
+    render();
+  });
+
+  /* ---------- data ---------- */
+  function loadAll() {
+    el('content').innerHTML = '<div class="loading"><div class="spinner"></div>Cargando datos…</div>';
+    Promise.all([
+      api('/api/admin/stats'), api('/api/admin/users'), api('/api/admin/purchases'),
+      api('/api/admin/visits'), api('/api/admin/demos')
+    ]).then(function (res) {
+      state.data = { stats: res[0], users: res[1].users, purchases: res[2].purchases, visits: res[3], demos: res[4].demos };
+      el('stamp').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+      renderNav();
+      render();
+    }).catch(function (e) {
+      if (e.status === 401) { [TOKEN_KEY, EMAIL_KEY].forEach(function (k) { localStorage.removeItem(k); }); state.token = null; showLogin(); return; }
+      el('content').innerHTML = emptyBox('bi-exclamation-triangle', 'No se pudieron cargar los datos', e.message);
+    });
+  }
+
+  /* ---------- render ---------- */
+  function currentTab() { return TABS.filter(function (x) { return x.id === state.tab; })[0]; }
+  function pageHead() {
+    var t = currentTab();
+    return '<div class="page-head"><h2>' + ico(t.icon) + ' ' + esc(t.label) + '</h2><p>' + esc(t.desc) + '</p></div>';
+  }
+  function emptyBox(icon, title, sub) {
+    return '<div class="empty"><span class="eic">' + ico(icon) + '</span><strong>' + esc(title) + '</strong>' +
+      (sub ? '<div style="margin-top:4px;font-size:.82rem">' + esc(sub) + '</div>' : '') + '</div>';
+  }
+  function card(icon, label, value, sub, tone) {
+    return '<div class="card ' + (tone || '') + '">' +
+      '<div class="top"><span class="ico">' + ico(icon) + '</span><span class="k">' + esc(label) + '</span></div>' +
+      '<div class="v">' + value + '</div>' + (sub ? '<div class="s">' + sub + '</div>' : '') + '</div>';
+  }
+  function insight(tone, icon, label, value, hint) {
+    return '<div class="insight ' + tone + '"><div class="il">' + ico(icon) + ' ' + esc(label) + '</div>' +
+      '<div class="iv">' + value + '</div><div class="ih">' + esc(hint) + '</div></div>';
+  }
+  function panel(icon, title, count, inner, toolbar) {
+    return '<div class="panel"><div class="panel-head"><h3>' + ico(icon) + ' ' + esc(title) + '</h3>' +
+      (count != null ? '<span class="count">' + esc(num(count)) + '</span>' : '') + '</div>' +
+      (toolbar ? toolbar : '') + '<div class="body">' + inner + '</div></div>';
+  }
+  function searchBar(ph) {
+    return '<div class="toolbar"><div class="search"><span class="si">' + ico('bi-search') + '</span>' +
+      '<input id="searchInput" type="search" placeholder="' + esc(ph) + '" value="' + esc(state.query) + '" /></div></div>';
+  }
+
+  function render() {
+    var d = state.data, s = d.stats, c = el('content');
+    if (!s) { c.innerHTML = '<div class="loading"><div class="spinner"></div>Cargando…</div>'; return; }
+    var html = pageHead();
+
+    if (state.tab === 'resumen') {
+      html += '<div class="cards">' +
+        card('bi-people', 'Registrados', num(s.users), s.verified + ' con correo confirmado', 'plan') +
+        card('bi-patch-check', 'Confirmados', num(s.verified), 'de ' + num(s.users) + ' registrados', 'ok') +
+        card('bi-gem', 'Planes de pago', num(s.premium), 'activos ahora mismo', 'plan') +
+        card('bi-credit-card-2-front', 'Compras', num(s.purchases), num(s.buyers) + ' compradores únicos', '') +
+        card('bi-cash-coin', 'Ingresos (demo)', money(s.revenue), 'suma de todas las compras', 'money') +
+        card('bi-eye', 'Visitas', num(s.visits), num(s.uniqueVisitors) + ' visitantes únicos', 'info') +
+        card('bi-building', 'Solicitudes demo', num(s.demos), 'formulario de instituciones', '') +
+        card('bi-clipboard-check', 'Tests realizados', num(s.testsTaken), 'en total', '') +
+        '</div>';
+      html += '<div class="insights">' +
+        insight('ok', 'bi-patch-check', 'Correos confirmados', pct(s.verified, s.users), 'registrados que verificaron su correo') +
+        insight('info', 'bi-bullseye', 'Conversión a pago', pct(s.buyers, s.users), 'registrados que compraron un plan') +
+        insight('warn', 'bi-clipboard-check', 'Tests por usuario', s.users ? (s.testsTaken / s.users).toFixed(1) : '0', 'promedio por persona') +
+        insight('info', 'bi-arrow-repeat', 'Visitas por visitante', s.uniqueVisitors ? (s.visits / s.uniqueVisitors).toFixed(1) : '0', 'veces que vuelven al sitio') +
+        '</div>';
+      html += '<div class="grid-2">' +
+        panel('bi-person-plus', 'Últimos registros', null, usersTable(d.users.slice(0, 6))) +
+        panel('bi-inbox', 'Últimas solicitudes', null, demosTable(d.demos.slice(0, 6))) +
+        '</div>';
+      c.innerHTML = html;
+      return;
+    }
+
+    if (state.tab === 'usuarios') {
+      html += '<div class="cards">' +
+        card('bi-people', 'Registrados', num(s.users), 'total de cuentas', 'plan') +
+        card('bi-patch-check', 'Confirmados', num(s.verified), pct(s.verified, s.users) + ' del total', 'ok') +
+        card('bi-gem', 'De pago', num(s.premium), 'con plan Premium o Super', '') +
+        '</div>';
+      html += panel('bi-people', 'Lista de registrados', d.users.length, '<div id="tableHost">' + usersTable(filtered('usuarios')) + '</div>',
+        searchBar('Buscar por nombre, correo o etapa…'));
+      c.innerHTML = html; bindSearch(); return;
+    }
+
+    if (state.tab === 'compras') {
+      html += '<div class="cards">' +
+        card('bi-credit-card-2-front', 'Compras', num(s.purchases), 'suscripciones registradas', 'plan') +
+        card('bi-person-badge', 'Compradores únicos', num(s.buyers), 'personas que pagaron', '') +
+        card('bi-cash-coin', 'Ingresos (demo)', money(s.revenue), 'suma de todas las compras', 'money') +
+        '</div>';
+      html += panel('bi-receipt', 'Detalle de compras', d.purchases.length, '<div id="tableHost">' + purchasesTable(filtered('compras')) + '</div>',
+        searchBar('Buscar por correo o plan…'));
+      c.innerHTML = html; bindSearch(); return;
+    }
+
+    if (state.tab === 'visitas') {
+      html += '<div class="cards">' +
+        card('bi-eye', 'Visitas totales', num(s.visits), 'veces que se abrió el sitio', 'info') +
+        card('bi-person-badge', 'Visitantes únicos', num(s.uniqueVisitors), 'dispositivos distintos', '') +
+        card('bi-arrow-repeat', 'Visitas por persona', s.uniqueVisitors ? (s.visits / s.uniqueVisitors).toFixed(1) : '0', 'promedio de retorno', '') +
+        '</div>';
+      html += panel('bi-bar-chart-line', 'Visitas por día (últimos 7 días)', null, visitsChart(d.visits.visits));
+      html += panel('bi-clock-history', 'Últimas visitas', d.visits.visits.length, '<div id="tableHost">' + visitsTable(filtered('visitas')) + '</div>',
+        searchBar('Buscar por página o referencia…'));
+      c.innerHTML = html; bindSearch(); return;
+    }
+
+    if (state.tab === 'demos') {
+      html += '<div class="cards">' +
+        card('bi-building', 'Solicitudes', num(s.demos), 'recibidas en total', 'plan') +
+        '</div>';
+      html += panel('bi-envelope-paper', 'Solicitudes de demo', d.demos.length, '<div id="tableHost">' + demosTable(filtered('demos')) + '</div>',
+        searchBar('Buscar por institución, contacto o mensaje…'));
+      c.innerHTML = html; bindSearch();
+    }
+  }
+
+  function filtered(tab) {
+    var q = state.query, d = state.data;
+    if (tab === 'usuarios') return d.users.filter(function (u) { return matches(q, u.name, u.email, u.nivel, u.plan); });
+    if (tab === 'compras') return d.purchases.filter(function (p) { return matches(q, p.email, p.plan, p.planNombre); });
+    if (tab === 'visitas') return d.visits.visits.filter(function (v) { return matches(q, v.path, v.ref, v.visitor); });
+    if (tab === 'demos') return d.demos.filter(function (x) { return matches(q, x.center, x.contacto, x.mensaje, x.region, x.tipo); });
+    return [];
+  }
+  function bindSearch() {
+    var input = el('searchInput');
+    if (!input) return;
+    input.addEventListener('input', function () {
+      state.query = this.value;
+      var host = el('tableHost');
+      var list = filtered(state.tab);
+      if (state.tab === 'usuarios') host.innerHTML = usersTable(list);
+      else if (state.tab === 'compras') host.innerHTML = purchasesTable(list);
+      else if (state.tab === 'visitas') host.innerHTML = visitsTable(list);
+      else if (state.tab === 'demos') host.innerHTML = demosTable(list);
+    });
+  }
+
+  /* ---------- tables ---------- */
+  function usersTable(users) {
+    if (!users.length) return emptyBox('bi-person-x', 'Sin resultados', state.query ? 'Ningún registrado coincide con tu búsqueda.' : 'Aún no hay cuentas registradas.');
+    var rows = users.map(function (u) {
+      var ver = u.emailVerified
+        ? '<span class="pill ok" title="Correo verificado">' + ico('bi-check-circle') + ' Confirmado</span>'
+        : '<span class="pill no" title="Todavía no confirma su correo">' + ico('bi-hourglass-split') + ' Pendiente</span>';
+      return '<tr>' +
+        '<td><div class="person"><span class="avatar">' + esc(initials(u.name, u.email)) + '</span><div>' +
+          '<div class="cell-main">' + esc(u.name || 'Sin nombre') + '</div>' +
+          '<div class="cell-sub mono">' + esc(u.email) + '</div></div></div></td>' +
+        '<td class="tb-hide">' + esc(NIVEL_LABEL[u.nivel] || u.nivel || '—') + '</td>' +
+        '<td>' + planPill(u.plan) + '</td>' +
+        '<td>' + ver + '</td>' +
+        '<td class="tb-hide"><span class="cell-main">' + num(u.tests) + ' tests</span><div class="cell-sub">' + num(u.sims) + ' simulaciones · ' + num(u.saved) + ' favoritos</div></td>' +
+        '<td class="muted nowrap">' + fmtDate(u.createdAt) + '</td>' +
+        '<td class="nowrap"><button class="icon-btn danger del-user" type="button" title="Eliminar cuenta" data-email="' + esc(u.email) + '">' + ico('bi-trash3') + '</button></td>' +
+      '</tr>';
+    }).join('');
+    var head = '<tr><th>Persona</th><th class="tb-hide">Etapa</th><th>Plan</th><th>Confirmado</th><th class="tb-hide">Actividad</th><th>Registro</th><th></th></tr>';
+    return '<table><thead>' + head + '</thead><tbody>' + rows + '</tbody></table>';
+  }
+
+  function purchasesTable(purchases) {
+    if (!purchases.length) return emptyBox('bi-credit-card-2-front', 'Sin compras', state.query ? 'Ninguna compra coincide con tu búsqueda.' : 'Todavía no se registró ninguna compra.');
+    var rows = purchases.map(function (p) {
+      return '<tr>' +
+        '<td class="mono">' + esc(p.email) + '</td>' +
+        '<td>' + planPill(p.plan) + '</td>' +
+        '<td class="cell-main nowrap">' + esc(money(p.amount)) + '</td>' +
+        '<td class="muted nowrap">' + fmtDate(p.at) + '</td>' +
+      '</tr>';
+    }).join('');
+    return '<table><thead><tr><th>Correo</th><th>Plan</th><th>Monto</th><th>Fecha</th></tr></thead><tbody>' + rows + '</tbody></table>';
+  }
+
+  function visitsTable(visits) {
+    if (!visits.length) return emptyBox('bi-eye-slash', 'Sin visitas', state.query ? 'Ninguna visita coincide con tu búsqueda.' : 'Todavía no se registran visitas.');
+    var rows = visits.map(function (v) {
+      var ref = String(v.ref || '').replace(/^https?:\/\//, '');
+      var page = v.path && v.path !== '/' && v.path !== '#/' ? v.path.replace(/^#\/?/, '') : 'Inicio';
+      return '<tr>' +
+        '<td><span class="mono" title="' + esc(v.visitor || 'anon') + '">' + esc((v.visitor || 'anon').slice(0, 8)) + '</span></td>' +
+        '<td class="cell-main">' + esc(page) + '</td>' +
+        '<td class="muted tb-hide">' + esc(ref.slice(0, 48) || 'Directo') + '</td>' +
+        '<td class="muted nowrap">' + fmtDate(v.at) + '</td>' +
+      '</tr>';
+    }).join('');
+    return '<table><thead><tr><th>Visitante</th><th>Página</th><th class="tb-hide">Referencia</th><th>Fecha</th></tr></thead><tbody>' + rows + '</tbody></table>';
+  }
+
+  function demosTable(demos) {
+    if (!demos.length) return emptyBox('bi-building', 'Sin solicitudes', state.query ? 'Ninguna solicitud coincide con tu búsqueda.' : 'Aún no llegan solicitudes de colegios o instituciones.');
+    var rows = demos.map(function (d) {
+      var isMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(d.contacto || '').trim());
+      var contact = isMail
+        ? '<a href="mailto:' + esc(d.contacto) + '" class="mono">' + esc(d.contacto) + '</a>'
+        : '<span class="mono">' + esc(d.contacto || '—') + '</span>';
+      return '<tr>' +
+        '<td><div class="cell-main">' + esc(d.center || '—') + '</div><div class="cell-sub">' + esc(d.tipo || '') + (d.region ? ' · ' + esc(d.region) : '') + '</div></td>' +
+        '<td>' + contact + '</td>' +
+        '<td class="msg">' + esc(d.mensaje || '—') + '</td>' +
+        '<td class="muted nowrap">' + fmtDate(d.at) + '</td>' +
+      '</tr>';
+    }).join('');
+    return '<table><thead><tr><th>Institución</th><th>Contacto</th><th>Mensaje</th><th>Fecha</th></tr></thead><tbody>' + rows + '</tbody></table>';
+  }
+
+  /* ---------- chart ---------- */
+  function visitsChart(visits) {
+    if (!visits.length) return emptyBox('bi-bar-chart', 'Sin datos de visitas', 'El gráfico aparecerá cuando haya visitas registradas.');
+    var days = [], idx = {};
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date(today); d.setDate(today.getDate() - i);
+      var key = d.toISOString().slice(0, 10);
+      idx[key] = days.length;
+      days.push({ key: key, date: d, count: 0 });
+    }
+    visits.forEach(function (v) {
+      var key = String(v.at || '').slice(0, 10);
+      if (idx[key] != null) days[idx[key]].count++;
+    });
+    var max = Math.max.apply(null, days.map(function (d) { return d.count; }).concat([1]));
+    var bars = days.map(function (d) {
+      var h = Math.round((d.count / max) * 100);
+      return '<div class="bar" title="' + fmtDay(d.date) + ': ' + d.count + ' visitas">' +
+        '<span class="val">' + (d.count || '') + '</span>' +
+        '<div class="col" style="height:' + (d.count ? Math.max(h, 6) : 3) + '%"></div>' +
+        '<span class="lbl">' + fmtDay(d.date) + '</span></div>';
+    }).join('');
+    return '<div class="chart">' + bars + '</div>';
+  }
+
+  /* ---------- arranque ---------- */
+  if (state.token) {
+    api('/api/admin/stats').then(function () { showApp(); })
+      .catch(function () { [TOKEN_KEY, EMAIL_KEY].forEach(function (k) { localStorage.removeItem(k); }); state.token = null; showLogin(); });
+  } else {
+    showLogin();
+  }
+})();
+</script>
+</body>
+</html>

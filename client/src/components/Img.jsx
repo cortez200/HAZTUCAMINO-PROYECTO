@@ -3,7 +3,7 @@ import Icon from './Icon.jsx';
 
 /* Imagen con respaldo elegante: si la URL falla, se muestra un degradado
    con el icono del área en lugar de una imagen rota. */
-export default function Img({ src, alt = '', className, style, icon = 'Compass', ratio }) {
+export default function Img({ src, alt = '', className, style, icon = 'Compass', ratio, priority = false }) {
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
   if (failed) {
@@ -31,7 +31,8 @@ export default function Img({ src, alt = '', className, style, icon = 'Compass',
       alt={alt}
       className={className}
       style={{ ...style, opacity: loaded ? 1 : 0, transition: 'opacity .4s', aspectRatio: ratio }}
-      loading="lazy"
+      loading={priority ? 'eager' : 'lazy'}
+      fetchPriority={priority ? 'high' : undefined}
       onLoad={() => setLoaded(true)}
       onError={() => setFailed(true)}
     />

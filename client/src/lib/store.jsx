@@ -63,6 +63,12 @@ export function AuthProvider({ children }) {
   }, []);
   const logout = useCallback(() => { setToken(null); setAccount(null); }, []);
 
+  const verifySession = useCallback(async (token) => {
+    const r = await api.verifyEmail(token);
+    if (r.token) { setToken(r.token); setAccount(r.account); }
+    return r;
+  }, []);
+
   const toggleSaved = useCallback(async (careerId) => {
     const { account } = await api.toggleSaved(careerId);
     setAccount(account); return account;
@@ -86,7 +92,7 @@ export function AuthProvider({ children }) {
   const resendVerification = useCallback((email) => api.resendVerification(email), []);
 
   const value = {
-    account, loading, login, register, logout, setAccount,
+    account, loading, login, register, logout, setAccount, verifySession,
     toggleSaved, submitTest, saveSim, subscribe, cancelPlan, resendVerification
   };
   return <AuthCtx.Provider value={value}>{children}</AuthCtx.Provider>;
