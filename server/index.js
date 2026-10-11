@@ -17,7 +17,10 @@ import { sendMail, verificationEmail, resetEmail, institutionEmail, institutionA
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SECRET = process.env.HTC_SECRET || 'htc-dev-secret-change-me';
 const PORT = process.env.PORT || 4000;
-const APP_URL = (process.env.APP_URL || `http://localhost:${process.env.CLIENT_PORT || 5173}`).replace(/\/$/, '');
+// URL pública del FRONTEND (Static Site). Se usa para armar los enlaces de los
+// correos (verificar / restablecer). Si no se define, se deduce del host de la
+// petición. En Render con frontend separado, define APP_URL con la URL del sitio.
+const PUBLIC_URL = (process.env.APP_URL || '').replace(/\/$/, '');
 
 /* -------------------------- persistencia (SQLite) -------------------------- */
 let db = { users: loadUsers(), requests: loadRequests() };
@@ -63,15 +66,25 @@ function verifyAction(token, purpose) {
   if (!data.exp || data.exp < Date.now()) return null;
   return data;
 }
-/* Base de los enlaces de los correos: usa el host desde donde entró el usuario
-   (así funciona igual en :4000, :5173 o el dominio real), con APP_URL como respaldo. */
+/* Base de los enlaces que ve el usuario (frontend). Prioriza APP_URL, que en
+   Render debe ser la URL de la Static Site; si no, usa el host de la petición. */
 function baseUrl(req) {
+  if (PUBLIC_URL) return PUBLIC_URL;
   if (req) {
     const proto = String(req.headers['x-forwarded-proto'] || req.protocol || 'http').split(',')[0].trim();
     const host = String(req.headers['x-forwarded-host'] || req.headers.host || '').split(',')[0].trim();
     if (host) return `${proto}://${host}`;
   }
-  return APP_URL;
+  return `http://localhost:${process.env.CLIENT_PORT || 5173}`;
+}
+/* Base del propio servidor (API/admin). El panel vive aquí, no en el frontend. */
+function serverBase(req) {
+  if (req) {
+    const proto = String(req.headers['x-forwarded-proto'] || req.protocol || 'http').split(',')[0].trim();
+    const host = String(req.headers['x-forwarded-host'] || req.headers.host || '').split(',')[0].trim();
+    if (host) return `${proto}://${host}`;
+  }
+  return `http://localhost:${process.env.PORT || 4000}`;
 }
 const verifyUrl = (base, token) => `${base}/#/verificar?token=${encodeURIComponent(token)}`;
 const resetUrl = (base, token) => `${base}/#/restablecer?token=${encodeURIComponent(token)}`;
@@ -177,7 +190,7 @@ const RESET_TTL = 30 * 60 * 1000;         // 30 min
 
 async function sendVerificationEmail(u, base) {
   const token = signAction(u.email, 'verify', VERIFY_TTL);
-  const { previewUrl } = await sendMail({ to: u.email, ...verificationEmail(u.name, verifyUrl(base || APP_URL, token)) });
+  const { previewUrl } = await sendMail({ to: u.email, ...verificationEmail(u.name, verifyUrl(base || baseUrl(), token)) });
   return previewUrl || null;
 }
 
@@ -408,7 +421,7 @@ app.post('/api/institutions', async (req, res) => {
   db.requests.push(request);
   persist();
 
-  const panelUrl = `${baseUrl(req)}/admin`;
+  const panelUrl = `${serverBase(req)}/admin`;
   const applicantEmail = isEmail(contact) ? contact : null;
 
   // Aviso interno al equipo (siempre) + confirmación al solicitante (si dejó correo).
