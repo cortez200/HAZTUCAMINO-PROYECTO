@@ -67,6 +67,19 @@ if (!metaGet(MISSIONS_SEED_V2_KEY)) {
   metaSet(MISSIONS_SEED_V2_KEY, new Date().toISOString());
 }
 
+/* Migración: aplica los niveles Gratis/Premium también a misiones que ya
+   estaban guardadas en SQLite. Conserva Gratis solo en las dos misiones base. */
+const MISSION_TIERS_KEY = 'catalog_mission_tiers_v1';
+if (!metaGet(MISSION_TIERS_KEY)) {
+  const FREE_MISSION_IDS = new Set(['ing-software-carrito', 'medicina-abdomen']);
+  const catalogMissions = loadCatalog().missions || [];
+  for (const mission of catalogMissions) {
+    mission.tier = FREE_MISSION_IDS.has(mission.id) ? 'free' : 'premium';
+    upsertCatalogItem('missions', mission.id, mission);
+  }
+  metaSet(MISSION_TIERS_KEY, new Date().toISOString());
+}
+
 /* Migración: agrega universidades nuevas y las asocia a las carreras una sola
    vez (no pisa las ediciones que el admin haya hecho en el panel). */
 const UNI_SYNC_KEY = 'catalog_universities_v2';
