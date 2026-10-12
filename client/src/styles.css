@@ -16,6 +16,8 @@
   --primary-700: #3730a3;
   --primary-soft: #eef2ff;
 
+  --star: #f59e0b;
+
   --ok: #059669;   --ok-soft: #ecfdf5;
   --warn: #d97706; --warn-soft: #fffbeb;
   --danger: #dc2626; --danger-soft: #fef2f2;
@@ -118,6 +120,8 @@ p { margin: 0; }
 .chip:hover { border-color: var(--muted); }
 .chip.on { background: var(--text); color: #fff; border-color: var(--text); }
 .chip-area.on { background: var(--area-soft); border-color: var(--area); color: var(--area-dark); }
+.chip-uni { padding: 5px 13px 5px 6px; }
+.chip-uni.on .uni-logo.logo { border-color: transparent; }
 
 /* ---------- formularios ---------- */
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
@@ -217,8 +221,13 @@ p { margin: 0; }
 /* ---------- hero ---------- */
 .hero-img { position: relative; border-radius: var(--radius-lg); overflow: hidden; color: #fff; }
 .hero-img img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
-.hero-img .overlay { position: absolute; inset: 0; background: linear-gradient(105deg, rgba(15,23,42,.9), rgba(15,23,42,.45) 60%, rgba(15,23,42,.15)); }
-.hero-img .inner { position: relative; padding: 40px; max-width: 640px; }
+.hero-img .overlay {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(105deg, rgba(15,23,42,.04) 0%, rgba(15,23,42,0) 30%),
+    linear-gradient(to top, rgba(15,23,42,.10) 0%, rgba(15,23,42,0) 32%);
+}
+.hero-img .inner { position: relative; padding: 40px; max-width: 640px; text-shadow: 0 1px 5px rgba(2,6,23,.7), 0 1px 2px rgba(2,6,23,.55); }
 
 /* ---------- barras de afinidad ---------- */
 .affinity { display: flex; flex-direction: column; gap: 14px; }
@@ -625,5 +634,127 @@ p { margin: 0; }
   .slots-2, .slots-3, .slots-4, .slots-5 { grid-template-columns: 1fr; }
   .slot { min-height: 92px; }
   .drag-chip { flex: 1 1 100%; }
+}
+
+/* ---------- opiniones / reseñas ---------- */
+.stars { display: inline-flex; align-items: center; gap: 2px; line-height: 0; }
+.stars svg { display: block; }
+
+.star-input { display: inline-flex; gap: 4px; margin: 12px 0; }
+.star-input button {
+  background: none; border: 0; padding: 0; cursor: pointer; color: var(--border-strong);
+  transition: transform .12s ease;
+}
+.star-input button:hover { transform: scale(1.12); }
+.star-input button.on { color: var(--star); }
+
+.reviews-top { display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center; padding: 4px 0 18px; border-bottom: 1px solid var(--border); }
+.reviews-score { text-align: center; min-width: 96px; }
+.reviews-score .big { font-size: 2.4rem; font-weight: 800; line-height: 1; }
+.reviews-bars { display: flex; flex-direction: column; gap: 6px; }
+.rev-bar { display: grid; grid-template-columns: 34px 1fr 28px; align-items: center; gap: 10px; font-size: .8rem; }
+.rev-bar .n { display: inline-flex; align-items: center; gap: 3px; color: var(--text-2); }
+.rev-bar .track { height: 8px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.rev-bar .fill { display: block; height: 100%; background: var(--star); border-radius: 999px; }
+.rev-bar .c { text-align: right; color: var(--muted); }
+
+.review-form { display: flex; flex-direction: column; gap: 10px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+.review-form textarea {
+  width: 100%; resize: vertical; border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  padding: 11px 13px; font: inherit; font-size: .9rem; background: var(--surface); color: var(--text);
+}
+.review-form textarea:focus { outline: none; border-color: var(--primary); box-shadow: var(--ring); }
+.ferr { color: var(--danger); font-size: .85rem; }
+
+.review-login {
+  display: flex; align-items: center; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--border);
+  color: var(--text-2);
+}
+
+.review-list { display: flex; flex-direction: column; gap: 4px; padding-top: 8px; }
+.review-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.review-item:last-child { border-bottom: 0; }
+.review-empty { display: flex; align-items: center; gap: 12px; padding: 20px; color: var(--muted); border: 1px dashed var(--border-strong); border-radius: var(--radius); }
+
+/* universidades en resultados */
+.rec-unis { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.rec-uni {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+.uni-logo.sm { width: 34px; height: 34px; border-radius: 9px; font-size: .68rem; }
+.uni-logo.round { border-radius: 50%; }
+.uni-logo.logo { background: #fff; border: 1px solid var(--border); padding: 5px; overflow: hidden; }
+.uni-logo.logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+@media (max-width: 560px) {
+  .reviews-top { grid-template-columns: 1fr; gap: 14px; }
+  .reviews-score { text-align: left; }
+}
+
+/* ---------- reseñas reales de Google (por universidad) ---------- */
+.g-head {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;
+  padding-bottom: 16px; border-bottom: 1px solid var(--border);
+}
+.g-head-uni { display: flex; align-items: center; gap: 13px; min-width: 0; }
+.g-uni-name { font-size: 1.06rem; font-weight: 800; margin: 0; }
+.g-uni-sub { display: inline-flex; align-items: center; gap: 5px; font-size: .78rem; color: var(--muted); margin-top: 2px; }
+
+.g-score { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.g-score-big { display: flex; align-items: center; gap: 11px; }
+.g-score-num { font-size: 2.1rem; font-weight: 800; line-height: 1; letter-spacing: -.02em; }
+.g-score-col { display: flex; flex-direction: column; gap: 2px; }
+.g-score-count { font-size: .72rem; color: var(--muted); }
+
+.g-loading { display: flex; align-items: center; gap: 10px; padding: 24px 2px; color: var(--muted); font-size: .9rem; }
+.g-spinner {
+  width: 16px; height: 16px; border-radius: 50%; flex: none;
+  border: 2px solid var(--border-strong); border-top-color: var(--primary);
+  animation: g-spin .7s linear infinite;
+}
+@keyframes g-spin { to { transform: rotate(360deg); } }
+
+.g-list-head {
+  display: flex; align-items: center; gap: 7px; margin: 18px 0 10px;
+  font-size: .76rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--text-2);
+}
+.g-count { background: var(--area-soft); color: var(--area-dark); border-radius: 999px; padding: 1px 9px; font-size: .7rem; letter-spacing: 0; }
+
+.g-review-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.g-review {
+  display: flex; flex-direction: column; gap: 9px;
+  padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface-2); transition: border-color .15s ease, box-shadow .15s ease;
+}
+.g-review:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+.g-review-head { display: flex; align-items: center; gap: 10px; }
+.g-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; flex: none; }
+.g-avatar-fallback {
+  width: 38px; height: 38px; border-radius: 50%; flex: none; display: grid; place-items: center;
+  background: var(--primary-soft); color: var(--primary-700); font-weight: 800; font-size: .9rem;
+}
+.g-review-who { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.g-author {
+  font-size: .86rem; font-weight: 700; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.g-author:hover { color: var(--primary-700); }
+.g-date { font-size: .72rem; color: var(--muted); }
+.g-review-stars { flex: none; }
+.g-review-text { margin: 0; font-size: .88rem; line-height: 1.55; color: var(--text-2); }
+
+.g-foot {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px;
+  margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border);
+}
+.g-powered { display: inline-flex; align-items: center; opacity: .9; }
+.g-powered img { display: block; }
+
+@media (max-width: 560px) {
+  .g-head { flex-direction: column; align-items: flex-start; }
+  .g-score-num { font-size: 1.7rem; }
+  .g-review-grid { grid-template-columns: 1fr; }
 }
 

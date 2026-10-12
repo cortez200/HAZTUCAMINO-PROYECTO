@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex, nofollow" />
 <title>Panel Administrativo · Haz Tu Camino</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 <style>
   :root{
@@ -25,9 +28,28 @@
   .hidden{display:none !important}
   ::selection{background:var(--primary-soft)}
 
-  /* ---------- Login ---------- */
-  #login{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(1200px 600px at 50% -10%,#e0e7ff,#f4f6fb)}
-  .login-card{width:100%;max-width:410px;background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);padding:36px 30px}
+  /* ---------- Login (mismo diseño que el login de la web) ---------- */
+  #login{min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
+  .auth-side{position:relative;background:#0f172a;overflow:hidden}
+  .auth-side .auth-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
+  .auth-side .auth-veil{position:absolute;inset:0;background:linear-gradient(160deg,rgba(79,70,229,.88),rgba(15,23,42,.9))}
+  .auth-side .auth-inner{position:absolute;inset:0;padding:44px;color:#fff;display:flex;flex-direction:column;gap:20px}
+  .auth-side .auth-brand{display:flex;align-items:center;gap:9px;color:#fff;text-decoration:none;font-weight:800;font-size:1.1rem}
+  .auth-side .auth-brand:hover{text-decoration:none}
+  .auth-side .auth-brand i{font-size:22px}
+  .auth-side .auth-main{flex:1;display:flex;flex-direction:column;justify-content:center}
+  .auth-side h2{font-size:1.95rem;font-weight:800;max-width:420px;line-height:1.2;margin:0;letter-spacing:-.01em}
+  .auth-side .auth-lead{opacity:.9;margin:14px 0 0;max-width:420px;line-height:1.6}
+  .auth-side .auth-points{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:13px}
+  .auth-side .auth-points li{display:flex;align-items:flex-start;gap:9px;font-size:.95rem;opacity:.95}
+  .auth-side .auth-points li i{color:#a5b4fc;flex:none;margin-top:2px}
+  .auth-side .auth-foot{opacity:.7;font-size:.82rem;max-width:400px;margin:0}
+  .auth-main-panel{display:grid;place-items:center;padding:30px 20px;background:#f5f7fb}
+  .auth-form{width:100%;max-width:430px}
+  .auth-form h1{font-size:1.7rem;font-weight:800;letter-spacing:-.01em;margin:0}
+  .auth-form .auth-sub{color:var(--text-2);font-size:.95rem;margin:8px 0 24px}
+  .auth-form .field:first-of-type{margin-top:0}
+  @media(max-width:900px){ #login{grid-template-columns:1fr} .auth-side{display:none} }
   .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:1.1rem}
   .logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:grid;place-items:center;color:#fff;font-size:20px;box-shadow:0 6px 14px rgba(79,70,229,.35)}
   .field{margin-top:16px}
@@ -164,30 +186,78 @@
     th,td{padding:10px 14px}
     .tb-hide{display:none}
   }
+
+  /* ---------- Catálogo ---------- */
+  .subtabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+  .subtabs .stab{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);color:var(--text-2);padding:8px 13px;border-radius:10px;font-weight:700;font-size:.82rem;cursor:pointer;transition:.15s;font-family:inherit}
+  .subtabs .stab:hover{border-color:#c7d2fe;background:#fbfcff}
+  .subtabs .stab.on{background:var(--primary-soft);border-color:#c7d2fe;color:var(--primary-700)}
+  .subtabs .stab .n{background:var(--surface-2);color:var(--text-2);font-size:.7rem;font-weight:800;padding:1px 7px;border-radius:999px}
+  .subtabs .stab.on .n{background:#fff;color:var(--primary-700)}
+  .row-actions{display:flex;gap:8px;justify-content:flex-end}
+  .link-img{width:46px;height:34px;border-radius:8px;object-fit:cover;background:var(--surface-2);border:1px solid var(--border)}
+  .swatch{display:inline-block;width:14px;height:14px;border-radius:4px;border:1px solid var(--border);vertical-align:-2px;margin-right:6px}
+  .thumb-cell{display:flex;align-items:center;gap:10px}
+  .btn-danger{background:var(--danger);color:#fff}
+  .btn-danger:not(:disabled):hover{background:#b91c1c}
+  .btn-sm{padding:8px 13px;font-size:.83rem;border-radius:10px}
+  .modal-back{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:60;display:grid;place-items:center;padding:18px;overflow:auto}
+  .modal{background:var(--surface);border-radius:var(--radius);width:100%;max-width:640px;box-shadow:var(--shadow);max-height:92vh;display:flex;flex-direction:column;animation:pop .16s ease}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border-2)}
+  .modal-head h3{font-size:1.05rem;display:flex;align-items:center;gap:9px}
+  .modal-head h3 i{color:var(--primary)}
+  .modal-body{padding:18px 20px;overflow:auto}
+  .modal-foot{display:flex;gap:10px;justify-content:flex-end;padding:14px 20px;border-top:1px solid var(--border-2);background:var(--surface-2);border-radius:0 0 var(--radius) var(--radius)}
+  .modal .field{margin-top:14px}
+  .modal .field:first-child{margin-top:0}
+  .modal textarea{width:100%;padding:11px 13px;border:1px solid var(--border);border-radius:12px;font-family:inherit;font-size:.9rem;outline:none;resize:vertical;min-height:80px;background:var(--surface);transition:.15s}
+  .modal textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+  .modal textarea.json{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.79rem;min-height:130px;white-space:pre;overflow:auto}
+  .modal select{width:100%;padding:11px 13px;border:1px solid var(--border);border-radius:12px;font-size:.92rem;font-family:inherit;outline:none;background:var(--surface)}
+  .modal .fhint{font-size:.74rem;color:var(--muted);margin-top:5px}
+  .modal .ferr{color:var(--danger);font-size:.82rem;background:var(--danger-soft);border:1px solid #fecaca;padding:8px 11px;border-radius:9px;margin-top:14px}
 </style>
 </head>
 <body>
   <!-- LOGIN -->
   <div id="login">
-    <form class="login-card" id="loginForm">
-      <div class="brand"><span class="logo"><i class="bi bi-compass"></i></span> Haz Tu Camino</div>
-      <h2 style="margin-top:18px;font-size:1.25rem">Panel administrativo</h2>
-      <p class="subtitle">Ingresa para ver las métricas del sitio.</p>
-      <div class="field">
-        <label for="email">Correo</label>
-        <input id="email" type="email" autocomplete="username" placeholder="tu@correo.com" required />
-      </div>
-      <div class="field">
-        <label for="password">Contraseña</label>
-        <div class="input-wrap">
-          <input id="password" type="password" autocomplete="current-password" placeholder="••••••••" required />
-          <button type="button" class="pw-toggle" id="pwToggle" aria-label="Mostrar contraseña"><i class="bi bi-eye"></i></button>
+    <aside class="auth-side">
+      <img class="auth-img" src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1100&q=70" alt="" />
+      <div class="auth-veil"></div>
+      <div class="auth-inner">
+        <span class="auth-brand"><i class="bi bi-compass"></i> Haz Tu Camino</span>
+        <div class="auth-main">
+          <h2>Administra la plataforma con una mirada clara.</h2>
+          <p class="auth-lead">Revisa registros, compras, visitas y solicitudes de Haz Tu Camino desde un solo panel.</p>
+          <ul class="auth-points">
+            <li><i class="bi bi-check-circle"></i><span>Métricas del sitio en tiempo real</span></li>
+            <li><i class="bi bi-check-circle"></i><span>Gestión de cuentas registradas</span></li>
+            <li><i class="bi bi-check-circle"></i><span>Compras, visitas y solicitudes de instituciones</span></li>
+          </ul>
         </div>
+        <p class="auth-foot">Acceso exclusivo para administradores.</p>
       </div>
-      <div id="loginErr" class="err hidden"></div>
-      <button class="btn btn-primary btn-block" type="submit" style="margin-top:18px" id="loginBtn"><i class="bi bi-box-arrow-in-right"></i> Ingresar</button>
-      <p class="hint"><i class="bi bi-shield-lock"></i> Acceso solo para administradores. Este panel no está enlazado en la web pública.</p>
-    </form>
+    </aside>
+
+    <main class="auth-main-panel">
+      <form class="auth-form" id="loginForm">
+        <h1>Panel administrativo</h1>
+        <p class="auth-sub">Ingresa para ver las métricas del sitio.</p>
+        <div class="field">
+          <label for="email">Correo</label>
+          <input id="email" type="email" autocomplete="username" placeholder="tu@correo.com" required />
+        </div>
+        <div class="field">
+          <label for="password">Contraseña</label>
+          <div class="input-wrap">
+            <input id="password" type="password" autocomplete="current-password" placeholder="••••••••" required />
+            <button type="button" class="pw-toggle" id="pwToggle" aria-label="Mostrar contraseña"><i class="bi bi-eye"></i></button>
+          </div>
+        </div>
+        <div id="loginErr" class="err hidden"></div>
+        <button class="btn btn-primary btn-block" type="submit" style="margin-top:18px" id="loginBtn"><i class="bi bi-box-arrow-in-right"></i> Ingresar</button>
+      </form>
+    </main>
   </div>
 
   <!-- APP -->
@@ -215,12 +285,95 @@
   var TOKEN_KEY = 'htc_admin_token';
   var EMAIL_KEY = 'htc_admin_email';
   var TAB_KEY = 'htc_admin_tab';
+  var KIND_KEY = 'htc_admin_kind';
   var TABS = [
     { id: 'resumen',  icon: 'bi-grid-1x2',        label: 'Resumen',     desc: 'Todo el panorama de Haz Tu Camino de un vistazo.' },
     { id: 'usuarios', icon: 'bi-people',          label: 'Registrados', desc: 'Personas que crearon una cuenta en la plataforma.' },
     { id: 'compras',  icon: 'bi-credit-card-2-front', label: 'Compras', desc: 'Suscripciones a los planes Premium y Super Premium.' },
     { id: 'visitas',  icon: 'bi-graph-up-arrow',  label: 'Visitas',     desc: 'Cuántas veces y cuántas personas entran al sitio.' },
-    { id: 'demos',    icon: 'bi-building',        label: 'Solicitudes', desc: 'Pedidos de demostración del formulario de instituciones.' }
+    { id: 'demos',    icon: 'bi-building',        label: 'Solicitudes', desc: 'Solicitudes enviadas desde el formulario de instituciones.' },
+    { id: 'catalogo', icon: 'bi-mortarboard',     label: 'Catálogo',    desc: 'Carreras, áreas, universidades, simulaciones y planes.' }
+  ];
+  var CATALOG_KINDS = [
+    { id: 'careers', label: 'Carreras', icon: 'bi-mortarboard', fields: [
+      { k: 'id', label: 'ID', type: 'text', pk: true },
+      { k: 'nombre', label: 'Nombre', type: 'text' },
+      { k: 'area', label: 'Área', type: 'area' },
+      { k: 'duracion', label: 'Duración (ciclos)', type: 'number' },
+      { k: 'descripcion', label: 'Descripción', type: 'textarea' },
+      { k: 'img', label: 'Imagen (URL)', type: 'text' },
+      { k: 'video', label: 'Video (URL embed)', type: 'text' },
+      { k: 'habilidades', label: 'Habilidades', type: 'lines' },
+      { k: 'lugares', label: 'Dónde trabaja', type: 'lines' },
+      { k: 'cursos', label: 'Cursos', type: 'lines' },
+      { k: 'emprender', label: 'Emprender', type: 'lines' },
+      { k: 'especializaciones', label: 'Especializaciones', type: 'lines' },
+      { k: 'universidades', label: 'Universidades (JSON)', type: 'json' }
+    ] },
+    { id: 'areas', label: 'Áreas', icon: 'bi-diagram-3', fields: [
+      { k: 'id', label: 'ID', type: 'text', pk: true },
+      { k: 'nombre', label: 'Nombre', type: 'text' },
+      { k: 'icon', label: 'Icono (lucide)', type: 'text' },
+      { k: 'color', label: 'Color', type: 'text' },
+      { k: 'soft', label: 'Color suave', type: 'text' },
+      { k: 'dark', label: 'Color oscuro', type: 'text' },
+      { k: 'frase', label: 'Frase', type: 'text' },
+      { k: 'img', label: 'Imagen (URL)', type: 'text' }
+    ] },
+    { id: 'universities', label: 'Universidades', icon: 'bi-building', fields: [
+      { k: 'id', label: 'ID', type: 'text', pk: true },
+      { k: 'nombre', label: 'Nombre', type: 'text' },
+      { k: 'corto', label: 'Siglas', type: 'text' },
+      { k: 'tipo', label: 'Tipo', type: 'text' },
+      { k: 'ciudad', label: 'Ciudad', type: 'text' },
+      { k: 'web', label: 'Sitio web', type: 'text' },
+      { k: 'color', label: 'Color', type: 'text' },
+      { k: 'pension', label: 'Pensión (JSON {min,max})', type: 'json' }
+    ] },
+    { id: 'simulations', label: 'Simulaciones', icon: 'bi-controller', fields: [
+      { k: 'id', label: 'ID', type: 'text', pk: true },
+      { k: 'titulo', label: 'Título', type: 'text' },
+      { k: 'area', label: 'Área', type: 'area' },
+      { k: 'video', label: 'Video (URL embed)', type: 'text' },
+      { k: 'situaciones', label: 'Situaciones (JSON)', type: 'json' },
+      { k: 'caso', label: 'Caso (JSON)', type: 'json' }
+    ] },
+    { id: 'plans', label: 'Planes', icon: 'bi-gem', fields: [
+      { k: 'id', label: 'ID', type: 'text', pk: true },
+      { k: 'nombre', label: 'Nombre', type: 'text' },
+      { k: 'tagline', label: 'Tagline', type: 'text' },
+      { k: 'precio', label: 'Precio', type: 'number' },
+      { k: 'moneda', label: 'Moneda', type: 'text' },
+      { k: 'periodo', label: 'Periodo', type: 'text' },
+      { k: 'dias', label: 'Días', type: 'number' },
+      { k: 'destacado', label: 'Destacado', type: 'bool' },
+      { k: 'features', label: 'Beneficios (JSON)', type: 'json' }
+    ] },
+    { id: 'missions', label: 'Misiones', icon: 'bi-controller', fields: [
+      { k: 'id', label: 'ID', type: 'text', pk: true },
+      { k: 'careerId', label: 'Carrera (id)', type: 'text' },
+      { k: 'area', label: 'Área', type: 'area' },
+      { k: 'titulo', label: 'Título', type: 'text' },
+      { k: 'subtitulo', label: 'Subtítulo', type: 'text' },
+      { k: 'nivel', label: 'Nivel (inicial/intermedio/avanzado)', type: 'text' },
+      { k: 'tier', label: 'Acceso (free/premium)', type: 'text' },
+      { k: 'engine', label: 'Motor (code/decision/drag)', type: 'text' },
+      { k: 'dificultad', label: 'Dificultad (1-3)', type: 'number' },
+      { k: 'objetivos', label: 'Objetivos evaluables', type: 'number' },
+      { k: 'xp', label: 'XP máximo', type: 'number' },
+      { k: 'estimadoMin', label: 'Duración (min)', type: 'number' },
+      { k: 'rol', label: 'Rol del estudiante', type: 'text' },
+      { k: 'contexto', label: 'Contexto', type: 'textarea' },
+      { k: 'objetivo', label: 'Objetivo', type: 'textarea' },
+      { k: 'habilidades', label: 'Habilidades', type: 'lines' },
+      { k: 'entregables', label: 'Criterios / entregables', type: 'lines' },
+      { k: 'code', label: 'Motor código (JSON)', type: 'json' },
+      { k: 'decision', label: 'Motor decisión (JSON)', type: 'json' },
+      { k: 'drag', label: 'Motor arrastrar (JSON)', type: 'json' },
+      { k: 'worksheet', label: 'Motor cálculos (JSON)', type: 'json' },
+      { k: 'match', label: 'Motor emparejar (JSON)', type: 'json' },
+      { k: 'allocate', label: 'Motor reparto (JSON)', type: 'json' }
+    ] }
   ];
   var PLAN_LABEL = { free: 'Básico', premium: 'Premium', super: 'Super Premium' };
   var NIVEL_LABEL = { secundaria: 'Secundaria', universidad: 'Instituto / universidad', cambio: 'Cambio de carrera' };
@@ -229,6 +382,7 @@
     token: localStorage.getItem(TOKEN_KEY) || null,
     email: localStorage.getItem(EMAIL_KEY) || '',
     tab: TABS.some(function (t) { return t.id === localStorage.getItem(TAB_KEY); }) ? localStorage.getItem(TAB_KEY) : 'resumen',
+    kind: localStorage.getItem(KIND_KEY) || 'careers',
     data: {},
     query: ''
   };
@@ -345,6 +499,27 @@
       .catch(function (e) { notify(e.message, 'err'); btn.disabled = false; });
   });
 
+  /* Editar / eliminar elementos del catálogo. */
+  document.addEventListener('click', function (ev) {
+    var edit = ev.target.closest('.cat-edit');
+    if (edit) {
+      var kind = edit.getAttribute('data-kind');
+      var id = edit.getAttribute('data-id');
+      var item = ((state.data.catalog || {})[kind] || []).filter(function (x) { return x.id === id; })[0];
+      if (item) openEditor(kind, item);
+      return;
+    }
+    var del = ev.target.closest('.cat-del');
+    if (!del) return;
+    var k = del.getAttribute('data-kind');
+    var did = del.getAttribute('data-id');
+    if (!window.confirm('¿Eliminar "' + did + '" del catálogo?\n\nEsta acción no se puede deshacer.')) return;
+    del.disabled = true;
+    api('/api/admin/catalog/' + k + '/' + encodeURIComponent(did), { method: 'DELETE' })
+      .then(function () { notify('Eliminado: ' + did, 'ok'); reloadCatalog(); })
+      .catch(function (err) { notify(err.message, 'err'); del.disabled = false; });
+  });
+
   /* ---------- nav ---------- */
   function renderNav() {
     var counts = navCounts();
@@ -374,9 +549,9 @@
     el('content').innerHTML = '<div class="loading"><div class="spinner"></div>Cargando datos…</div>';
     Promise.all([
       api('/api/admin/stats'), api('/api/admin/users'), api('/api/admin/purchases'),
-      api('/api/admin/visits'), api('/api/admin/demos')
+      api('/api/admin/visits'), api('/api/admin/demos'), api('/api/admin/catalog')
     ]).then(function (res) {
-      state.data = { stats: res[0], users: res[1].users, purchases: res[2].purchases, visits: res[3], demos: res[4].demos };
+      state.data = { stats: res[0], users: res[1].users, purchases: res[2].purchases, visits: res[3], demos: res[4].demos, catalog: res[5] };
       el('stamp').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
       renderNav();
       render();
@@ -426,9 +601,9 @@
         card('bi-patch-check', 'Confirmados', num(s.verified), 'de ' + num(s.users) + ' registrados', 'ok') +
         card('bi-gem', 'Planes de pago', num(s.premium), 'activos ahora mismo', 'plan') +
         card('bi-credit-card-2-front', 'Compras', num(s.purchases), num(s.buyers) + ' compradores únicos', '') +
-        card('bi-cash-coin', 'Ingresos (demo)', money(s.revenue), 'suma de todas las compras', 'money') +
+        card('bi-cash-coin', 'Ingresos', money(s.revenue), 'suma de todas las compras', 'money') +
         card('bi-eye', 'Visitas', num(s.visits), num(s.uniqueVisitors) + ' visitantes únicos', 'info') +
-        card('bi-building', 'Solicitudes demo', num(s.demos), 'formulario de instituciones', '') +
+        card('bi-building', 'Solicitudes', num(s.demos), 'formulario de instituciones', '') +
         card('bi-clipboard-check', 'Tests realizados', num(s.testsTaken), 'en total', '') +
         '</div>';
       html += '<div class="insights">' +
@@ -460,7 +635,7 @@
       html += '<div class="cards">' +
         card('bi-credit-card-2-front', 'Compras', num(s.purchases), 'suscripciones registradas', 'plan') +
         card('bi-person-badge', 'Compradores únicos', num(s.buyers), 'personas que pagaron', '') +
-        card('bi-cash-coin', 'Ingresos (demo)', money(s.revenue), 'suma de todas las compras', 'money') +
+        card('bi-cash-coin', 'Ingresos', money(s.revenue), 'suma de todas las compras', 'money') +
         '</div>';
       html += panel('bi-receipt', 'Detalle de compras', d.purchases.length, '<div id="tableHost">' + purchasesTable(filtered('compras')) + '</div>',
         searchBar('Buscar por correo o plan…'));
@@ -483,9 +658,22 @@
       html += '<div class="cards">' +
         card('bi-building', 'Solicitudes', num(s.demos), 'recibidas en total', 'plan') +
         '</div>';
-      html += panel('bi-envelope-paper', 'Solicitudes de demo', d.demos.length, '<div id="tableHost">' + demosTable(filtered('demos')) + '</div>',
+      html += panel('bi-envelope-paper', 'Solicitudes', d.demos.length, '<div id="tableHost">' + demosTable(filtered('demos')) + '</div>',
         searchBar('Buscar por institución, contacto o mensaje…'));
       c.innerHTML = html; bindSearch();
+      return;
+    }
+
+    if (state.tab === 'catalogo') {
+      var cat = d.catalog || {};
+      html += '<div class="subtabs">' + CATALOG_KINDS.map(function (k) {
+        var n = (cat[k.id] || []).length;
+        return '<button class="stab' + (state.kind === k.id ? ' on' : '') + '" data-kind="' + k.id + '" type="button">' +
+          ico(k.icon) + esc(k.label) + '<span class="n">' + esc(num(n)) + '</span></button>';
+      }).join('') + '</div>';
+      html += catalogPanel(cat);
+      c.innerHTML = html;
+      bindCatalog();
     }
   }
 
@@ -510,6 +698,209 @@
       else if (state.tab === 'demos') host.innerHTML = demosTable(list);
     });
   }
+
+  /* ---------- catálogo (editable) ---------- */
+  function catKind(id) {
+    for (var i = 0; i < CATALOG_KINDS.length; i++) if (CATALOG_KINDS[i].id === id) return CATALOG_KINDS[i];
+    return null;
+  }
+  function catAreas() { return (state.data.catalog || {}).areas || []; }
+  function areaName(id) {
+    var a = catAreas().filter(function (x) { return x.id === id; })[0];
+    return a ? a.nombre : (id || '—');
+  }
+  function catalogPanel(cat) {
+    var kd = catKind(state.kind) || CATALOG_KINDS[0];
+    var items = cat[kd.id] || [];
+    var toolbar = '<div class="toolbar"><div class="search"><span class="si">' + ico('bi-search') + '</span>' +
+      '<input id="searchInput" type="search" placeholder="Buscar en ' + esc(kd.label.toLowerCase()) + '…" value="' + esc(state.query) + '" /></div>' +
+      '<button class="btn btn-primary btn-sm" id="addBtn" type="button">' + ico('bi-plus-lg') + ' Agregar</button></div>';
+    return panel(kd.icon, kd.label, items.length, '<div id="tableHost">' + catalogRows(kd.id, items) + '</div>', toolbar);
+  }
+  function catalogRows(kind, items) {
+    var q = state.query;
+    function m() {
+      if (!q) return true;
+      var needle = q.toLowerCase();
+      for (var i = 0; i < arguments.length; i++) {
+        if (String(arguments[i] || '').toLowerCase().indexOf(needle) !== -1) return true;
+      }
+      return false;
+    }
+    var list = (items || []).filter(function (it) {
+      if (kind === 'careers') return m(it.nombre, it.id, it.area);
+      if (kind === 'areas') return m(it.nombre, it.id);
+      if (kind === 'universities') return m(it.nombre, it.corto, it.id, it.ciudad);
+      if (kind === 'simulations') return m(it.titulo, it.id, it.area);
+      if (kind === 'missions') return m(it.titulo, it.id, it.careerId, it.engine);
+      if (kind === 'plans') return m(it.nombre, it.id);
+      return true;
+    });
+    if (!list.length) return emptyBox('bi-inbox', 'Sin resultados', q ? 'Nada coincide con tu búsqueda.' : 'Todavía no hay elementos.');
+    return '<table><thead>' + catHead(kind) + '</thead><tbody>' + list.map(function (it) { return catRow(it); }).join('') + '</tbody></table>';
+  }
+  function catHead(kind) {
+    if (kind === 'careers') return '<tr><th>Carrera</th><th>Área</th><th>Duración</th><th>Universidades</th><th></th></tr>';
+    if (kind === 'areas') return '<tr><th>Área</th><th>ID</th><th>Icono</th><th></th></tr>';
+    if (kind === 'universities') return '<tr><th>Universidad</th><th>Tipo</th><th>Ciudad</th><th></th></tr>';
+    if (kind === 'simulations') return '<tr><th>Simulación</th><th>Área</th><th>Situaciones</th><th></th></tr>';
+    if (kind === 'missions') return '<tr><th>Misión</th><th>Carrera</th><th>Motor</th><th>Acceso</th><th></th></tr>';
+    if (kind === 'plans') return '<tr><th>Plan</th><th>Precio</th><th>Periodo</th><th></th></tr>';
+    return '<tr><th></th></tr>';
+  }
+  function catActions(kind, id) {
+    return '<td class="nowrap"><div class="row-actions">' +
+      '<button class="icon-btn cat-edit" type="button" title="Editar" data-kind="' + esc(kind) + '" data-id="' + esc(id) + '">' + ico('bi-pencil') + '</button>' +
+      '<button class="icon-btn danger cat-del" type="button" title="Eliminar" data-kind="' + esc(kind) + '" data-id="' + esc(id) + '">' + ico('bi-trash3') + '</button>' +
+      '</div></td>';
+  }
+  function catRow(it) {
+    var kind = state.kind;
+    if (kind === 'careers') {
+      return '<tr>' +
+        '<td><div class="thumb-cell"><img class="link-img" src="' + esc(it.img || '') + '" alt="" onerror="this.style.visibility=\'hidden\'" /><div><div class="cell-main">' + esc(it.nombre || it.id) + '</div><div class="cell-sub mono">' + esc(it.id) + '</div></div></div></td>' +
+        '<td>' + esc(areaName(it.area)) + '</td>' +
+        '<td class="nowrap">' + esc(it.duracion != null ? it.duracion + ' ciclos' : '—') + '</td>' +
+        '<td class="nowrap">' + esc(num((it.universidades || []).length)) + '</td>' +
+        catActions(kind, it.id) + '</tr>';
+    }
+    if (kind === 'areas') {
+      return '<tr>' +
+        '<td><span class="swatch" style="background:' + esc(it.color || '#cbd5e1') + '"></span><span class="cell-main">' + esc(it.nombre || it.id) + '</span></td>' +
+        '<td class="mono">' + esc(it.id) + '</td>' +
+        '<td class="mono">' + esc(it.icon || '') + '</td>' +
+        catActions(kind, it.id) + '</tr>';
+    }
+    if (kind === 'universities') {
+      return '<tr>' +
+        '<td><div class="cell-main">' + esc(it.nombre || it.id) + '</div><div class="cell-sub mono">' + esc(it.corto || '') + '</div></td>' +
+        '<td>' + esc(it.tipo || '—') + '</td>' +
+        '<td>' + esc(it.ciudad || '—') + '</td>' +
+        catActions(kind, it.id) + '</tr>';
+    }
+    if (kind === 'simulations') {
+      return '<tr>' +
+        '<td><div class="cell-main">' + esc(it.titulo || it.id) + '</div><div class="cell-sub mono">' + esc(it.id) + '</div></td>' +
+        '<td>' + esc(areaName(it.area)) + '</td>' +
+        '<td class="nowrap">' + esc(num((it.situaciones || []).length)) + '</td>' +
+        catActions(kind, it.id) + '</tr>';
+    }
+    if (kind === 'plans') {
+      return '<tr>' +
+        '<td><div class="cell-main">' + esc(it.nombre || it.id) + '</div><div class="cell-sub mono">' + esc(it.id) + '</div></td>' +
+        '<td class="nowrap">' + esc((it.moneda || 'S/') + ' ' + num(it.precio || 0)) + '</td>' +
+        '<td>' + esc(it.periodo || '—') + '</td>' +
+        catActions(kind, it.id) + '</tr>';
+    }
+    if (kind === 'missions') {
+      var tierLabel = it.tier === 'premium' ? 'Premium' : 'Gratis';
+      var engineLabel = { code: 'Código', decision: 'Decisión', drag: 'Arrastrar' }[it.engine] || (it.engine || '—');
+      return '<tr>' +
+        '<td><div class="cell-main">' + esc(it.titulo || it.id) + '</div><div class="cell-sub mono">' + esc(it.id) + '</div></td>' +
+        '<td>' + esc(it.careerId || '—') + '</td>' +
+        '<td>' + esc(engineLabel) + '</td>' +
+        '<td>' + esc(tierLabel) + '</td>' +
+        catActions(kind, it.id) + '</tr>';
+    }
+    return '';
+  }
+  function bindCatalog() {
+    var sub = document.querySelector('.subtabs');
+    if (sub) sub.addEventListener('click', function (ev) {
+      var b = ev.target.closest('.stab'); if (!b) return;
+      state.kind = b.getAttribute('data-kind');
+      state.query = '';
+      localStorage.setItem(KIND_KEY, state.kind);
+      render();
+    });
+    var input = el('searchInput');
+    if (input) input.addEventListener('input', function () {
+      state.query = this.value;
+      var host = el('tableHost');
+      if (host) host.innerHTML = catalogRows(state.kind, ((state.data.catalog || {})[state.kind] || []));
+    });
+    var add = el('addBtn');
+    if (add) add.addEventListener('click', function () { openEditor(state.kind, null); });
+  }
+  function openEditor(kind, item) {
+    var kd = catKind(kind);
+    if (!kd) return;
+    var isNew = !item;
+    item = item || {};
+    var body = kd.fields.map(function (f) {
+      var val = item[f.k];
+      if (f.type === 'area') {
+        var opts = '<option value="">—</option>' + catAreas().map(function (a) {
+          return '<option value="' + esc(a.id) + '"' + (a.id === val ? ' selected' : '') + '>' + esc(a.nombre) + '</option>';
+        }).join('');
+        return '<div class="field"><label>' + esc(f.label) + '</label><select data-field="' + f.k + '">' + opts + '</select></div>';
+      }
+      if (f.type === 'bool') {
+        return '<div class="field"><label>' + esc(f.label) + '</label><select data-field="' + f.k + '">' +
+          '<option value="false"' + (!val ? ' selected' : '') + '>No</option>' +
+          '<option value="true"' + (val ? ' selected' : '') + '>Sí</option></select></div>';
+      }
+      if (f.type === 'lines') {
+        var text = Array.isArray(val) ? val.join('\n') : (val || '');
+        return '<div class="field"><label>' + esc(f.label) + '</label><textarea data-field="' + f.k + '" data-type="lines" placeholder="Un elemento por línea">' + esc(text) + '</textarea><div class="fhint">Escribe un elemento por línea.</div></div>';
+      }
+      if (f.type === 'json') {
+        var j = (val == null) ? '' : JSON.stringify(val, null, 2);
+        return '<div class="field"><label>' + esc(f.label) + '</label><textarea class="json" data-field="' + f.k + '" data-type="json" placeholder="[]">' + esc(j) + '</textarea><div class="fhint">JSON válido. Déjalo vacío para omitir el campo.</div></div>';
+      }
+      if (f.type === 'textarea') {
+        return '<div class="field"><label>' + esc(f.label) + '</label><textarea data-field="' + f.k + '">' + esc(val || '') + '</textarea></div>';
+      }
+      var inputType = f.type === 'number' ? 'number' : 'text';
+      var ro = (f.pk && !isNew) ? ' readonly' : '';
+      return '<div class="field"><label>' + esc(f.label) + '</label><input type="' + inputType + '" data-field="' + f.k + '" value="' + esc(val == null ? '' : val) + '"' + ro + ' /></div>';
+    }).join('');
+
+    var back = document.createElement('div');
+    back.className = 'modal-back';
+    back.innerHTML =
+      '<div class="modal" role="dialog" aria-modal="true">' +
+        '<div class="modal-head"><h3>' + ico(isNew ? 'bi-plus-circle' : 'bi-pencil-square') + ' ' + esc((isNew ? 'Agregar' : 'Editar') + ' · ' + kd.label) + '</h3>' +
+        '<button class="icon-btn" data-close type="button" title="Cerrar">' + ico('bi-x-lg') + '</button></div>' +
+        '<div class="modal-body">' + body + '<div class="ferr hidden" data-err></div></div>' +
+        '<div class="modal-foot">' +
+          '<button class="btn btn-ghost" data-cancel type="button">Cancelar</button>' +
+          '<button class="btn btn-primary" data-save type="button">' + ico('bi-check-lg') + ' Guardar</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(back);
+    function close() { if (back.parentNode) back.parentNode.removeChild(back); }
+    back.addEventListener('click', function (e) { if (e.target === back) close(); });
+    back.querySelector('[data-close]').addEventListener('click', close);
+    back.querySelector('[data-cancel]').addEventListener('click', close);
+    back.querySelector('[data-save]').addEventListener('click', function () {
+      var err = back.querySelector('[data-err]');
+      err.classList.add('hidden');
+      var out = {}, bad = null;
+      kd.fields.forEach(function (f) {
+        var node = back.querySelector('[data-field="' + f.k + '"]');
+        if (!node) return;
+        var v = node.value;
+        if (f.type === 'number') { if (v !== '') out[f.k] = Number(v); }
+        else if (f.type === 'bool') { out[f.k] = v === 'true'; }
+        else if (f.type === 'lines') { out[f.k] = v.split('\n').map(function (s) { return s.trim(); }).filter(Boolean); }
+        else if (f.type === 'json') {
+          var t = v.trim();
+          if (t) { try { out[f.k] = JSON.parse(t); } catch (ex) { bad = f.label + ': JSON no válido.'; } }
+        } else { out[f.k] = v; }
+      });
+      if (bad) { err.textContent = bad; err.classList.remove('hidden'); return; }
+      if (!out.id) { err.textContent = 'El identificador (id) es obligatorio.'; err.classList.remove('hidden'); return; }
+      var saveBtn = back.querySelector('[data-save]');
+      saveBtn.disabled = true;
+      var req = isNew
+        ? api('/api/admin/catalog/' + kind, { method: 'POST', body: out })
+        : api('/api/admin/catalog/' + kind + '/' + encodeURIComponent(item.id), { method: 'PUT', body: out });
+      req.then(function () { close(); notify((isNew ? 'Agregado' : 'Actualizado') + ': ' + out.id, 'ok'); reloadCatalog(); })
+        .catch(function (e) { err.textContent = e.message; err.classList.remove('hidden'); saveBtn.disabled = false; });
+    });
+  }
+  function reloadCatalog() { state.query = ''; loadAll(); }
 
   /* ---------- tables ---------- */
   function usersTable(users) {

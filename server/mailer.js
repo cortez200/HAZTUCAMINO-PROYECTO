@@ -125,7 +125,7 @@ const shell = (title, body, cta, url) => `
         ${cta && url ? `<a href="${url}" style="display:inline-block;background:#4f46e5;color:#fff;text-decoration:none;padding:12px 22px;border-radius:10px;font-weight:700">${cta}</a>` : ''}
       </div>
       <div style="padding:16px 28px;border-top:1px solid #e2e8f0;color:#94a3b8;font-size:12px">
-        Prototipo demostrativo · Hecho en Perú
+        Haz Tu Camino · Hecho en Perú
       </div>
     </div>
   </div>`;
@@ -149,12 +149,12 @@ export function resetEmail(name, url) {
 export function institutionEmail(center) {
   return {
     subject: 'Recibimos tu solicitud · Haz Tu Camino',
-    text: `Hola, recibimos la solicitud de ${center}. Nuestro equipo te contactará muy pronto para coordinar una demostración.`,
-    html: shell('Recibimos tu solicitud', `¡Gracias! Recibimos la solicitud de <b>${center}</b>. Nuestro equipo te contactará muy pronto para coordinar una demostración para tus estudiantes.`)
+    text: `Hola, recibimos la solicitud de ${center}. Nuestro equipo te contactará muy pronto para coordinar una sesión.`,
+    html: shell('Recibimos tu solicitud', `¡Gracias! Recibimos la solicitud de <b>${center}</b>. Nuestro equipo te contactará muy pronto para coordinar una sesión para tus estudiantes.`)
   };
 }
 
-/* Notificación interna al equipo cuando alguien solicita una demo. */
+/* Notificación interna al equipo cuando alguien solicita información. */
 export function institutionAdminEmail(r, url) {
   const rows = [
     ['Institución', r.center],
@@ -164,14 +164,14 @@ export function institutionAdminEmail(r, url) {
     ['Mensaje', r.mensaje || '(sin mensaje)'],
     ['Fecha', r.at ? new Date(r.at).toLocaleString('es-PE') : '']
   ].filter(([, v]) => v);
-  const body = `<p style="color:#475569;line-height:1.6;margin:0 0 16px">Nueva solicitud de demostración:</p>
+  const body = `<p style="color:#475569;line-height:1.6;margin:0 0 16px">Nueva solicitud de institución:</p>
     <table style="width:100%;border-collapse:collapse;font-size:14px">
       ${rows.map(([k, v]) => `<tr><td style="padding:6px 10px 6px 0;color:#64748b;white-space:nowrap;vertical-align:top">${k}</td><td style="padding:6px 0;color:#0f172a;font-weight:600">${v}</td></tr>`).join('')}
     </table>`;
   const text = rows.map(([k, v]) => `${k}: ${v}`).join('\n');
   return {
-    subject: `Nueva solicitud de demo · ${r.center}`,
-    text: `Nueva solicitud de demostración.\n\n${text}`,
-    html: shell('Nueva solicitud de demo', body, 'Ver en el panel', url)
+    subject: `Nueva solicitud de institución · ${r.center}`,
+    text: `Nueva solicitud de institución.\n\n${text}`,
+    html: shell('Nueva solicitud de institución', body, 'Ver en el panel', url)
   };
 }

@@ -13,6 +13,7 @@ import CarreraDetalle from './pages/CarreraDetalle.jsx';
 import Comparar from './pages/Comparar.jsx';
 import Simulaciones from './pages/Simulaciones.jsx';
 import Simulacion from './pages/Simulacion.jsx';
+import Mision from './pages/Mision.jsx';
 import Videos from './pages/Videos.jsx';
 import Guardadas from './pages/Guardadas.jsx';
 import Perfil from './pages/Perfil.jsx';
@@ -51,6 +52,7 @@ function Site() {
         <Route path="carreras" element={<Carreras />} />
         <Route path="carreras/:id" element={<CarreraDetalle />} />
         <Route path="simulaciones" element={<Simulaciones />} />
+        <Route path="simulaciones/mision/:id" element={<Mision />} />
         <Route path="simulaciones/:id" element={<Simulacion />} />
         <Route path="planes" element={<Planes />} />
         <Route path="videos" element={<Videos />} />

@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { carrera, area, CARRERAS, universidad, simDeArea } from '../lib/data.js';
+import { carrera, area, CARRERAS, universidad, simDeArea, primeraMisionDeCarrera, missionsDeCarrera } from '../lib/data.js';
 import { buildMalla } from '../lib/mallas.js';
 import { areaScores } from '../lib/scoring.js';
 import { useAuth, useToast } from '../lib/store.jsx';
+import { api } from '../lib/api.js';
 import { areaVars, Badge, Btn, Card, Progress } from '../components/ui.jsx';
 import CareerCard from '../components/CareerCard.jsx';
+import GoogleReviews from '../components/GoogleReviews.jsx';
+import UniLogo from '../components/UniLogo.jsx';
+import { Stars } from '../components/Stars.jsx';
 import Icon from '../components/Icon.jsx';
 import Img from '../components/Img.jsx';
 
@@ -28,6 +32,16 @@ export default function CarreraDetalle() {
   const { account, toggleSaved } = useAuth();
   const toast = useToast();
   const [uniSel, setUniSel] = useState(c ? c.universidades[0].id : null);
+  const [revSel, setRevSel] = useState(c ? c.universidades[0].id : null);
+  const [uniSummary, setUniSummary] = useState({});
+
+  useEffect(() => {
+    api.universityReviewSummary().then((r) => setUniSummary(r.summaries || {})).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    setRevSel(c ? c.universidades[0].id : null);
+  }, [c]);
 
   if (!c) {
     return (
@@ -43,6 +57,8 @@ export default function CarreraDetalle() {
   const score = account?.done ? areaScores(account.answers).find((s) => s.id === c.area) : null;
   const related = CARRERAS.filter((x) => x.area === c.area && x.id !== c.id);
   const sim = simDeArea(c.area);
+  const mision = primeraMisionDeCarrera(c.id);
+  const misiones = missionsDeCarrera(c.id);
   const vid = (c.video || '').split('/').pop();
 
   const privadas = c.universidades.filter((o) => o.tipo === 'Privada');
@@ -52,6 +68,7 @@ export default function CarreraDetalle() {
 
   const sel = c.universidades.find((o) => o.id === uniSel) || c.universidades[0];
   const selUni = universidad(sel.id);
+  const revUni = universidad(revSel) || universidad(c.universidades[0].id);
   const malla = buildMalla(c, sel);
 
   const onSave = () => {
@@ -77,9 +94,11 @@ export default function CarreraDetalle() {
         <Btn variant={saved ? 'soft' : 'primary'} icon={saved ? 'BookmarkCheck' : 'Bookmark'} onClick={onSave}>
           {saved ? 'Guardada' : 'Guardar carrera'}
         </Btn>
-        {sim && (
-          <Link to={`/simulaciones/${sim.id}`} className="btn btn-primary"><Icon name="Gamepad2" size={16} /> Simular la carrera</Link>
-        )}
+        {mision ? (
+          <Link to={`/simulaciones/mision/${mision.id}`} className="btn btn-primary"><Icon name="Gamepad2" size={16} /> Simular la carrera</Link>
+        ) : sim ? (
+          <Link to={`/simulaciones/${sim.id}`} className="btn btn-soft" title="Simulador específico en desarrollo"><Icon name="Hourglass" size={16} /> Simulación del área</Link>
+        ) : null}
         <Link to={`/comparar?c=${c.id}`} className="btn btn-outline"><Icon name="SlidersHorizontal" size={16} /> Comparar</Link>
         <a href={`https://www.youtube.com/watch?v=${vid}`} target="_blank" rel="noreferrer" className="btn btn-outline"><Icon name="Youtube" size={17} /> Ver video</a>
       </div>
@@ -151,12 +170,19 @@ export default function CarreraDetalle() {
             return (
               <Card key={o.id} className="card-pad">
                 <div className="row gap-12" style={{ alignItems: 'flex-start' }}>
-                  <span className="uni-logo" style={{ background: u.color }}>{u.corto.slice(0, 3)}</span>
+                  <UniLogo uni={u} size={46} />
                   <div className="grow">
                     <div className="row between gap-8">
                       <h3 style={{ fontSize: '1rem', fontWeight: 700 }}>{u.nombre}</h3>
                       <Badge tone={u.tipo === 'Pública' ? 'ok' : 'soft'}>{u.tipo}</Badge>
                     </div>
+                    {uniSummary[o.id]?.rating != null && (
+                      <div className="row gap-6 mt-8" style={{ alignItems: 'center' }}>
+                        <Stars value={uniSummary[o.id].rating} size={13} />
+                        <span className="small bold">{Number(uniSummary[o.id].rating).toFixed(1)}</span>
+                        <span className="tiny dim">· {Number(uniSummary[o.id].total || 0).toLocaleString()} opiniones en Google</span>
+                      </div>
+                    )}
                     <div className="row gap-12 wrap small dim mt-8">
                       <span className="row gap-4"><Icon name="MapPin" size={14} /> {u.ciudad}</span>
                       <span className="row gap-4"><Icon name="CalendarClock" size={14} /> {o.duracion} ciclos</span>
@@ -167,6 +193,9 @@ export default function CarreraDetalle() {
                       </span>
                       <div className="row gap-8">
                         <a href={u.web} target="_blank" rel="noreferrer" className="btn btn-ghost btn-sm">Web <Icon name="ExternalLink" size={13} /></a>
+                        <button className={`btn btn-sm ${revSel === o.id ? 'btn-soft' : 'btn-outline'}`} onClick={() => setRevSel(o.id)}>
+                          Opiniones
+                        </button>
                         <button className={`btn btn-sm ${uniSel === o.id ? 'btn-soft' : 'btn-outline'}`} onClick={() => setUniSel(o.id)}>
                           Ver malla
                         </button>
@@ -178,6 +207,25 @@ export default function CarreraDetalle() {
             );
           })}
         </div>
+      </section>
+
+      {/* ---------------- Opiniones (Google Maps) ---------------- */}
+      <section className="mt-32">
+        <div className="row between wrap gap-12 mb-16">
+          <div>
+            <h2 className="section-title" style={{ fontSize: '1.5rem' }}>Opiniones de las universidades</h2>
+            <p className="section-sub" style={{ fontSize: '.95rem' }}>Calificación y comentarios reales publicados por estudiantes en Google Maps.</p>
+          </div>
+          <div className="row wrap gap-8">
+            {c.universidades.map((o) => (
+              <button key={o.id} className={`chip chip-uni ${revSel === o.id ? 'on' : ''}`} onClick={() => setRevSel(o.id)}>
+                <UniLogo uni={universidad(o.id)} size={20} />
+                {universidad(o.id).corto}
+              </button>
+            ))}
+          </div>
+        </div>
+        {revUni && <GoogleReviews key={revUni.id} uni={revUni} />}
       </section>
 
       {/* ---------------- Malla curricular ---------------- */}

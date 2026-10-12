@@ -140,6 +140,13 @@ export const api = {
       auth: true,
     }),
 
+  submitMission: (payload) =>
+    request('/account/mission', {
+      method: 'POST',
+      body: payload,
+      auth: true,
+    }),
+
   subscribe: (plan) =>
     request('/account/subscribe', {
       method: 'POST',
@@ -152,6 +159,33 @@ export const api = {
       method: 'POST',
       auth: true,
     }),
+
+  reviews: (careerId) =>
+    request(`/reviews?career=${encodeURIComponent(careerId)}`, {
+      auth: true,
+    }),
+
+  reviewSummary: () =>
+    request('/reviews/summary'),
+
+  saveReview: (payload) =>
+    request('/reviews', {
+      method: 'POST',
+      body: payload,
+      auth: true,
+    }),
+
+  deleteReview: (careerId) =>
+    request(`/reviews/${encodeURIComponent(careerId)}`, {
+      method: 'DELETE',
+      auth: true,
+    }),
+
+  universityReviews: (uniId) =>
+    request(`/universities/${encodeURIComponent(uniId)}/reviews`),
+
+  universityReviewSummary: () =>
+    request('/universities/reviews'),
 
   sendInstitution: (payload) =>
     request('/institutions', {

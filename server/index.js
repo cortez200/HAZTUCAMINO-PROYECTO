@@ -10,9 +10,17 @@ import {
 import {
   loadUsers, loadRequests, saveUser, saveRequest,
   savePurchase, loadPurchases, saveVisit, loadVisits, visitSummary,
-  deleteUser
+  deleteUser,
+  catalogSeeded, markCatalogSeeded, seedCatalog, loadCatalog,
+  upsertCatalogItem, deleteCatalogItem,
+  metaGet, metaSet,
+  saveReview, deleteReview, loadReviews, loadMyReview, reviewSummaries, reviewDistribution,
+  getUniReviews, saveUniReviews, uniReviewSummary
 } from './db.js';
 import { sendMail, verificationEmail, resetEmail, institutionEmail, institutionAdminEmail } from './mailer.js';
+import { fetchUniversityReviews, hasGoogle } from './google.js';
+import { staticUniReviews, staticUniSummaries } from './uniReviews.js';
+import { MISSIONS } from './missions.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SECRET = process.env.HTC_SECRET || 'htc-dev-secret-change-me';
@@ -27,6 +35,57 @@ let db = { users: loadUsers(), requests: loadRequests() };
 function persist() {
   for (const u of Object.values(db.users)) saveUser(u);
   for (const r of db.requests) saveRequest(r);
+}
+
+/* -------------------------- catálogo editable --------------------------
+   El catálogo (carreras, áreas, universidades, simulaciones y planes) se
+   siembra una sola vez desde data.js y luego se gestiona desde el panel admin. */
+const CATALOG_KINDS = ['areas', 'careers', 'universities', 'simulations', 'plans', 'missions'];
+if (!catalogSeeded()) {
+  seedCatalog('areas', AREAS);
+  seedCatalog('careers', CARRERAS);
+  seedCatalog('universities', UNIVERSIDADES);
+  seedCatalog('simulations', SIMS);
+  seedCatalog('plans', PLANS);
+  seedCatalog('missions', MISSIONS);
+  markCatalogSeeded();
+}
+/* Migración: siembra las misiones (simuladores por carrera) en bases de datos
+   creadas antes de esta función. INSERT OR IGNORE respeta las ediciones del admin. */
+const MISSIONS_SEED_KEY = 'catalog_missions_v1';
+if (!metaGet(MISSIONS_SEED_KEY)) {
+  seedCatalog('missions', MISSIONS);
+  metaSet(MISSIONS_SEED_KEY, new Date().toISOString());
+}
+
+/* Migración: siembra las misiones de las 30 carreras nuevas (motores worksheet,
+   match y allocate incluidos). INSERT OR IGNORE respeta las ediciones del admin
+   y no duplica las misiones ya existentes. */
+const MISSIONS_SEED_V2_KEY = 'catalog_missions_v2';
+if (!metaGet(MISSIONS_SEED_V2_KEY)) {
+  seedCatalog('missions', MISSIONS);
+  metaSet(MISSIONS_SEED_V2_KEY, new Date().toISOString());
+}
+
+/* Migración: agrega universidades nuevas y las asocia a las carreras una sola
+   vez (no pisa las ediciones que el admin haya hecho en el panel). */
+const UNI_SYNC_KEY = 'catalog_universities_v2';
+if (!metaGet(UNI_SYNC_KEY)) {
+  const cat = loadCatalog();
+  const haveUni = new Set((cat.universities || []).map((u) => u.id));
+  for (const u of UNIVERSIDADES) if (!haveUni.has(u.id)) upsertCatalogItem('universities', u.id, u);
+  for (const c of CARRERAS) {
+    const stored = (cat.careers || []).find((x) => x.id === c.id);
+    if (!stored) continue;
+    const have = new Set((stored.universidades || []).map((o) => o.id));
+    const merged = [...(stored.universidades || [])];
+    for (const o of (c.universidades || [])) if (!have.has(o.id)) merged.push(o);
+    if (merged.length !== (stored.universidades || []).length) {
+      stored.universidades = merged;
+      upsertCatalogItem('careers', stored.id, stored);
+    }
+  }
+  metaSet(UNI_SYNC_KEY, new Date().toISOString());
 }
 
 /* -------------------------- seguridad -------------------------- */
@@ -115,20 +174,23 @@ function adminAuth(req, res, next) {
 /* -------------------------- helpers -------------------------- */
 const newAccount = (name, email, nivel, emailVerified = false) => ({
   email, name, nivel, plan: 'free', done: false, emailVerified,
-  answers: {}, unknown: [], sims: {}, saved: [], history: [],
+  answers: {}, unknown: [], sims: {}, saved: [], history: [], progress: {},
   createdAt: new Date().toISOString(), planSince: null, planUntil: null
 });
 const isPremium = (u) => u && (u.plan === 'premium' || u.plan === 'super');
 const testAttempts = (u) => (u && Array.isArray(u.history) ? u.history.length : 0);
 function publicAccount(u) {
   if (!u) return null;
+  const progress = u.progress && typeof u.progress === 'object' ? u.progress : {};
   return {
     email: u.email, name: u.name, nivel: u.nivel, plan: u.plan, done: u.done,
     emailVerified: u.emailVerified,
     planSince: u.planSince || u.premiumSince || undefined,
     planUntil: u.planUntil || undefined,
     answers: u.answers, unknown: u.unknown, sims: u.sims, saved: u.saved,
-    history: u.history, createdAt: u.createdAt
+    history: u.history, createdAt: u.createdAt,
+    progress,
+    missions: progress.missions || {}
   };
 }
 function areaScores(acc) {
@@ -163,10 +225,90 @@ function auth(req, res, next) {
 /* catálogo público */
 app.get('/api/health', (_req, res) => res.json({ ok: true, ts: Date.now() }));
 app.get('/api/catalog', (_req, res) => {
+  const cat = loadCatalog();
   res.json({
-    areas: AREAS, careers: CARRERAS, preguntas: PREGUNTAS, opciones: OPCIONES,
-    simulations: SIMS, niveles: NIVELES, freeSims: FREE_SIMS, universities: UNIVERSIDADES,
-    plans: PLANS, freeTestLimit: FREE_TEST_LIMIT
+    areas: cat.areas || [], careers: cat.careers || [], preguntas: PREGUNTAS, opciones: OPCIONES,
+    simulations: cat.simulations || [], missions: cat.missions || [], niveles: NIVELES, freeSims: FREE_SIMS,
+    universities: cat.universities || [], plans: cat.plans || [], freeTestLimit: FREE_TEST_LIMIT
+  });
+});
+
+/* -------------------------- reseñas de carreras --------------------------
+   Contenido real enviado por las personas (una reseña por usuario y carrera).
+   Públicas para leer; para escribir se necesita sesión. */
+app.get('/api/reviews', (req, res) => {
+  const career = String(req.query.career || '').trim();
+  if (!career) return res.status(400).json({ error: 'Falta indicar la carrera.' });
+  const reviews = loadReviews(career);
+  const count = reviews.length;
+  const avg = count ? Math.round((reviews.reduce((s, r) => s + r.rating, 0) / count) * 10) / 10 : 0;
+  const header = req.headers.authorization || '';
+  const token = header.startsWith('Bearer ') ? header.slice(7) : null;
+  const payload = verifyToken(token);
+  const email = payload && db.users[payload.email] ? payload.email : null;
+  res.json({
+    summary: { count, avg, dist: reviewDistribution(career) },
+    reviews,
+    mine: email ? loadMyReview(career, email) : null
+  });
+});
+
+app.get('/api/reviews/summary', (_req, res) => res.json({ summaries: reviewSummaries() }));
+
+app.post('/api/reviews', auth, (req, res) => {
+  const career = String(req.body?.career || '').trim();
+  const rating = Math.round(Number(req.body?.rating));
+  const comment = String(req.body?.comment || '').trim().slice(0, 800);
+  if (!CARRERAS.some((c) => c.id === career)) return res.status(400).json({ error: 'Carrera no válida.' });
+  if (!(rating >= 1 && rating <= 5)) return res.status(400).json({ error: 'Elige una calificación de 1 a 5 estrellas.' });
+  if (comment.length < 4) return res.status(400).json({ error: 'Escribe un comentario breve (mínimo 4 caracteres).' });
+  saveReview({ career, email: req.user.email, name: req.user.name, rating, comment });
+  res.status(201).json({
+    ok: true,
+    mine: loadMyReview(career, req.user.email),
+    summaries: reviewSummaries()
+  });
+});
+
+app.delete('/api/reviews/:career', auth, (req, res) => {
+  deleteReview(req.params.career, req.user.email);
+  res.json({ ok: true, summaries: reviewSummaries() });
+});
+
+/* ------------------ reseñas reales de universidades (Google Maps) ------------------
+   Calificación y comentarios públicos de Google Places. Se cachean en SQLite
+   para no gastar la cuota de la API en cada visita. */
+const UNI_TTL_MS = 1000 * 60 * 60 * 24 * 14; // 14 días
+
+app.get('/api/universities/reviews', (_req, res) => {
+  const summaries = { ...staticUniSummaries(), ...uniReviewSummary() };
+  res.json({ enabled: true, summaries });
+});
+
+app.get('/api/universities/:id/reviews', async (req, res) => {
+  const u = UNIVERSIDADES.find((x) => x.id === req.params.id);
+  if (!u) return res.status(404).json({ error: 'Universidad no encontrada.' });
+
+  let cached = getUniReviews(u.id);
+  const stale = !cached || (Date.now() - Date.parse(cached.fetchedAt || 0) > UNI_TTL_MS);
+  if ((!cached || stale || !cached.reviews?.length) && hasGoogle()) {
+    const data = await fetchUniversityReviews(u);
+    if (data) { saveUniReviews(u.id, { ...data, fetchedAt: new Date().toISOString() }); cached = getUniReviews(u.id); }
+  }
+
+  const fallback = staticUniReviews(u.id);
+  const live = cached && (cached.reviews?.length || cached.rating != null);
+  const src = live ? cached : fallback;
+
+  res.json({
+    enabled: true,
+    source: live ? 'Google Places' : 'Google Maps',
+    university: { id: u.id, nombre: u.nombre, corto: u.corto, ciudad: u.ciudad, color: u.color },
+    rating: src?.rating ?? null,
+    total: src?.total ?? 0,
+    mapsUrl: src?.mapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.nombre + ' ' + (u.ciudad || ''))}`,
+    reviews: src?.reviews || [],
+    fetchedAt: live ? cached.fetchedAt : null
   });
 });
 
@@ -373,6 +515,81 @@ app.post('/api/account/sims', auth, (req, res) => {
   res.json({ account: publicAccount(req.user) });
 });
 
+/* -------------------- misiones (simuladores por carrera) -------------------- */
+/* Lee las misiones del catálogo editable (así el admin manda); si por alguna
+   razón no estuvieran sembradas, cae a las misiones de data. */
+const missionsFromCatalog = () => {
+  const cat = loadCatalog();
+  return (cat.missions && cat.missions.length) ? cat.missions : MISSIONS;
+};
+function careerProgressFor(progress, careerId, allMissions) {
+  const list = allMissions.filter((m) => m.careerId === careerId);
+  let completed = 0; let bestPct = 0; let attempts = 0;
+  for (const m of list) {
+    const mp = (progress.missions || {})[m.id];
+    if (!mp) continue;
+    const total = Number(m.objetivos) || 1;
+    if ((Number(mp.best) || 0) >= total) completed += 1;
+    attempts += Number(mp.attempts) || 0;
+    const pct = (Number(mp.best) || 0) / total;
+    if (pct > bestPct) bestPct = pct;
+  }
+  return { careerId, total: list.length, completed, bestPct: Math.round(bestPct * 100), attempts };
+}
+
+app.post('/api/account/mission', auth, (req, res) => {
+  const allMissions = missionsFromCatalog();
+  const missionId = String(req.body?.missionId || '');
+  const mission = allMissions.find((m) => m.id === missionId);
+  if (!mission) return res.status(400).json({ error: 'Misión no válida.' });
+  if (mission.tier === 'premium' && !isPremium(req.user)) {
+    return res.status(402).json({ error: 'Esta misión es parte del plan Premium. Actívalo para continuar.', premiumRequired: true });
+  }
+
+  const total = Math.max(1, Number(mission.objetivos) || 1);
+  let score = Number(req.body?.score);
+  if (!Number.isFinite(score)) score = 0;
+  score = Math.max(0, Math.min(total, Math.round(score)));
+  const timeMs = Math.max(0, Math.min(30 * 60 * 1000, Number(req.body?.timeMs) || 0));
+  const now = new Date().toISOString();
+
+  const p = req.user.progress && typeof req.user.progress === 'object' ? req.user.progress : {};
+  p.missions = p.missions && typeof p.missions === 'object' ? p.missions : {};
+  p.history = Array.isArray(p.history) ? p.history : [];
+
+  const prev = p.missions[mission.id] || { best: 0, attempts: 0, timeMs: 0 };
+  const pct = score / total;
+
+  p.missions[mission.id] = {
+    best: Math.max(Number(prev.best) || 0, score),
+    total,
+    attempts: (Number(prev.attempts) || 0) + 1,
+    last: score,
+    timeMs: (Number(prev.timeMs) || 0) + timeMs,
+    lastAt: now,
+    careerId: mission.careerId,
+    engine: mission.engine
+  };
+
+  p.byCareer = p.byCareer && typeof p.byCareer === 'object' ? p.byCareer : {};
+  p.byCareer[mission.careerId] = careerProgressFor(p, mission.careerId, allMissions);
+
+  p.history.unshift({
+    missionId: mission.id, careerId: mission.careerId, titulo: mission.titulo,
+    score, total, pct: Math.round(pct * 100), timeMs, at: now
+  });
+  p.history = p.history.slice(0, 100);
+
+  req.user.progress = p;
+  persist();
+  res.json({
+    account: publicAccount(req.user),
+    result: {
+      missionId: mission.id, score, total, pct: Math.round(pct * 100)
+    }
+  });
+});
+
 const PLAN_DAYS = { premium: 30, super: 365 };
 app.post('/api/account/subscribe', auth, (req, res) => {
   const planId = String(req.body?.plan || 'premium');
@@ -393,7 +610,7 @@ app.post('/api/account/subscribe', auth, (req, res) => {
   });
   res.json({
     account: publicAccount(req.user),
-    notice: `Plan ${plan.nombre} activado. Esta es una demostración: no se realizó ningún cobro real.`
+    notice: `Plan ${plan.nombre} activado correctamente.`
   });
 });
 
@@ -507,6 +724,44 @@ app.get('/api/admin/demos', adminAuth, (_req, res) => {
   res.json({ demos });
 });
 
+/* -------------------------- catálogo (panel admin) -------------------------- */
+app.get('/api/admin/catalog', adminAuth, (_req, res) => {
+  const cat = loadCatalog();
+  const out = {};
+  for (const k of CATALOG_KINDS) out[k] = cat[k] || [];
+  res.json(out);
+});
+
+app.post('/api/admin/catalog/:kind', adminAuth, (req, res) => {
+  const kind = req.params.kind;
+  if (!CATALOG_KINDS.includes(kind)) return res.status(400).json({ error: 'Tipo de catálogo no válido.' });
+  const item = req.body;
+  if (!item || typeof item !== 'object' || Array.isArray(item)) return res.status(400).json({ error: 'Datos no válidos.' });
+  const id = String(item.id || '').trim();
+  if (!id) return res.status(400).json({ error: 'Falta el identificador (id).' });
+  const saved = { ...item, id };
+  upsertCatalogItem(kind, id, saved);
+  res.json({ ok: true, item: saved });
+});
+
+app.put('/api/admin/catalog/:kind/:id', adminAuth, (req, res) => {
+  const kind = req.params.kind;
+  if (!CATALOG_KINDS.includes(kind)) return res.status(400).json({ error: 'Tipo de catálogo no válido.' });
+  const item = req.body;
+  if (!item || typeof item !== 'object' || Array.isArray(item)) return res.status(400).json({ error: 'Datos no válidos.' });
+  const id = String(req.params.id);
+  const saved = { ...item, id };
+  upsertCatalogItem(kind, id, saved);
+  res.json({ ok: true, item: saved });
+});
+
+app.delete('/api/admin/catalog/:kind/:id', adminAuth, (req, res) => {
+  const kind = req.params.kind;
+  if (!CATALOG_KINDS.includes(kind)) return res.status(400).json({ error: 'Tipo de catálogo no válido.' });
+  deleteCatalogItem(kind, req.params.id);
+  res.json({ ok: true });
+});
+
 /* Sirve la app compilada (client/dist) en el mismo puerto, si existe. */
 const CLIENT_DIST = path.join(__dirname, '..', 'client', 'dist');
 if (fs.existsSync(CLIENT_DIST)) {
@@ -520,7 +775,10 @@ if (fs.existsSync(CLIENT_DIST)) {
       }
     }
   }));
-  app.get(/^(?!\/api).*/, (_req, res) => res.sendFile(path.join(CLIENT_DIST, 'index.html')));
+  app.get(/^(?!\/api).*/, (_req, res) => {
+    res.setHeader('Cache-Control', 'no-cache');
+    res.sendFile(path.join(CLIENT_DIST, 'index.html'));
+  });
 }
 
 app.use((err, _req, res, _next) => {

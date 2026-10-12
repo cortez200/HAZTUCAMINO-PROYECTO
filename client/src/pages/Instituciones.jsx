@@ -41,8 +41,8 @@ export default function Instituciones() {
       <main style={{ maxWidth: 640, margin: '0 auto', padding: '40px 20px 64px' }}>
         <div className="center mb-24">
           <Badge tone="primary" icon="School">Para colegios e institutos</Badge>
-          <h1 style={{ fontSize: '2rem', fontWeight: 800, marginTop: 14 }}>Solicita una demo</h1>
-          <p className="dim mt-8">Cuéntanos sobre tu institución y te contactaremos para coordinar una demostración.</p>
+          <h1 style={{ fontSize: '2rem', fontWeight: 800, marginTop: 14 }}>Solicita información</h1>
+          <p className="dim mt-8">Cuéntanos sobre tu institución y te contactaremos para coordinar una sesión.</p>
         </div>
 
         {sent ? (

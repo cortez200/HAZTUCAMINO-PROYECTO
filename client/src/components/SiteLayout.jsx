@@ -144,14 +144,14 @@ export default function SiteLayout({ children }) {
           <div>
             <h2 className="foot-title">Institución</h2>
             <Link to="/instituciones" className="foot-link">Para colegios</Link>
-            <Link to="/instituciones" className="foot-link">Solicitar demo</Link>
+            <Link to="/instituciones" className="foot-link">Solicitar información</Link>
             <Link to="/login" className="foot-link">Iniciar sesión</Link>
             <Link to="/register" className="foot-link">Crear cuenta</Link>
           </div>
         </div>
         <div className="container footer-bottom">
           <span className="muted small">Hecho en Perú · 2026</span>
-          <span className="muted small">Prototipo demostrativo · datos de ejemplo</span>
+          <span className="muted small">Orientación vocacional para el Perú</span>
         </div>
       </footer>
     </div>

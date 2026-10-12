@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
-import { CARRERAS, AREAS, area, simDeArea } from '../lib/data.js';
-import { areaScores, topCareers } from '../lib/scoring.js';
+import { CARRERAS, AREAS, area, universidad, missionsDeCarrera, isPremium, isFreeMission } from '../lib/data.js';
+import { areaScores, careerScores } from '../lib/scoring.js';
 import { useAuth } from '../lib/store.jsx';
 import { areaVars, Badge, Btn, Card, EmptyState } from '../components/ui.jsx';
 import CareerCard from '../components/CareerCard.jsx';
 import Icon from '../components/Icon.jsx';
+import UniLogo from '../components/UniLogo.jsx';
 
 export default function Resultados() {
   const { account, toggleSaved } = useAuth();
@@ -23,10 +24,18 @@ export default function Resultados() {
   const top3 = scores.slice(0, 3);
   const unknown = (account.unknown || []).map(area).filter(Boolean);
   const savedSet = account.saved || [];
-  const careersByIds = top3.flatMap((a) => CARRERAS.filter((c) => c.area === a.id));
-  const recomendada = topCareers(account.answers || {}, 1)[0];
+  const hasSignal = scores.some((s) => s.pct > 0);
+  const rankedCareers = careerScores(account.answers || {}).filter((c) => c.score > 0);
+  const careersByIds = rankedCareers.slice(0, 8);
+  const recomendada = rankedCareers[0];
   const recAr = recomendada ? area(recomendada.area) : null;
-  const recSim = recomendada ? simDeArea(recomendada.area) : null;
+  const recMissions = recomendada ? missionsDeCarrera(recomendada.id) : [];
+  const recMission = recMissions.length
+    ? (isPremium(account)
+      ? recMissions.find((m) => !isFreeMission(m)) || recMissions[0]
+      : recMissions.find(isFreeMission) || recMissions[0])
+    : null;
+  const recMissionLocked = recMission && !isFreeMission(recMission) && !isPremium(account);
   const recPrivadas = recomendada ? recomendada.universidades.filter((o) => o.tipo === 'Privada') : [];
   const recDesde = recPrivadas.length ? Math.min(...recPrivadas.map((o) => o.min)) : null;
 
@@ -44,6 +53,17 @@ export default function Resultados() {
       </div>
 
       {/* Carrera recomendada */}
+      {!hasSignal && (
+        <Card className="card-pad mb-24" style={{ borderColor: 'var(--border-strong)' }}>
+          <div className="row gap-8 bold" style={{ color: 'var(--warn)' }}>
+            <Icon name="HelpCircle" size={18} /> Aún no podemos recomendarte una carrera
+          </div>
+          <p className="small dim mt-8">
+            Marcaste "No me gusta" en casi todo. Repite el test y responde "Me gusta" o "Tengo dudas" en las actividades que sí llamen tu atención para ver tus carreras afines.
+          </p>
+          <div className="mt-16"><Link to="/test" className="btn btn-primary"><Icon name="RotateCcw" size={16} /> Repetir test</Link></div>
+        </Card>
+      )}
       {recomendada && (
         <Card className="card-pad mb-24" style={{ ...areaVars(recAr), borderColor: 'var(--area)', overflow: 'hidden' }}>
           <div className="row between wrap gap-16">
@@ -58,12 +78,38 @@ export default function Resultados() {
               </div>
               <div className="row gap-12 wrap mt-24">
                 <Link to={`/carreras/${recomendada.id}`} className="btn btn-primary"><Icon name="Info" size={16} /> Ver información completa</Link>
-                {recSim && <Link to={`/simulaciones/${recSim.id}`} className="btn btn-outline"><Icon name="Gamepad2" size={16} /> Ir a la simulación</Link>}
+                {recMission ? (
+                  <Link to={`/simulaciones/mision/${recMission.id}`} className="btn btn-outline">
+                    <Icon name={recMissionLocked ? 'Lock' : 'Gamepad2'} size={16} />
+                    Hacer simulación{recMissionLocked ? ' · Premium' : ''}
+                  </Link>
+                ) : (
+                  <Link to="/simulaciones" className="btn btn-outline"><Icon name="Gamepad2" size={16} /> Ver simulaciones</Link>
+                )}
               </div>
             </div>
             <span style={{ width: 76, height: 76, borderRadius: 20, background: 'var(--area-soft)', color: 'var(--area)', display: 'grid', placeItems: 'center', flex: 'none' }}>
               <Icon name={recAr.icon} size={38} />
             </span>
+          </div>
+          <div className="mt-24">
+            <div className="tiny muted bold mb-12">DÓNDE ESTUDIARLA ({recomendada.universidades.length})</div>
+            <div className="rec-unis">
+              {recomendada.universidades.map((o) => {
+                const u = universidad(o.id);
+                return (
+                  <div key={o.id} className="rec-uni">
+                    <UniLogo uni={u} size={34} />
+                    <div className="grow" style={{ minWidth: 0 }}>
+                      <div className="small bold truncate">{u.nombre}</div>
+                      <div className="tiny dim truncate">
+                        {u.ciudad} · {o.tipo === 'Pública' ? 'Pública' : `S/ ${o.min.toLocaleString()}–${o.max.toLocaleString()}/mes`}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </Card>
       )}

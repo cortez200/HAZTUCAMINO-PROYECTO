@@ -75,7 +75,7 @@ export default function Forgot() {
             </p>
             {sent.previewUrl && (
               <div className="card card-pad mt-16" style={{ background: 'var(--primary-soft)', border: 0, textAlign: 'left' }}>
-                <span className="small bold row gap-6" style={{ color: 'var(--primary-700)' }}><Icon name="Sparkles" size={15} /> Modo demo: míralo aquí</span>
+                <span className="small bold row gap-6" style={{ color: 'var(--primary-700)' }}><Icon name="Sparkles" size={15} /> Vista previa: míralo aquí</span>
                 <div className="mt-8"><a href={sent.previewUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--primary)', fontWeight: 700, wordBreak: 'break-all' }}>Abrir correo de prueba →</a></div>
               </div>
             )}

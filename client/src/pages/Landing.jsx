@@ -134,7 +134,7 @@ export default function Landing() {
             <Badge tone="primary" icon="School">Para colegios e institutos</Badge>
             <h2 className="section-title">Lleva la orientación vocacional a tu institución</h2>
             <p className="dim">
-              Solicita una demo para tus estudiantes. Resultados por aula y guía para tutores.
+              Coordínala para tus estudiantes. Resultados por aula y guía para tutores.
             </p>
             <div>
               <Link to="/instituciones" className="btn btn-primary btn-lg">Solicitar información <Icon name="ArrowRight" size={18} /></Link>

@@ -1,0 +1,41 @@
+// Logos de universidades auto-hospedados en client/public/logos
+// Fuente: Wikimedia Commons / Wikipedia y sitios oficiales.
+// Si una universidad no esta aqui, UniLogo cae al favicon y luego a las iniciales.
+export const UNI_LOGOS = {
+  "pucp": "/logos/pucp.png",
+  "uac": "/logos/uac.svg",
+  "ucontinental": "/logos/ucontinental.png",
+  "ucsm": "/logos/ucsm.png",
+  "ucsp": "/logos/ucsp.png",
+  "ucsur": "/logos/ucsur.png",
+  "udep": "/logos/udep.png",
+  "ulima": "/logos/ulima.png",
+  "unalm": "/logos/unalm.png",
+  "unap": "/logos/unap.png",
+  "unc": "/logos/unc.png",
+  "undac": "/logos/undac.png",
+  "une": "/logos/une.png",
+  "unheval": "/logos/unheval.png",
+  "uni": "/logos/uni.jpg",
+  "unjbg": "/logos/unjbg.png",
+  "unmsm": "/logos/unmsm.png",
+  "unp": "/logos/unp.png",
+  "unsa": "/logos/unsa.png",
+  "unsaac": "/logos/unsaac.png",
+  "unsch": "/logos/unsch.png",
+  "unt": "/logos/unt.png",
+  "unu": "/logos/unu.png",
+  "up": "/logos/up.png",
+  "upao": "/logos/upao.jpg",
+  "upc": "/logos/upc.png",
+  "upch": "/logos/upch.svg",
+  "upn": "/logos/upn.png",
+  "urp": "/logos/urp.png",
+  "usat": "/logos/usat.png",
+  "usil": "/logos/usil.gif",
+  "usmp": "/logos/usmp.png",
+  "utec": "/logos/utec.jpg",
+  "utp": "/logos/utp.png",
+};
+
+export default UNI_LOGOS;

@@ -81,6 +81,10 @@ export function AuthProvider({ children }) {
     const { account } = await api.saveSim(simId, score);
     setAccount(account); return account;
   }, []);
+  const submitMission = useCallback(async (payload) => {
+    const res = await api.submitMission(payload);
+    setAccount(res.account); return res;
+  }, []);
   const subscribe = useCallback(async (plan) => {
     const r = await api.subscribe(plan);
     setAccount(r.account); return r;
@@ -93,7 +97,7 @@ export function AuthProvider({ children }) {
 
   const value = {
     account, loading, login, register, logout, setAccount, verifySession,
-    toggleSaved, submitTest, saveSim, subscribe, cancelPlan, resendVerification
+    toggleSaved, submitTest, saveSim, submitMission, subscribe, cancelPlan, resendVerification
   };
   return <AuthCtx.Provider value={value}>{children}</AuthCtx.Provider>;
 }

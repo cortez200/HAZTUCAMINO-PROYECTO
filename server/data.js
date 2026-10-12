@@ -248,6 +248,166 @@ export const UNIVERSIDADES = [
       "min": 1200,
       "max": 2400
     }
+  },
+  {
+    "id": "une",
+    "nombre": "Universidad Nacional de Educación Enrique Guzmán y Valle",
+    "corto": "UNE",
+    "tipo": "Pública",
+    "ciudad": "Lima",
+    "web": "https://www.une.edu.pe",
+    "color": "#0369a1",
+    "pension": { "min": 0, "max": 0 }
+  },
+  {
+    "id": "unap",
+    "nombre": "Universidad Nacional del Altiplano",
+    "corto": "UNAP",
+    "tipo": "Pública",
+    "ciudad": "Puno",
+    "web": "https://www.unap.edu.pe",
+    "color": "#0f766e",
+    "pension": { "min": 0, "max": 0 }
+  },
+  {
+    "id": "unc",
+    "nombre": "Universidad Nacional de Cajamarca",
+    "corto": "UNC",
+    "tipo": "Pública",
+    "ciudad": "Cajamarca",
+    "web": "https://www.unc.edu.pe",
+    "color": "#15803d",
+    "pension": { "min": 0, "max": 0 }
+  },
+  {
+    "id": "unsch",
+    "nombre": "Universidad Nacional de San Cristóbal de Huamanga",
+    "corto": "UNSCH",
+    "tipo": "Pública",
+    "ciudad": "Ayacucho",
+    "web": "https://www.unsch.edu.pe",
+    "color": "#7c2d12",
+    "pension": { "min": 0, "max": 0 }
+  },
+  {
+    "id": "unjbg",
+    "nombre": "Universidad Nacional Jorge Basadre Grohmann",
+    "corto": "UNJBG",
+    "tipo": "Pública",
+    "ciudad": "Tacna",
+    "web": "https://www.unjbg.edu.pe",
+    "color": "#9a3412",
+    "pension": { "min": 0, "max": 0 }
+  },
+  {
+    "id": "unheval",
+    "nombre": "Universidad Nacional Hermilio Valdizán",
+    "corto": "UNHEVAL",
+    "tipo": "Pública",
+    "ciudad": "Huánuco",
+    "web": "https://www.unheval.edu.pe",
+    "color": "#166534",
+    "pension": { "min": 0, "max": 0 }
+  },
+  {
+    "id": "unu",
+    "nombre": "Universidad Nacional de Ucayali",
+    "corto": "UNU",
+    "tipo": "Pública",
+    "ciudad": "Pucallpa",
+    "web": "https://www.unu.edu.pe",
+    "color": "#065f46",
+    "pension": { "min": 0, "max": 0 }
+  },
+  {
+    "id": "undac",
+    "nombre": "Universidad Nacional Daniel Alcides Carrión",
+    "corto": "UNDAC",
+    "tipo": "Pública",
+    "ciudad": "Cerro de Pasco",
+    "web": "https://www.undac.edu.pe",
+    "color": "#1e3a8a",
+    "pension": { "min": 0, "max": 0 }
+  },
+  {
+    "id": "ucv",
+    "nombre": "Universidad César Vallejo",
+    "corto": "UCV",
+    "tipo": "Privada",
+    "ciudad": "Trujillo",
+    "web": "https://www.ucv.edu.pe",
+    "color": "#b91c1c",
+    "pension": { "min": 720, "max": 1750 }
+  },
+  {
+    "id": "utp",
+    "nombre": "Universidad Tecnológica del Perú",
+    "corto": "UTP",
+    "tipo": "Privada",
+    "ciudad": "Lima",
+    "web": "https://www.utp.edu.pe",
+    "color": "#c2410c",
+    "pension": { "min": 800, "max": 2000 }
+  },
+  {
+    "id": "ucontinental",
+    "nombre": "Universidad Continental",
+    "corto": "UC",
+    "tipo": "Privada",
+    "ciudad": "Huancayo",
+    "web": "https://ucontinental.edu.pe",
+    "color": "#a21caf",
+    "pension": { "min": 900, "max": 2100 }
+  },
+  {
+    "id": "upn",
+    "nombre": "Universidad Privada del Norte",
+    "corto": "UPN",
+    "tipo": "Privada",
+    "ciudad": "Trujillo",
+    "web": "https://www.upn.edu.pe",
+    "color": "#0e7490",
+    "pension": { "min": 800, "max": 2000 }
+  },
+  {
+    "id": "urp",
+    "nombre": "Universidad Ricardo Palma",
+    "corto": "URP",
+    "tipo": "Privada",
+    "ciudad": "Lima",
+    "web": "https://www.urp.edu.pe",
+    "color": "#1d4ed8",
+    "pension": { "min": 1200, "max": 2600 }
+  },
+  {
+    "id": "usat",
+    "nombre": "Universidad Católica Santo Toribio de Mogrovejo",
+    "corto": "USAT",
+    "tipo": "Privada",
+    "ciudad": "Chiclayo",
+    "web": "https://www.usat.edu.pe",
+    "color": "#7e22ce",
+    "pension": { "min": 900, "max": 2000 }
+  },
+  {
+    "id": "uac",
+    "nombre": "Universidad Andina del Cusco",
+    "corto": "UAC",
+    "tipo": "Privada",
+    "ciudad": "Cusco",
+    "web": "https://www.uandina.edu.pe",
+    "color": "#be185d",
+    "pension": { "min": 900, "max": 2000 }
+  },
+  {
+    "id": "ucsp",
+    "nombre": "Universidad Católica San Pablo",
+    "corto": "UCSP",
+    "tipo": "Privada",
+    "ciudad": "Arequipa",
+    "web": "https://ucsp.edu.pe",
+    "color": "#b45309",
+    "pension": { "min": 1300, "max": 2600 }
   }
 ];
 
@@ -3240,3 +3400,76 @@ export const carrera = (id) => CARRERAS.find((c) => c.id === id);
 export const universidad = (id) => UNIVERSIDADES.find((u) => u.id === id);
 export const simDeArea = (areaId) => SIMS.find((s) => s.area === areaId);
 export const isFreeSim = (id) => FREE_SIMS.includes(id);
+
+/* -------------------------------------------------------------------------
+   Enriquecimiento: además de las universidades base de cada carrera, se
+   agregan más opciones (públicas y privadas) según el área, para que el
+   estudiante vea un abanico más amplio de dónde estudiarla. El aporte de cada
+   universidad (tipo, pensión y duración) se toma de UNIVERSIDADES. */
+export const AREA_UNIVERSITIES = {
+  salud: ['unmsm', 'upch', 'upc', 'usmp', 'ucsur', 'ucsm', 'unsa', 'unt', 'unap', 'ucv', 'utp', 'usat'],
+  tecnologia: ['uni', 'upc', 'utec', 'pucp', 'unp', 'unap', 'unt', 'unsch', 'ucv', 'utp', 'ucontinental', 'upn'],
+  ciencias: ['unmsm', 'unalm', 'pucp', 'uni', 'unsa', 'unap', 'unc', 'unsch', 'urp', 'ucsp'],
+  negocios: ['pucp', 'ulima', 'up', 'upc', 'usil', 'usmp', 'ucv', 'utp', 'ucontinental', 'upn', 'urp'],
+  educacion: ['une', 'unmsm', 'unsch', 'unheval', 'unu', 'undac', 'ucv', 'utp', 'ucontinental', 'usat'],
+  arte: ['pucp', 'ulima', 'upc', 'usil', 'ucsur', 'urp', 'ucv', 'utp', 'uac'],
+  derecho: ['pucp', 'ulima', 'up', 'usmp', 'unmsm', 'unsaac', 'unt', 'urp', 'ucv', 'utp', 'uac'],
+  naturaleza: ['unalm', 'uni', 'unp', 'unsa', 'unmsm', 'unsaac', 'unap', 'unc', 'unu', 'ucsur']
+};
+
+const _uniById = new Map(UNIVERSIDADES.map((u) => [u.id, u]));
+for (const c of CARRERAS) {
+  const seen = new Set((c.universidades || []).map((o) => o.id));
+  for (const id of (AREA_UNIVERSITIES[c.area] || [])) {
+    if (seen.has(id)) continue;
+    const u = _uniById.get(id);
+    if (!u) continue;
+    c.universidades = c.universidades || [];
+    c.universidades.push({
+      id, tipo: u.tipo,
+      min: u.pension?.min || 0, max: u.pension?.max || 0,
+      duracion: c.duracion
+    });
+    seen.add(id);
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Afinidad de cada pregunta con carreras concretas (además de su área).
+   Permite recomendar una carrera distinta según los intereses que la persona
+   marcó, incluso dentro de una misma área, en vez de repetir siempre la misma. */
+const CAREER_AFFINITY = {
+  1: ['enfermeria', 'medicina'],
+  2: ['mecatronica', 'ing-industrial'],
+  3: ['quimica', 'biologia'],
+  4: ['administracion', 'marketing'],
+  5: ['educacion'],
+  6: ['diseño-grafico', 'arquitectura'],
+  7: ['derecho'],
+  8: ['agronomia', 'veterinaria'],
+  9: ['medicina', 'biologia'],
+  10: ['ing-software', 'mecatronica'],
+  11: ['matematica', 'economia'],
+  12: ['contabilidad', 'economia'],
+  13: ['psicologia', 'trabajo-social'],
+  14: ['audiovisual', 'diseño-grafico'],
+  15: ['periodismo', 'comunicacion'],
+  16: ['veterinaria', 'biologia-marina'],
+  17: ['enfermeria', 'nutricion'],
+  18: ['ing-civil', 'arquitectura', 'ing-industrial'],
+  19: ['matematica', 'fisica'],
+  20: ['marketing', 'administracion'],
+  21: ['trabajo-social', 'sociologia'],
+  22: ['audiovisual', 'comunicacion'],
+  23: ['comunicacion', 'periodismo'],
+  24: ['agronomia', 'ambiental', 'turismo'],
+  25: ['medicina', 'quimica'],
+  26: ['mecatronica', 'ing-industrial'],
+  27: ['fisica', 'matematica'],
+  28: ['administracion', 'ing-industrial'],
+  29: ['psicologia', 'sociologia'],
+  30: ['moda', 'arquitectura', 'diseño-grafico'],
+  31: ['derecho', 'relaciones'],
+  32: ['ambiental', 'quimica']
+};
+for (const p of PREGUNTAS) { if (CAREER_AFFINITY[p.id]) p.c = CAREER_AFFINITY[p.id]; }

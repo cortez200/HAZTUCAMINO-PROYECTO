@@ -32,7 +32,7 @@ export default function Img({ src, alt = '', className, style, icon = 'Compass',
       className={className}
       style={{ ...style, opacity: loaded ? 1 : 0, transition: 'opacity .4s', aspectRatio: ratio }}
       loading={priority ? 'eager' : 'lazy'}
-      fetchPriority={priority ? 'high' : undefined}
+      {...(priority ? { fetchpriority: 'high' } : {})}
       onLoad={() => setLoaded(true)}
       onError={() => setFailed(true)}
     />

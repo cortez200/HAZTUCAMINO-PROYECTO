@@ -9,7 +9,7 @@
 - [Test vocacional](/#/test): cuestionario de 32 preguntas (5 minutos).
 - [Simulaciones](/#/simulaciones): casos interactivos con video, decisiones y puntaje.
 - [Planes](/#/planes): comparación de planes Gratis y Premium.
-- [Para colegios](/#/instituciones): solicitud de demo institucional.
+- [Para colegios](/#/instituciones): solicitud institucional.
 - [Iniciar sesión](/#/login) y [Crear cuenta](/#/register).
 
 ## Qué ofrece
@@ -26,4 +26,4 @@
 - Backend: Node.js + Express (API REST).
 - Persistencia: archivo JSON en el servidor.
 
-Nota: prototipo demostrativo. Las mensualidades y mallas son datos de ejemplo y la activación Premium es simulada (sin cobro real).
+Nota: las mensualidades y mallas son datos de referencia.

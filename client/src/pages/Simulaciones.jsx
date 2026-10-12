@@ -1,79 +1,200 @@
 import { Link } from 'react-router-dom';
-import { SIMS, area, isPremium } from '../lib/data.js';
+import { MISSIONS, CARRERAS, AREAS, area, isPremium, missionsDeCarrera, nivelMision, isFreeMission, engineIcon, engineLabel } from '../lib/data.js';
 import { useAuth } from '../lib/store.jsx';
-import { areaVars, Badge, Card } from '../components/ui.jsx';
+import { areaVars, Badge, Card, Progress } from '../components/ui.jsx';
 import Icon from '../components/Icon.jsx';
-import { actividadDe } from '../lib/activity.js';
+
+function MissionRow({ m, ar, account }) {
+  const locked = !isFreeMission(m) && !isPremium(account);
+  const mp = account?.missions?.[m.id];
+  const total = m.objetivos || mp?.total || 1;
+  const pct = mp ? Math.round((Math.min(mp.best, total) / total) * 100) : 0;
+  const done = mp && mp.best >= total;
+
+  const body = (
+    <>
+      <span className="mission-row-ico"><Icon name={locked ? 'Lock' : engineIcon(m.engine)} size={20} /></span>
+      <span className="grow">
+        <span className="row gap-8 wrap">
+          <b className="mission-row-title">{m.titulo}</b>
+          <Badge tone="soft" icon={engineIcon(m.engine)}>{engineLabel(m.engine)}</Badge>
+          <Badge tone={isFreeMission(m) ? 'ok' : 'gold'} icon={isFreeMission(m) ? 'Unlock' : 'Lock'}>{isFreeMission(m) ? 'Gratis' : 'Premium'}</Badge>
+        </span>
+        <span className="dim small mission-row-sub">{nivelMision(m.nivel)} · {m.habilidades.slice(0, 3).join(' · ')}</span>
+        {!locked && account && (
+          <span className="mission-row-prog">
+            <Progress value={pct} area />
+            <em>{done ? 'Completada' : mp ? `${mp.best}/${total} · ${pct}%` : 'Sin empezar'}</em>
+          </span>
+        )}
+      </span>
+    </>
+  );
+
+  if (locked) {
+    return (
+      <Link to="/planes" className="mission-row is-locked" style={areaVars(ar)} aria-label={`Desbloquear ${m.titulo} con Premium`}>
+        {body}
+        <span className="mission-row-cta"><Icon name="Lock" size={16} /> Desbloquear</span>
+      </Link>
+    );
+  }
+
+  return (
+    <Link to={`/simulaciones/mision/${m.id}`} className={`mission-row ${done ? 'is-done' : ''}`} style={areaVars(ar)}>
+      {body}
+      <span className="mission-row-cta">
+        <Icon name={mp ? 'RotateCcw' : 'Play'} size={16} /> {mp ? (done ? 'Repetir' : 'Continuar') : 'Jugar'}
+      </span>
+    </Link>
+  );
+}
+
+function SectionHead({ icon, title, sub, children }) {
+  return (
+    <div className="sim-h2">
+      <span className="sim-h2-ico"><Icon name={icon} size={19} /></span>
+      <div className="grow">
+        <h2>{title}</h2>
+        {sub && <p className="sim-h2-sub">{sub}</p>}
+      </div>
+      {children}
+    </div>
+  );
+}
 
 export default function Simulaciones() {
   const { account } = useAuth();
-  const premium = isPremium(account);
-  const sims = account?.sims || {};
+  const carreras = CARRERAS
+    .filter((c) => missionsDeCarrera(c.id).length > 0)
+    .sort((a, b) => missionsDeCarrera(b.id).length - missionsDeCarrera(a.id).length);
+  const enDesarrollo = CARRERAS.filter((c) => missionsDeCarrera(c.id).length === 0);
+
+  const totalMisiones = MISSIONS.length;
+  const completadas = account
+    ? MISSIONS.filter((m) => {
+        const mp = account.missions?.[m.id];
+        return mp && mp.best >= (m.objetivos || mp.total || 1);
+      }).length
+    : 0;
+  const xpGanado = account
+    ? MISSIONS.reduce((acc, m) => {
+        const mp = account.missions?.[m.id];
+        if (!mp) return acc;
+        const total = m.objetivos || mp.total || 1;
+        return acc + Math.round((Math.min(mp.best, total) / total) * (m.xp || 0));
+      }, 0)
+    : 0;
+  const areasExploradas = account
+    ? new Set(MISSIONS.filter((m) => account.missions?.[m.id]).map((m) => m.area)).size
+    : 0;
+  const pctGlobal = totalMisiones ? Math.round((completadas / totalMisiones) * 100) : 0;
 
   return (
     <>
       <div className="page-head">
         <div>
           <h1 className="page-title">Simulaciones</h1>
-          <p className="page-sub">Mira un video de la profesión y resuelve un reto real arrastrando objetos. Obtén tu puntaje de afinidad.</p>
+          <p className="page-sub">Practica profesiones reales con misiones interactivas: código, casos clínicos y retos de decisión.</p>
         </div>
-        {!premium && <Badge tone="gold" icon="Lock">Función Premium</Badge>}
       </div>
 
-      {!premium && (
-        <Card className="card-pad mb-24" style={{ borderColor: 'var(--primary)', overflow: 'hidden' }}>
-          <div className="row between wrap gap-16">
-            <div className="grow" style={{ minWidth: 260 }}>
-              <Badge tone="gold" icon="Lock">No disponible en tu plan</Badge>
-              <h2 style={{ fontSize: 'clamp(1.2rem, 3vw, 1.5rem)', fontWeight: 800, marginTop: 12 }}>
-                Las simulaciones son parte de Premium
-              </h2>
-              <p className="dim mt-8" style={{ maxWidth: 560 }}>
-                Practica profesiones reales con videos y retos interactivos. Activa Premium y desbloquea las 8 simulaciones.
+      {account ? (
+        <div className="sim-hero">
+          <div className="sim-hero-inner">
+            <div className="sim-hero-main">
+              <div className="row gap-8">
+                <Icon name="TrendingUp" size={18} color="#e0e7ff" />
+                <span className="sim-hero-title">Tu progreso</span>
+              </div>
+              <p className="sim-hero-sub">
+                {completadas === 0
+                  ? 'Aún no has completado misiones. ¡Empieza con una misión gratuita!'
+                  : `Has completado ${completadas} de ${totalMisiones} misiones. ¡Sigue así!`}
               </p>
+              <div className="sim-hero-bar"><span style={{ width: `${pctGlobal}%` }} /></div>
+              <span className="sim-hero-pct">{pctGlobal}% del recorrido</span>
             </div>
-            <Link to="/planes" className="btn btn-primary btn-lg" style={{ flex: 'none' }}>
-              <Icon name="Sparkles" size={18} /> Comprar Premium
-            </Link>
+            <div className="sim-stats">
+              <div className="sim-stat"><b>{completadas}<i>/{totalMisiones}</i></b><em>Misiones</em></div>
+              <div className="sim-stat"><b>{xpGanado}</b><em>XP ganado</em></div>
+              <div className="sim-stat"><b>{areasExploradas}<i>/{AREAS.length}</i></b><em>Áreas</em></div>
+            </div>
           </div>
+        </div>
+      ) : (
+        <Card className="sim-cta">
+          <span className="sim-cta-ico"><Icon name="User" size={22} /></span>
+          <div className="grow">
+            <h3>Crea una cuenta para guardar tu avance</h3>
+            <p className="dim small mt-8" style={{ margin: 0 }}>Tu progreso, XP y misiones completadas se guardarán en tu perfil.</p>
+          </div>
+          <Link to="/register" className="btn btn-primary"><Icon name="Sparkles" size={18} /> Empezar gratis</Link>
         </Card>
       )}
 
+      {/* Misiones por carrera */}
+      <SectionHead
+        icon="Gamepad2"
+        title="Misiones por carrera"
+        sub="Cada simulador te pone en el rol de un profesional. Hay misiones gratuitas y misiones Premium para practicar más."
+      >
+        <span className="badge badge-soft">{carreras.length} carreras</span>
+      </SectionHead>
+
+      {carreras.length === 0 && (
+        <Card className="card-pad center"><p className="dim">Todavía no hay misiones disponibles.</p></Card>
+      )}
+
       <div className="grid cols-2">
-        {SIMS.map((s) => {
-          const ar = area(s.area);
-          const done = sims[s.id] != null;
-          const locked = !premium;
-          const total = actividadDe(s.area)?.items.length || 3;
+        {carreras.map((c) => {
+          const ar = area(c.area);
+          const list = missionsDeCarrera(c.id);
+          const doneCount = list.filter((m) => account?.missions?.[m.id]?.best >= (m.objetivos || 1)).length;
           return (
-            <div key={s.id} className="card card-pad" style={{ ...areaVars(ar), opacity: locked ? 0.85 : 1 }}>
-              <div className="row gap-16">
-                <span style={{ width: 52, height: 52, borderRadius: 14, background: 'var(--area-soft)', color: 'var(--area)', display: 'grid', placeItems: 'center', flex: 'none' }}>
-                  <Icon name={ar.icon} size={24} />
+            <Card key={c.id} className="card-pad career-missions" style={areaVars(ar)}>
+              <div className="cm-head">
+                <span className="mission-ico sm" style={{ background: 'var(--area-soft)', color: 'var(--area)' }}>
+                  <Icon name={ar.icon} size={22} />
                 </span>
                 <div className="grow">
-                  <div className="row between gap-8">
-                    <Badge tone="area">{ar.nombre}</Badge>
-                    {locked ? <Badge tone="gold" icon="Lock">Premium</Badge> : done ? <Badge tone="ok" icon="CheckCircle2">{sims[s.id]}/{total}</Badge> : <Badge tone="soft">Disponible</Badge>}
-                  </div>
-                  <h3 style={{ fontWeight: 700, marginTop: 10, fontSize: '1.05rem' }}>{actividadDe(s.area)?.titulo || s.caso?.titulo || s.titulo}</h3>
-                  <p className="muted small mt-8">{s.caso?.contexto || s.titulo}</p>
+                  <Badge tone="area">{ar.nombre}</Badge>
+                  <h3 className="cm-title">{c.nombre}</h3>
                 </div>
+                <Link to={`/carreras/${c.id}`} className="btn btn-soft btn-sm">Ver carrera</Link>
               </div>
-              <div className="row between mt-16">
-                <span className="row gap-6 muted small"><Icon name="Hand" size={15} /> Video + reto interactivo</span>
-                {locked ? (
-                  <Link to="/planes" className="btn btn-soft btn-sm"><Icon name="Lock" size={15} /> Desbloquear</Link>
-                ) : (
-                  <Link to={`/simulaciones/${s.id}`} className="btn btn-primary btn-sm">
-                    <Icon name="Play" size={15} /> {done ? 'Repetir' : 'Comenzar'}
-                  </Link>
-                )}
+              <div className="stack gap-8">
+                {list.map((m) => <MissionRow key={m.id} m={m} ar={ar} account={account} />)}
               </div>
-            </div>
+              <p className="cm-foot">
+                <Icon name="CheckCircle2" size={14} /> <b>{doneCount}</b> de {list.length} completadas · {list.length} {list.length === 1 ? 'misión' : 'misiones'}
+              </p>
+            </Card>
           );
         })}
       </div>
+
+      {/* Carreras en desarrollo */}
+      {enDesarrollo.length > 0 && (
+        <>
+          <SectionHead
+            icon="Hourglass"
+            title="Simuladores en desarrollo"
+            sub="Estamos creando misiones para estas carreras. Mientras tanto, puedes explorar sus fichas y opciones de estudio."
+          />
+          <Card className="card-pad">
+            <div className="row gap-8 wrap">
+              {enDesarrollo.map((c) => (
+                <Link key={c.id} to={`/carreras/${c.id}`} className="develop-chip">
+                  <Icon name={area(c.area)?.icon} size={14} /> {c.nombre}
+                  <em>Pronto</em>
+                </Link>
+              ))}
+            </div>
+          </Card>
+        </>
+      )}
+
     </>
   );
 }

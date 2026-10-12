@@ -8,6 +8,7 @@ export const CARRERAS = [];
 export const PREGUNTAS = [];
 export const OPCIONES = [];
 export const SIMS = [];
+export const MISSIONS = [];
 export const NIVELES = [];
 export const FREE_SIMS = [];
 export const PLANS = [];
@@ -28,6 +29,7 @@ export function hydrateCatalog(catalog = {}) {
   fill(PREGUNTAS, catalog.preguntas);
   fill(OPCIONES, catalog.opciones);
   fill(SIMS, catalog.simulations);
+  fill(MISSIONS, catalog.missions);
   fill(NIVELES, catalog.niveles);
   fill(FREE_SIMS, catalog.freeSims);
   fill(PLANS, catalog.plans);
@@ -43,3 +45,24 @@ export const planById = (id) => PLANS.find((p) => p.id === id);
 export const isPremium = (account) => account?.plan === 'premium' || account?.plan === 'super';
 export const planLabel = (plan) => planById(plan)?.nombre || 'Básico';
 export const freeTestLimit = () => _freeTestLimit;
+
+/* ------------------------- misiones (simuladores) ------------------------- */
+export const missionById = (id) => MISSIONS.find((m) => m.id === id);
+export const missionsDeCarrera = (careerId) => MISSIONS.filter((m) => m.careerId === careerId);
+export const primeraMisionDeCarrera = (careerId) => missionsDeCarrera(careerId)[0] || null;
+export const misionesDeArea = (areaId) => MISSIONS.filter((m) => m.area === areaId);
+export const isFreeMission = (mission) => !mission || mission.tier !== 'premium';
+/* Carreras que ya tienen al menos una misión implementada. */
+export const carrerasConMisiones = () => {
+  const ids = new Set(MISSIONS.map((m) => m.careerId));
+  return CARRERAS.filter((c) => ids.has(c.id));
+};
+export const nivelMision = (nivel) =>
+  ({ inicial: 'Inicial', intermedio: 'Intermedio', avanzado: 'Avanzado' }[nivel] || 'Inicial');
+
+/* Icono representativo de cada motor de misión. */
+export const engineIcon = (engine) =>
+  ({ code: 'Code', decision: 'Brain', drag: 'Hand', worksheet: 'Calculator', match: 'Puzzle', allocate: 'Wallet' }[engine] || 'Gamepad2');
+
+export const engineLabel = (engine) =>
+  ({ code: 'Código', decision: 'Decisión', drag: 'Clasificar', worksheet: 'Cálculos', match: 'Emparejar', allocate: 'Reparto' }[engine] || 'Reto');

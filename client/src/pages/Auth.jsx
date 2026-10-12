@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NIVELES } from '../lib/data.js';
 import { useAuth, useToast } from '../lib/store.jsx';
 import { Btn } from '../components/ui.jsx';
@@ -11,6 +11,7 @@ export default function Auth({ mode }) {
   const { login, register: signup, resendVerification } = useAuth();
   const toast = useToast();
   const nav = useNavigate();
+  const location = useLocation();
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [nivel, setNivel] = useState('secundaria');
   const [errors, setErrors] = useState({});
@@ -36,7 +37,8 @@ export default function Auth({ mode }) {
       } else {
         await login({ email: form.email.trim(), password: form.password });
         toast('¡Hola de nuevo!', 'CheckCircle2');
-        nav('/');
+        const from = location.state?.from;
+        nav(typeof from === 'string' && from.startsWith('/') && !from.startsWith('//') ? from : '/', { replace: true });
       }
     } catch (err) {
       if (err.data?.needsVerification) {
