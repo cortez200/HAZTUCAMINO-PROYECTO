@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { NIVELES } from '../lib/data.js';
 import { useAuth, useToast } from '../lib/store.jsx';
+import { api } from '../lib/api.js';
 import { Btn } from '../components/ui.jsx';
 import Icon from '../components/Icon.jsx';
 import AuthLayout from '../components/AuthLayout.jsx';
@@ -12,11 +13,36 @@ export default function Auth({ mode }) {
   const toast = useToast();
   const nav = useNavigate();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const verificationToken = register ? searchParams.get('token') : null;
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [nivel, setNivel] = useState('secundaria');
   const [errors, setErrors] = useState({});
   const [busy, setBusy] = useState(false);
   const [pending, setPending] = useState(null);
+  const [confirmation, setConfirmation] = useState(verificationToken ? 'working' : null);
+  const [confirmationError, setConfirmationError] = useState('');
+  const handledVerification = useRef(null);
+
+  useEffect(() => {
+    if (!verificationToken || handledVerification.current === verificationToken) return;
+    handledVerification.current = verificationToken;
+    api.verifyEmail(verificationToken)
+      .then((result) => {
+        setPending({ email: result.email });
+        setConfirmation('success');
+        toast('Correo confirmado. Ya puedes iniciar sesión.', 'CheckCircle2');
+      })
+      .catch((err) => {
+        setConfirmation('error');
+        setConfirmationError(err.message);
+      })
+      .finally(() => {
+        const next = new URLSearchParams(searchParams);
+        next.delete('token');
+        setSearchParams(next, { replace: true });
+      });
+  }, [verificationToken, searchParams, setSearchParams, toast]);
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
@@ -37,7 +63,7 @@ export default function Auth({ mode }) {
           const from = location.state?.from;
           nav(typeof from === 'string' && from.startsWith('/') && !from.startsWith('//') ? from : '/', { replace: true });
         } else {
-          setPending({ email: form.email.trim() });
+          setPending({ email: form.email.trim(), previewUrl: res?.previewUrl || null });
           toast('Cuenta creada. Revisa tu correo para confirmarla.', 'Mail');
         }
       } else {
@@ -47,9 +73,12 @@ export default function Auth({ mode }) {
         nav(typeof from === 'string' && from.startsWith('/') && !from.startsWith('//') ? from : '/', { replace: true });
       }
     } catch (err) {
-      if (err.data?.needsVerification) {
-        setPending({ email: err.data.email || form.email.trim() });
-        toast('Confirma tu correo para ingresar.', 'Mail');
+      if (err.data?.needsVerification || err.data?.verificationEmailFailed) {
+        setPending({
+          email: err.data.email || form.email.trim(),
+          sendError: err.data?.verificationEmailFailed ? err.message : null
+        });
+        toast(err.data?.verificationEmailFailed ? err.message : 'Confirma tu correo para ingresar.', 'Mail');
       } else {
         setErrors({ form: err.message });
         toast(err.message, 'Info');
@@ -62,9 +91,16 @@ export default function Auth({ mode }) {
   const resend = async () => {
     setBusy(true);
     try {
-      await resendVerification(pending.email);
+      const result = await resendVerification(pending.email);
+      if (result?.alreadyVerified) {
+        setPending(null);
+        toast('Tu correo ya esta confirmado. Inicia sesion.', 'CheckCircle2');
+        return;
+      }
+      setPending((p) => ({ ...p, previewUrl: result?.previewUrl || null, sendError: null }));
       toast('Correo reenviado. Revisa tu bandeja (y el spam).', 'Mail');
     } catch (err) {
+      setPending((p) => ({ ...p, sendError: err.message }));
       toast(err.message, 'Info');
     } finally {
       setBusy(false);
@@ -86,20 +122,33 @@ export default function Auth({ mode }) {
   return (
     <AuthLayout headline={copy.headline} text={copy.text} points={copy.points}>
       <div style={{ width: '100%', maxWidth: 420 }}>
-        {pending ? (
+        {pending || confirmation ? (
             <div className="card card-pad center">
               <div style={{ width: 58, height: 58, borderRadius: 16, background: 'var(--primary-soft)', color: 'var(--primary)', display: 'grid', placeItems: 'center', margin: '0 auto 16px' }}>
                 <Icon name="Mail" size={28} />
               </div>
-              <h1 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Confirma tu registro</h1>
+              <h1 style={{ fontSize: '1.5rem', fontWeight: 800 }}>
+                {confirmation === 'working' ? 'Confirmando tu correo' : confirmation === 'success' ? 'Correo confirmado' : 'Confirma tu registro'}
+              </h1>
               <p className="dim mt-8 mb-24">
-                Tu cuenta está creada. Enviamos un correo a <b>{pending.email}</b> para confirmarla; puedes ingresar ahora y verificarla cuando quieras.
+                {confirmation === 'working'
+                  ? 'Espera un momento mientras confirmamos tu dirección.'
+                  : confirmation === 'success'
+                    ? <>La dirección <b>{pending?.email}</b> está confirmada. Ya puedes iniciar sesión.</>
+                    : confirmation === 'error'
+                      ? confirmationError || 'No pudimos confirmar el enlace.'
+                      : <>Confirma el correo <b>{pending?.email}</b> antes de ingresar. Revisa también la carpeta de spam.</>}
               </p>
-              <Btn variant="primary" type="button" className="btn-block btn-lg" onClick={resend} disabled={busy} icon={busy ? 'Clock' : 'Mail'}>
-                {busy ? 'Reenviando…' : 'Reenviar correo'}
-              </Btn>
+              {pending?.sendError && <p className="err mb-16" role="alert">{pending.sendError}</p>}
+              {pending?.previewUrl && <p className="small mb-16"><a href={pending.previewUrl} target="_blank" rel="noreferrer">Abrir correo de prueba</a></p>}
+              {confirmation === 'working' && <Btn variant="soft" type="button" className="btn-block btn-lg" disabled icon="Clock">Verificando…</Btn>}
+              {confirmation !== 'working' && confirmation !== 'success' && pending?.email && (
+                <Btn variant="primary" type="button" className="btn-block btn-lg" onClick={resend} disabled={busy} icon={busy ? 'Clock' : 'Mail'}>
+                  {busy ? 'Reenviando…' : 'Reenviar correo'}
+                </Btn>
+              )}
               <p className="center small mt-24" style={{ color: 'var(--text-2)' }}>
-                ¿Ya confirmaste tu correo?{' '}
+                {confirmation === 'success' ? 'Continúa para ingresar: ' : '¿Ya confirmaste tu correo? '}
                 <Link to="/login" style={{ color: 'var(--primary)', fontWeight: 700 }}>Ingresa</Link>
               </p>
             </div>

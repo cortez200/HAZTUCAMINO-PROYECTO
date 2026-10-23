@@ -239,7 +239,7 @@ function serverBase(req) {
   }
   return `http://localhost:${process.env.PORT || 4000}`;
 }
-const verifyUrl = (base, token) => `${base}/#/verificar?token=${encodeURIComponent(token)}`;
+const verifyUrl = (base, token) => `${base}/#/register?token=${encodeURIComponent(token)}`;
 const resetUrl = (base, token) => `${base}/#/restablecer?token=${encodeURIComponent(token)}`;
 
 /* -------------------------- admin -------------------------- */
@@ -435,61 +435,57 @@ app.post('/api/auth/register', async (req, res) => {
   const { name, email, password, nivel } = req.body || {};
   const mail = String(email || '').trim().toLowerCase();
   if (!name || String(name).trim().length < 2) return res.status(400).json({ error: 'Escribe tu nombre.' });
-  if (!isEmail(mail)) return res.status(400).json({ error: 'Correo no válido. Escribe un correo real.' });
-  if (!password || String(password).length < 6) return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres.' });
-  if (!NIVELES.some((n) => n.id === nivel)) return res.status(400).json({ error: 'Elige en qué etapa estás.' });
-
+  if (!isEmail(mail)) return res.status(400).json({ error: 'Correo no v\u00e1lido. Escribe un correo real.' });
+  if (!password || String(password).length < 6) return res.status(400).json({ error: 'La contrase\u00f1a debe tener al menos 6 caracteres.' });
+  if (!NIVELES.some((n) => n.id === nivel)) return res.status(400).json({ error: 'Elige en qu\u00e9 etapa est\u00e1s.' });
   const existing = db.users[mail];
-  if (existing && existing.emailVerified) {
-    return res.status(409).json({ error: 'Ya existe una cuenta con ese correo. Inicia sesión u olvidaste tu contraseña.' });
-  }
+  if (existing && existing.emailVerified) return res.status(409).json({ error: 'Ya existe una cuenta con ese correo. Inicia sesi\u00f3n o recupera tu contrase\u00f1a.' });
   const base = baseUrl(req);
-  if (existing) {
-    // Cuenta creada antes pero sin confirmar: actualiza datos y reenvía el correo.
-    existing.name = String(name).trim();
-    existing.nivel = nivel;
+  let user = existing;
+  if (user) {
+    user.name = String(name).trim(); user.nivel = nivel;
     const { salt, hash } = hashPassword(password);
-    existing.pwdSalt = salt; existing.pwdHash = hash;
-    persist();
-    // El correo se manda en segundo plano para no retrasar la respuesta.
-    sendVerificationEmail(existing, base).catch((e) => console.error('[auth] No se pudo enviar el correo de verificación:', e?.message || e));
-    return res.status(200).json({ ok: true, email: mail, account: publicAccount(existing), token: signToken(mail), verificationSent: true });
+    user.pwdSalt = salt; user.pwdHash = hash;
+  } else {
+    const { salt, hash } = hashPassword(password);
+    user = { ...newAccount(String(name).trim(), mail, nivel, false), pwdSalt: salt, pwdHash: hash };
+    db.users[mail] = user;
   }
-
-  const { salt, hash } = hashPassword(password);
-  const account = newAccount(String(name).trim(), mail, nivel, false);
-  db.users[mail] = { ...account, pwdSalt: salt, pwdHash: hash };
   persist();
-  // La cuenta queda pendiente de confirmar: no se inicia sesión todavía.
-  // El correo (que confirma la dirección) se envía en segundo plano.
-  sendVerificationEmail(db.users[mail], base).catch((e) => console.error('[auth] No se pudo enviar el correo de verificación:', e?.message || e));
-  res.status(201).json({ ok: true, email: mail, account: publicAccount(db.users[mail]), token: signToken(mail), verificationSent: true });
+  try {
+    const previewUrl = await sendVerificationEmail(user, base);
+    return res.status(existing ? 200 : 201).json({ ok: true, email: mail, verificationSent: true, previewUrl });
+  } catch (e) {
+    console.error('[auth] Verification email failed:', e?.message || e);
+    return res.status(502).json({ error: 'La cuenta se guard\u00f3, pero no pudimos enviar el correo. Intenta reenviarlo.', email: mail, verificationEmailFailed: true });
+  }
 });
 
 app.post('/api/auth/login', (req, res) => {
   const mail = String(req.body?.email || '').trim().toLowerCase();
   const password = String(req.body?.password || '');
-  if (!isEmail(mail)) return res.status(400).json({ error: 'Correo no válido. Revísalo e intenta de nuevo.' });
+  if (!isEmail(mail)) return res.status(400).json({ error: 'Correo no v\u00e1lido. Rev\u00edsalo e intenta de nuevo.' });
   const u = db.users[mail];
-  if (!u) return res.status(404).json({ error: 'Ese correo no está registrado. Crea una cuenta.' });
-  if (!verifyPassword(password, u.pwdSalt, u.pwdHash)) return res.status(401).json({ error: 'Contraseña incorrecta.' });
-  res.json({
-    token: signToken(mail),
-    account: publicAccount(u),
-    needsVerification: !u.emailVerified
-  });
+  if (!u) return res.status(404).json({ error: 'Ese correo no est\u00e1 registrado. Crea una cuenta.' });
+  if (!verifyPassword(password, u.pwdSalt, u.pwdHash)) return res.status(401).json({ error: 'Contrase\u00f1a incorrecta.' });
+  if (!u.emailVerified) return res.status(403).json({ error: 'Confirma tu correo antes de ingresar.', needsVerification: true, email: mail });
+  res.json({ token: signToken(mail), account: publicAccount(u) });
 });
 
-/* Reenvía el correo de confirmación. */
-app.post('/api/auth/resend', (req, res) => {
+/* Reenv\u00eda el correo de confirmaci\u00f3n. */
+app.post('/api/auth/resend', async (req, res) => {
   const mail = String(req.body?.email || '').trim().toLowerCase();
-  if (!isEmail(mail)) return res.status(400).json({ error: 'Correo no válido.' });
+  if (!isEmail(mail)) return res.status(400).json({ error: 'Correo no v\u00e1lido.' });
   const u = db.users[mail];
-  if (!u) return res.status(404).json({ error: 'Ese correo no está registrado.' });
+  if (!u) return res.status(404).json({ error: 'Ese correo no est\u00e1 registrado.' });
   if (u.emailVerified) return res.json({ ok: true, alreadyVerified: true });
-  // Se envía en segundo plano: la respuesta no depende del servidor SMTP.
-  sendVerificationEmail(u, baseUrl(req)).catch((e) => console.error('[auth] No se pudo reenviar el correo de verificación:', e?.message || e));
-  res.json({ ok: true, email: mail, verificationSent: true });
+  try {
+    const previewUrl = await sendVerificationEmail(u, baseUrl(req));
+    res.json({ ok: true, email: mail, verificationSent: true, previewUrl });
+  } catch (e) {
+    console.error('[auth] Verification resend failed:', e?.message || e);
+    res.status(502).json({ error: 'No pudimos enviar el correo. Intenta de nuevo m\u00e1s tarde.', email: mail });
+  }
 });
 
 /* Confirma el correo con el token del enlace. */
