@@ -28,7 +28,7 @@ export default function Videos() {
 
       <Card className="card-pad mb-24">
         <span className="row gap-8 card" style={{ padding: '2px 12px', background: 'var(--surface-2)', border: 0 }}>
-          <Icon name="Search" size={18} color="#94a3b8" />
+          <Icon name="Search" size={18} color="var(--muted)" />
           <input className="input" id="filtrar-video" name="filtrar" style={{ border: 0, background: 'transparent', padding: '9px 0' }} placeholder="Filtra por carrera o área (ej. enfermería, derecho…)" aria-label="Filtrar carreras" value={term} onChange={(e) => setTerm(e.target.value)} />
         </span>
       </Card>

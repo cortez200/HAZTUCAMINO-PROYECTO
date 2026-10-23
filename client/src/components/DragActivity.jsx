@@ -77,7 +77,12 @@ export default function DragActivity({ activity, area, onComplete }) {
     if (placedCount === items.length) {
       completed.current = true;
       const score = Math.max(0, items.length - mistakes);
-      const t = setTimeout(() => onComplete?.({ score, total: items.length, mistakes }), 700);
+      const detail = {
+        mistakes,
+        items: items.map((it) => ({ id: it.id, label: it.label, correct: it.correct, pista: it.pista })),
+        slots: slots.map((s) => ({ id: s.id, label: s.label, icon: s.icon })),
+      };
+      const t = setTimeout(() => onComplete?.({ score, total: items.length, detail }), 700);
       return () => clearTimeout(t);
     }
     return undefined;

@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
-import { AREAS, CARRERAS } from '../lib/data.js';
+import { AREAS, CARRERAS, UNIVERSIDADES } from '../lib/data.js';
 import CareerCard from '../components/CareerCard.jsx';
 import Icon from '../components/Icon.jsx';
 import Img from '../components/Img.jsx';
-import { areaVars, Badge, Btn } from '../components/ui.jsx';
+import { areaVars, Badge } from '../components/ui.jsx';
 import { useAuth } from '../lib/store.jsx';
+import { ADMISSION_QUESTIONS, REAL_EXAMS } from '../lib/admission.js';
 
 const HERO = 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1400&q=70';
 const SCHOOL = 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=1200&q=70';
@@ -39,38 +40,44 @@ export default function Landing() {
         </div>
       )}
 
-      {/* ---------------- Hero ---------------- */}
-      <section className="hero-grid" style={{ padding: '24px 0 40px' }}>
+      {/* ---------------- Hero estilo Coursera ---------------- */}
+      <section className="hero-coursera" style={{ marginBottom: 8 }}>
         <div>
-          <Badge tone="primary" icon="Sparkles">Orientación vocacional en Perú</Badge>
-          <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.1rem)', fontWeight: 800, marginTop: 16 }}>
-            Descubre qué carrera va contigo
+          <span className="hero-badge"><Icon name="Sparkles" size={15} color="var(--accent)" /> Orientación vocacional + preparación de admisión</span>
+          <h1 style={{ marginTop: 18 }}>
+            Decide tu carrera.<br />
+            <span style={{ color: 'var(--accent)' }}>Prepárate para lograrlo.</span>
           </h1>
-          <p className="dim" style={{ fontSize: '1.12rem', marginTop: 14, maxWidth: 520 }}>
-            Un test corto, información real de 32 carreras —universidades, mensualidades y mallas— y simulaciones para que elijas tu futuro con claridad.
+          <p style={{ fontSize: '1.08rem', marginTop: 16, maxWidth: 540, lineHeight: 1.65 }}>
+            Un test vocacional, {CARRERAS.length} carreras con malla por universidad y un banco de preguntas
+            calibrado con exámenes reales de las universidades más exigentes del Perú.
           </p>
           <div className="row gap-12 wrap mt-24">
-            <Link to={account ? '/test' : '/register'} className="btn btn-primary btn-lg">
+            <Link to={account ? '/test' : '/register'} className="btn btn-primary btn-lg" style={{ background: '#fff', color: 'var(--primary-700)' }}>
               <Icon name="Compass" size={19} /> Empezar gratis
             </Link>
-            <Link to="/carreras" className="btn btn-outline btn-lg">Ver carreras</Link>
+            <Link to="/examenes" className="btn btn-outline btn-lg"><Icon name="FileText" size={18} /> Practicar admisión</Link>
           </div>
-          <div className="row gap-24 wrap mt-24">
-            {[['32', 'carreras'], ['19', 'universidades'], ['5 min', 'de test']].map(([k, l]) => (
-              <div key={l}>
-                <div style={{ fontSize: '1.5rem', fontWeight: 800 }}>{k}</div>
-                <div className="muted small bold">{l}</div>
+          <div className="hero-stats row gap-24 wrap mt-32">
+            {[[String(CARRERAS.length), 'carreras'], [String(UNIVERSIDADES.length), 'universidades'], [String(ADMISSION_QUESTIONS.length), 'preguntas'], [String(REAL_EXAMS.length), 'exámenes reales']].map(([k, l]) => (
+              <div key={l} className="hero-stat">
+                <strong>{k}</strong>
+                <span>{l}</span>
               </div>
             ))}
           </div>
         </div>
-        <div className="panel" style={{ overflow: 'hidden', boxShadow: 'var(--shadow-lg)' }}>
+        <div className="hero-media">
           <Img src={HERO} alt="Estudiantes explorando su vocación" style={{ width: '100%', height: 420, objectFit: 'cover' }} icon="GraduationCap" priority />
+          <div className="hero-float">
+            <span className="ico"><Icon name="BadgeCheck" size={18} /></span>
+            <span>Datos de universidades peruanas<br /><span style={{ color: 'var(--muted)', fontWeight: 600 }}>Mallas, costos y admisión</span></span>
+          </div>
         </div>
       </section>
 
       {/* ---------------- Cómo funciona ---------------- */}
-      <section className="section">
+      <section className="section section-tint">
         <div className="center section-head">
           <h2 className="section-title">Cómo funciona</h2>
           <p className="section-sub">Tres pasos sencillos para aterrizar tu decisión.</p>
@@ -118,12 +125,37 @@ export default function Landing() {
         <div className="row between wrap gap-16 section-head">
           <div>
             <h2 className="section-title">Carreras destacadas</h2>
-            <p className="section-sub">Conoce qué hace cada profesional y dónde estudiarla.</p>
+            <p className="section-sub">Conoce qué hace cada profesional y dónde estudiarías.</p>
           </div>
-          <Link to="/carreras" className="btn btn-outline">Ver las 32 <Icon name="ArrowRight" size={16} /></Link>
+          <Link to="/carreras" className="btn btn-outline">Ver las {CARRERAS.length} <Icon name="ArrowRight" size={16} /></Link>
         </div>
         <div className="grid cols-4">
           {featured.map((c) => <CareerCard key={c.id} career={c} />)}
+        </div>
+      </section>
+
+      {/* ---------------- Admisión ---------------- */}
+      <section className="section">
+        <div className="section-navy">
+          <div className="row between wrap gap-24">
+            <div style={{ maxWidth: 620 }}>
+              <span className="hero-badge"><Icon name="FileText" size={15} color="var(--accent)" /> Nuevo: preparación de admisión</span>
+              <h2 className="section-title" style={{ marginTop: 16 }}>Banco de preguntas y exámenes reales</h2>
+              <p className="section-sub">
+                Practica por curso con preguntas calibradas al estilo UNI, UNMSM y PUCP. Revisa tu respuesta,
+                entiende el porqué y contrasta con solucionarios oficiales de exámenes reales.
+              </p>
+            </div>
+            <Link to="/examenes" className="btn btn-lg" style={{ background: 'var(--accent)', color: 'var(--navy)' }}>
+              Abrir banco de preguntas <Icon name="ArrowRight" size={18} />
+            </Link>
+          </div>
+          <div className="stat-band mt-32">
+            <div className="stat"><div className="k">{ADMISSION_QUESTIONS.length}</div><div className="l">preguntas de práctica</div></div>
+            <div className="stat"><div className="k">{REAL_EXAMS.length}</div><div className="l">exámenes oficiales enlazados</div></div>
+            <div className="stat"><div className="k">6</div><div className="l">cursos evaluados</div></div>
+            <div className="stat"><div className="k">100%</div><div className="l">con explicación</div></div>
+          </div>
         </div>
       </section>
 

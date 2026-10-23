@@ -1,8 +1,8 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { SIMS, CARRERAS, area, isPremium } from '../lib/data.js';
 import { useAuth, useToast } from '../lib/store.jsx';
-import { areaVars, Badge, Btn, Card, Progress } from '../components/ui.jsx';
+import { areaVars, Badge, Btn, Card } from '../components/ui.jsx';
 import CareerCard from '../components/CareerCard.jsx';
 import Icon from '../components/Icon.jsx';
 import SimScene from '../components/SimScene.jsx';
@@ -38,6 +38,12 @@ export default function Simulacion() {
   const [stage, setStage] = useState('video');
   const [result, setResult] = useState(null); // { score, total, mistakes }
   const [runKey, setRunKey] = useState(0);
+
+  useEffect(() => {
+    setStage('video');
+    setResult(null);
+    setRunKey((k) => k + 1);
+  }, [id]);
 
   const ar = sim ? area(sim.area) : null;
   const locked = sim ? !isPremium(account) : false;

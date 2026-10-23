@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#06142b" />
     <meta name="description" content="Haz Tu Camino — descubre tu vocación con un test corto, carreras reales y simulaciones." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Haz Tu Camino — Descubre tu vocación</title>
@@ -10,15 +11,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
-      .boot-splash{position:fixed;inset:0;display:grid;place-items:center;background:#f8fafc;color:#64748b;font-family:Inter,system-ui,sans-serif}
-      .boot-splash .ring{width:42px;height:42px;border-radius:50%;border:4px solid #e2e8f0;border-top-color:#4f46e5;animation:bspin .8s linear infinite}
+      .boot-splash{position:fixed;inset:0;display:grid;place-items:center;background:#f3f6fc;color:#617792;font-family:Inter,system-ui,sans-serif}
+      .boot-splash .ring{width:42px;height:42px;border-radius:50%;border:4px solid #d7e3f4;border-top-color:#3a5bd9;animation:bspin .8s linear infinite}
+      .boot-splash .brand{font-weight:800;letter-spacing:.02em;color:#06142b;margin-top:14px;font-size:.9rem}
       @keyframes bspin{to{transform:rotate(360deg)}}
       @media (prefers-reduced-motion: reduce){.boot-splash .ring{animation-duration:2s}}
     </style>
   </head>
   <body>
     <div id="root">
-      <div class="boot-splash" aria-label="Cargando"><div class="ring"></div></div>
+      <div class="boot-splash" aria-label="Cargando"><div style="display:grid;place-items:center"><div class="ring"></div><div class="brand">HAZ TU CAMINO</div></div></div>
     </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

@@ -1,5 +1,5 @@
 // Datos del dominio "Haz Tu Camino" (auto-generado).
-// Contenido: 8 areas, 32 carreras (con universidades), 32 preguntas, 8 simulaciones, 19 universidades.
+// Contenido: 8 areas, 32 carreras (con universidades), 32 preguntas, 8 simulaciones, 49 universidades.
 
 export const UNIVERSIDADES = [
   {
@@ -11,8 +11,8 @@ export const UNIVERSIDADES = [
     "web": "https://www.uni.edu.pe",
     "color": "#b91c1c",
     "pension": {
-      "min": 0,
-      "max": 0
+      "min": 100,
+      "max": 400
     }
   },
   {
@@ -24,8 +24,8 @@ export const UNIVERSIDADES = [
     "web": "https://www.unmsm.edu.pe",
     "color": "#9d174d",
     "pension": {
-      "min": 0,
-      "max": 0
+      "min": 100,
+      "max": 400
     }
   },
   {
@@ -37,8 +37,8 @@ export const UNIVERSIDADES = [
     "web": "https://www.lamolina.edu.pe",
     "color": "#166534",
     "pension": {
-      "min": 0,
-      "max": 0
+      "min": 100,
+      "max": 400
     }
   },
   {
@@ -50,8 +50,8 @@ export const UNIVERSIDADES = [
     "web": "https://www.unsa.edu.pe",
     "color": "#9a3412",
     "pension": {
-      "min": 0,
-      "max": 0
+      "min": 100,
+      "max": 400
     }
   },
   {
@@ -63,8 +63,8 @@ export const UNIVERSIDADES = [
     "web": "https://www.unsaac.edu.pe",
     "color": "#7c2d12",
     "pension": {
-      "min": 0,
-      "max": 0
+      "min": 100,
+      "max": 400
     }
   },
   {
@@ -76,8 +76,8 @@ export const UNIVERSIDADES = [
     "web": "https://www.unitru.edu.pe",
     "color": "#1e3a8a",
     "pension": {
-      "min": 0,
-      "max": 0
+      "min": 100,
+      "max": 400
     }
   },
   {
@@ -89,8 +89,8 @@ export const UNIVERSIDADES = [
     "web": "https://www.unp.edu.pe",
     "color": "#065f46",
     "pension": {
-      "min": 0,
-      "max": 0
+      "min": 100,
+      "max": 400
     }
   },
   {
@@ -257,7 +257,7 @@ export const UNIVERSIDADES = [
     "ciudad": "Lima",
     "web": "https://www.une.edu.pe",
     "color": "#0369a1",
-    "pension": { "min": 0, "max": 0 }
+    "pension": { "min": 100, "max": 400 }
   },
   {
     "id": "unap",
@@ -267,7 +267,7 @@ export const UNIVERSIDADES = [
     "ciudad": "Puno",
     "web": "https://www.unap.edu.pe",
     "color": "#0f766e",
-    "pension": { "min": 0, "max": 0 }
+    "pension": { "min": 100, "max": 400 }
   },
   {
     "id": "unc",
@@ -277,7 +277,7 @@ export const UNIVERSIDADES = [
     "ciudad": "Cajamarca",
     "web": "https://www.unc.edu.pe",
     "color": "#15803d",
-    "pension": { "min": 0, "max": 0 }
+    "pension": { "min": 100, "max": 400 }
   },
   {
     "id": "unsch",
@@ -287,7 +287,7 @@ export const UNIVERSIDADES = [
     "ciudad": "Ayacucho",
     "web": "https://www.unsch.edu.pe",
     "color": "#7c2d12",
-    "pension": { "min": 0, "max": 0 }
+    "pension": { "min": 100, "max": 400 }
   },
   {
     "id": "unjbg",
@@ -297,7 +297,7 @@ export const UNIVERSIDADES = [
     "ciudad": "Tacna",
     "web": "https://www.unjbg.edu.pe",
     "color": "#9a3412",
-    "pension": { "min": 0, "max": 0 }
+    "pension": { "min": 100, "max": 400 }
   },
   {
     "id": "unheval",
@@ -307,7 +307,7 @@ export const UNIVERSIDADES = [
     "ciudad": "Huánuco",
     "web": "https://www.unheval.edu.pe",
     "color": "#166534",
-    "pension": { "min": 0, "max": 0 }
+    "pension": { "min": 100, "max": 400 }
   },
   {
     "id": "unu",
@@ -317,7 +317,7 @@ export const UNIVERSIDADES = [
     "ciudad": "Pucallpa",
     "web": "https://www.unu.edu.pe",
     "color": "#065f46",
-    "pension": { "min": 0, "max": 0 }
+    "pension": { "min": 100, "max": 400 }
   },
   {
     "id": "undac",
@@ -327,7 +327,7 @@ export const UNIVERSIDADES = [
     "ciudad": "Cerro de Pasco",
     "web": "https://www.undac.edu.pe",
     "color": "#1e3a8a",
-    "pension": { "min": 0, "max": 0 }
+    "pension": { "min": 100, "max": 400 }
   },
   {
     "id": "ucv",
@@ -408,6 +408,147 @@ export const UNIVERSIDADES = [
     "web": "https://ucsp.edu.pe",
     "color": "#b45309",
     "pension": { "min": 1300, "max": 2600 }
+  }
+,
+  {
+    "id": "unap-iquitos",
+    "nombre": "Universidad Nacional de la Amazonía Peruana",
+    "corto": "UNAP-IQ",
+    "tipo": "Pública",
+    "ciudad": "Iquitos",
+    "web": "https://www.unapiquitos.edu.pe",
+    "color": "#0f766e",
+    "pension": { "min": 100, "max": 400 }
+  },
+  {
+    "id": "untumbes",
+    "nombre": "Universidad Nacional de Tumbes",
+    "corto": "UNTUMBES",
+    "tipo": "Pública",
+    "ciudad": "Tumbes",
+    "web": "https://www.untumbes.edu.pe",
+    "color": "#0369a1",
+    "pension": { "min": 100, "max": 400 }
+  },
+  {
+    "id": "unam",
+    "nombre": "Universidad Nacional de Moquegua",
+    "corto": "UNAM",
+    "tipo": "Pública",
+    "ciudad": "Moquegua",
+    "web": "https://www.unam.edu.pe",
+    "color": "#7e22ce",
+    "pension": { "min": 100, "max": 400 }
+  },
+  {
+    "id": "untrm",
+    "nombre": "Universidad Nacional Toribio Rodríguez de Mendoza",
+    "corto": "UNTRM",
+    "tipo": "Pública",
+    "ciudad": "Chachapoyas",
+    "web": "https://www.untrm.edu.pe",
+    "color": "#15803d",
+    "pension": { "min": 100, "max": 400 }
+  },
+  {
+    "id": "unh",
+    "nombre": "Universidad Nacional de Huancavelica",
+    "corto": "UNH",
+    "tipo": "Pública",
+    "ciudad": "Huancavelica",
+    "web": "https://www.unh.edu.pe",
+    "color": "#b45309",
+    "pension": { "min": 100, "max": 400 }
+  },
+  {
+    "id": "unaj",
+    "nombre": "Universidad Nacional de Juliaca",
+    "corto": "UNAJ",
+    "tipo": "Pública",
+    "ciudad": "Juliaca",
+    "web": "https://www.unaj.edu.pe",
+    "color": "#1d4ed8",
+    "pension": { "min": 100, "max": 400 }
+  },
+  {
+    "id": "undc",
+    "nombre": "Universidad Nacional de Cañete",
+    "corto": "UNDC",
+    "tipo": "Pública",
+    "ciudad": "Cañete",
+    "web": "https://www.undc.edu.pe",
+    "color": "#0e7490",
+    "pension": { "min": 100, "max": 400 }
+  },
+  {
+    "id": "unach",
+    "nombre": "Universidad Nacional Autónoma de Chota",
+    "corto": "UNACH",
+    "tipo": "Pública",
+    "ciudad": "Chota",
+    "web": "https://www.unach.edu.pe",
+    "color": "#4d7c0f",
+    "pension": { "min": 100, "max": 400 }
+  },
+  {
+    "id": "unia",
+    "nombre": "Universidad Nacional Intercultural de la Amazonía",
+    "corto": "UNIA",
+    "tipo": "Pública",
+    "ciudad": "Pucallpa",
+    "web": "https://www.unia.edu.pe",
+    "color": "#047857",
+    "pension": { "min": 100, "max": 400 }
+  },
+  {
+    "id": "upt",
+    "nombre": "Universidad Privada de Tacna",
+    "corto": "UPT",
+    "tipo": "Privada",
+    "ciudad": "Tacna",
+    "web": "https://www.upt.edu.pe",
+    "color": "#be123c",
+    "pension": { "min": 900, "max": 1800 }
+  },
+  {
+    "id": "uwiener",
+    "nombre": "Universidad Privada Norbert Wiener",
+    "corto": "UWIENER",
+    "tipo": "Privada",
+    "ciudad": "Lima",
+    "web": "https://www.uwiener.edu.pe",
+    "color": "#7c3aed",
+    "pension": { "min": 800, "max": 1600 }
+  },
+  {
+    "id": "upeu",
+    "nombre": "Universidad Peruana Unión",
+    "corto": "UPeU",
+    "tipo": "Privada",
+    "ciudad": "Lima",
+    "web": "https://www.upeu.edu.pe",
+    "color": "#1e3a8a",
+    "pension": { "min": 850, "max": 1700 }
+  },
+  {
+    "id": "unife",
+    "nombre": "Universidad Femenina del Sagrado Corazón",
+    "corto": "UNIFÉ",
+    "tipo": "Privada",
+    "ciudad": "Lima",
+    "web": "https://www.unife.edu.pe",
+    "color": "#9d174d",
+    "pension": { "min": 1100, "max": 2200 }
+  },
+  {
+    "id": "ulasalle",
+    "nombre": "Universidad La Salle",
+    "corto": "ULASALLE",
+    "tipo": "Privada",
+    "ciudad": "Arequipa",
+    "web": "https://www.ulasalle.edu.pe",
+    "color": "#0f766e",
+    "pension": { "min": 1000, "max": 2000 }
   }
 ];
 
@@ -556,7 +697,7 @@ export const CARRERAS = [
         "duracion": 12
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Doctor_examines_patient_with_stethoscope.jpg/1280px-Doctor_examines_patient_with_stethoscope.jpg",
+    "img": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/slGS-dcQUJY"
   },
   {
@@ -620,7 +761,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/Patient_lying_in_bed_in_intensive_care_unit_of_hospital_with_apparatuses_and_hemodialysis_machine.jpg/1280px-Patient_lying_in_bed_in_intensive_care_unit_of_hospital_with_apparatuses_and_hemodialysis_machine.jpg",
+    "img": "https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/Pfk6gsdHKH4"
   },
   {
@@ -684,7 +825,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/78/Psychotherapy.JPG/1280px-Psychotherapy.JPG",
+    "img": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/lxqX2EzHV7Y"
   },
   {
@@ -748,7 +889,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Healthcare_professional_sharing_healthy_lifestyle_tips_while_holding_a_glass_of_water_next_to_fresh_fruits_and_vegetables.jpg/1280px-Healthcare_professional_sharing_healthy_lifestyle_tips_while_holding_a_glass_of_water_next_to_fresh_fruits_and_vegetables.jpg",
+    "img": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/Xv86zN0Z-lA"
   },
   {
@@ -812,7 +953,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Code_on_computer_monitor_%28Unsplash%29.jpg/1280px-Code_on_computer_monitor_%28Unsplash%29.jpg",
+    "img": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/ICt3tBrxvBw"
   },
   {
@@ -876,7 +1017,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://upload.wikimedia.org/wikipedia/commons/3/38/Industrial_Engineer_Working.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "img": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/b9IGKjaRF1o"
   },
   {
@@ -940,7 +1081,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e5/Construction_activity_update_-_June_25%2C_2015_150625-F-LP903-667.jpg/1280px-Construction_activity_update_-_June_25%2C_2015_150625-F-LP903-667.jpg",
+    "img": "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/DbmAhEEQdI4"
   },
   {
@@ -1004,7 +1145,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Puma_Robotic_Arm_-_GPN-2000-001817.jpg/1280px-Puma_Robotic_Arm_-_GPN-2000-001817.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "img": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/W2J6LcU9A38"
   },
   {
@@ -1068,7 +1209,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/Observing_Ocular_Tissue_%289955308486%29.jpg/1280px-Observing_Ocular_Tissue_%289955308486%29.jpg",
+    "img": "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/rtElx43PAAI"
   },
   {
@@ -1132,7 +1273,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cc/Research_scientist_works_in_the_NCATS_chemistry_laboratory.jpg/1280px-Research_scientist_works_in_the_NCATS_chemistry_laboratory.jpg",
+    "img": "https://images.unsplash.com/photo-1532187643603-ba119ca4109e?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/4gA_3SaU4Xk"
   },
   {
@@ -1196,7 +1337,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d2/Natalia_Krizhanovskaya_writes_mathematical_formulas_on_the_blackboard_2021.jpg/1280px-Natalia_Krizhanovskaya_writes_mathematical_formulas_on_the_blackboard_2021.jpg",
+    "img": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/4vCaKJp7Mvo"
   },
   {
@@ -1260,7 +1401,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/Saint_Isaac%27s_Cathedral_-_Foucault_pendulum_in_1984.jpg/1280px-Saint_Isaac%27s_Cathedral_-_Foucault_pendulum_in_1984.jpg",
+    "img": "https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/19ZAOEDkqGI"
   },
   {
@@ -1324,7 +1465,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/Roundtable_Discussion_with_Minister_Juhan_Parts_%286810930839%29.jpg/1280px-Roundtable_Discussion_with_Minister_Juhan_Parts_%286810930839%29.jpg",
+    "img": "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/v4AkkgcxgFs"
   },
   {
@@ -1388,7 +1529,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/Accounting_book.jpg/1280px-Accounting_book.jpg",
+    "img": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/y-19upJwmw4"
   },
   {
@@ -1452,7 +1593,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8a/Billboard_in_Menands%2C_New_York.jpg/1280px-Billboard_in_Menands%2C_New_York.jpg",
+    "img": "https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/JbDQJEXNvBM"
   },
   {
@@ -1516,7 +1657,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/New_York_Stock_Exchange_August_2017_02.jpg/1280px-New_York_Stock_Exchange_August_2017_02.jpg",
+    "img": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/SsFt-OgZWj8"
   },
   {
@@ -1580,7 +1721,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Teachers_and_students_at_Baozhong_Junior_High_School_20121130_02.jpg/1280px-Teachers_and_students_at_Baozhong_Junior_High_School_20121130_02.jpg",
+    "img": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/DpDupSbcte0"
   },
   {
@@ -1644,7 +1785,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dd/Keya_Wakpala_Garden%2C_Mission_SD_3.jpg/1280px-Keya_Wakpala_Garden%2C_Mission_SD_3.jpg",
+    "img": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/Gw5e5Hw4DEU"
   },
   {
@@ -1708,7 +1849,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/DZ6_1718_Bustling_neon-lit_nightlife_street_filled_with_crowds_bars_and_bright_signs_advertising_seafood_and_entertainment.jpg/1280px-DZ6_1718_Bustling_neon-lit_nightlife_street_filled_with_crowds_bars_and_bright_signs_advertising_seafood_and_entertainment.jpg",
+    "img": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/MQijiA5Kz-M"
   },
   {
@@ -1772,7 +1913,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/99_-_Machu_Picchu_-_Juin_2009.jpg/1280px-99_-_Machu_Picchu_-_Juin_2009.jpg",
+    "img": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/p-BvGLJroCM"
   },
   {
@@ -1836,7 +1977,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://upload.wikimedia.org/wikipedia/commons/5/51/Graphic-designer-application-projects-collage-2.0.jpg",
+    "img": "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/YhD5KcxC4Mo"
   },
   {
@@ -1900,7 +2041,7 @@ export const CARRERAS = [
         "duracion": 11
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/05/Modern_Geometric_Architectural_Facade.jpg/1280px-Modern_Geometric_Architectural_Facade.jpg",
+    "img": "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/TaAshEVWa2E"
   },
   {
@@ -1964,7 +2105,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a7/Behind_the_Scene_shots_of_one_of_our_production_sets_by_Don_Ramey_Logan.jpg/1280px-Behind_the_Scene_shots_of_one_of_our_production_sets_by_Don_Ramey_Logan.jpg",
+    "img": "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/RpnKCUSpYz8"
   },
   {
@@ -2028,7 +2169,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/93/Pierre_Balmain_and_Ruth_Ford%2C_photographed_by_Carl_Van_Vechten%2C_November_9%2C_1947.jpg/1280px-Pierre_Balmain_and_Ruth_Ford%2C_photographed_by_Carl_Van_Vechten%2C_November_9%2C_1947.jpg",
+    "img": "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/Wf_IuHoikGE"
   },
   {
@@ -2092,7 +2233,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Statua_Iustitiae.jpg",
+    "img": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/WbZGNK4bN1E"
   },
   {
@@ -2156,7 +2297,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e5/CBC_journalists_in_Montreal.jpg/1280px-CBC_journalists_in_Montreal.jpg",
+    "img": "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/gIq-y5EvZqY"
   },
   {
@@ -2220,7 +2361,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/Radio_broadcaster_in_Yei%2C_Sudan.jpg/1280px-Radio_broadcaster_in_Yei%2C_Sudan.jpg",
+    "img": "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/PiKcHXnN8Hg"
   },
   {
@@ -2284,7 +2425,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6f/2nd_CTBT_Science_Diplomacy_Symposium_%2842341943561%29.jpg/1280px-2nd_CTBT_Science_Diplomacy_Symposium_%2842341943561%29.jpg",
+    "img": "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/d7AKdTCJLSI"
   },
   {
@@ -2348,7 +2489,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a7/Harvest_Field.jpg/1280px-Harvest_Field.jpg",
+    "img": "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/Q9CfrOXKs_A"
   },
   {
@@ -2412,7 +2553,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c9/Solar_Panels_are_Installed_on_Glacier_Headquarters_%2851255209871%29.jpg/1280px-Solar_Panels_are_Installed_on_Glacier_Headquarters_%2851255209871%29.jpg",
+    "img": "https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/t58bi5PNrmc"
   },
   {
@@ -2476,7 +2617,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/Pacific_Partnership_2022_veterinarians_operate_at_Solomon_Islands_Ministry_of_Agriculture_and_Livestock_%287408310%29.jpg/1280px-Pacific_Partnership_2022_veterinarians_operate_at_Solomon_Islands_Ministry_of_Agriculture_and_Livestock_%287408310%29.jpg",
+    "img": "https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/Q4bQXcajlBo"
   },
   {
@@ -2540,7 +2681,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://upload.wikimedia.org/wikipedia/commons/7/76/Blue_Linckia_Starfish.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "img": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/13gWLFN9saQ"
   }
 ];
@@ -3407,14 +3548,14 @@ export const isFreeSim = (id) => FREE_SIMS.includes(id);
    estudiante vea un abanico más amplio de dónde estudiarla. El aporte de cada
    universidad (tipo, pensión y duración) se toma de UNIVERSIDADES. */
 export const AREA_UNIVERSITIES = {
-  salud: ['unmsm', 'upch', 'upc', 'usmp', 'ucsur', 'ucsm', 'unsa', 'unt', 'unap', 'ucv', 'utp', 'usat'],
-  tecnologia: ['uni', 'upc', 'utec', 'pucp', 'unp', 'unap', 'unt', 'unsch', 'ucv', 'utp', 'ucontinental', 'upn'],
-  ciencias: ['unmsm', 'unalm', 'pucp', 'uni', 'unsa', 'unap', 'unc', 'unsch', 'urp', 'ucsp'],
-  negocios: ['pucp', 'ulima', 'up', 'upc', 'usil', 'usmp', 'ucv', 'utp', 'ucontinental', 'upn', 'urp'],
-  educacion: ['une', 'unmsm', 'unsch', 'unheval', 'unu', 'undac', 'ucv', 'utp', 'ucontinental', 'usat'],
-  arte: ['pucp', 'ulima', 'upc', 'usil', 'ucsur', 'urp', 'ucv', 'utp', 'uac'],
-  derecho: ['pucp', 'ulima', 'up', 'usmp', 'unmsm', 'unsaac', 'unt', 'urp', 'ucv', 'utp', 'uac'],
-  naturaleza: ['unalm', 'uni', 'unp', 'unsa', 'unmsm', 'unsaac', 'unap', 'unc', 'unu', 'ucsur']
+  salud: ['unmsm', 'upch', 'upc', 'usmp', 'ucsur', 'ucsm', 'unsa', 'unt', 'unap', 'ucv', 'utp', 'usat', 'unap-iquitos', 'untumbes', 'untrm', 'unh', 'upt', 'uwiener', 'upeu', 'unife'],
+  tecnologia: ['uni', 'upc', 'utec', 'pucp', 'unp', 'unap', 'unt', 'unsch', 'ucv', 'utp', 'ucontinental', 'upn', 'untumbes', 'unam', 'untrm', 'unh', 'unaj', 'undc', 'unach', 'upt', 'uwiener', 'upeu', 'ulasalle'],
+  ciencias: ['unmsm', 'unalm', 'pucp', 'uni', 'unsa', 'unap', 'unc', 'unsch', 'urp', 'ucsp', 'unap-iquitos', 'unam', 'unaj', 'unia'],
+  negocios: ['pucp', 'ulima', 'up', 'upc', 'usil', 'usmp', 'ucv', 'utp', 'ucontinental', 'upn', 'urp', 'unam', 'unaj', 'undc', 'unach', 'upt', 'uwiener', 'upeu', 'unife', 'ulasalle'],
+  educacion: ['une', 'unmsm', 'unsch', 'unheval', 'unu', 'undac', 'ucv', 'utp', 'ucontinental', 'usat', 'unap-iquitos', 'untrm', 'unh', 'undc', 'unach', 'unia', 'uwiener', 'upeu', 'unife', 'ulasalle'],
+  arte: ['pucp', 'ulima', 'upc', 'usil', 'ucsur', 'urp', 'ucv', 'utp', 'uac', 'upt', 'uwiener', 'unife', 'ulasalle'],
+  derecho: ['pucp', 'ulima', 'up', 'usmp', 'unmsm', 'unsaac', 'unt', 'urp', 'ucv', 'utp', 'uac', 'upt', 'uwiener', 'upeu', 'unife', 'ulasalle'],
+  naturaleza: ['unalm', 'uni', 'unp', 'unsa', 'unmsm', 'unsaac', 'unap', 'unc', 'unu', 'ucsur', 'unap-iquitos', 'untumbes', 'untrm', 'unh', 'undc', 'unach', 'unia']
 };
 
 const _uniById = new Map(UNIVERSIDADES.map((u) => [u.id, u]));
@@ -3431,6 +3572,13 @@ for (const c of CARRERAS) {
       duracion: c.duracion
     });
     seen.add(id);
+  }
+  for (const o of (c.universidades || [])) {
+    const u = _uniById.get(o.id);
+    if (u?.tipo === 'Pública') {
+      o.min = u.pension.min;
+      o.max = u.pension.max;
+    }
   }
 }
 

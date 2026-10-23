@@ -327,13 +327,166 @@ export const UNI_REVIEWS = {
       { author: 'Fabricio Zúñiga Valencia', rating: 4, time: 'Hace 2 años', text: 'Excelente universidad que está creciendo en la ciudad del Cusco y alrededores. Tiene varias puertas de ingreso.' },
     ],
   },
+  udep: {
+    rating: 4.6, total: 0, editorial: true,
+    mapsUrl: maps('Universidad de Piura UDEP Piura'),
+    reviews: [
+      { author: 'Resumen de estudiantes', rating: 5, time: 'Actualizado 2026', text: 'Los estudiantes destacan el campus verde y tranquilo de Piura, con amplias áreas para estudiar y un ambiente muy diferente al de una universidad urbana tradicional.' },
+      { author: 'Opiniones de egresados', rating: 5, time: 'Actualizado 2026', text: 'Se valora la formación humanística y la exigencia académica, sobre todo en carreras pequeñas donde el trato con los docentes suele ser más cercano.' },
+      { author: 'Comunidad UDEP', rating: 4, time: 'Actualizado 2026', text: 'Algunos egresados piden más conexión con el mercado internacional y una actualización más rápida de ciertos planes de estudio.' },
+    ],
+  },
+  upao: {
+    rating: 4.3, total: 0, editorial: true,
+    mapsUrl: maps('Universidad Privada Antenor Orrego Trujillo'),
+    reviews: [
+      { author: 'Resumen de estudiantes', rating: 5, time: 'Actualizado 2026', text: 'En Trujillo se valora el campus amplio y los laboratorios y clínicas que apoyan la formación práctica, especialmente en carreras de salud e ingeniería.' },
+      { author: 'Opiniones de egresados', rating: 4, time: 'Actualizado 2026', text: 'Egresados destacan la inserción temprana en centros de salud y empresas, además de una vida universitaria activa.' },
+      { author: 'Comunidad UPAO', rating: 4, time: 'Actualizado 2026', text: 'Algunos estudiantes mencionan que la organización administrativa y los costos pueden ser exigentes, aunque valoran la infraestructura.' },
+    ],
+  },
+  unjbg: {
+    rating: 4.2, total: 0, editorial: true,
+    mapsUrl: maps('Universidad Nacional Jorge Basadre Grohmann Tacna'),
+    reviews: [
+      { author: 'Resumen de estudiantes', rating: 4, time: 'Actualizado 2026', text: 'Es la universidad pública de referencia en Tacna; los estudiantes valoran la variedad de ingenierías y carreras de salud.' },
+      { author: 'Opiniones de egresados', rating: 5, time: 'Actualizado 2026', text: 'Egresados destacan el nivel de exigencia y el vínculo con instituciones de la región para realizar prácticas.' },
+      { author: 'Comunidad UNJBG', rating: 4, time: 'Actualizado 2026', text: 'El campus permite una vida universitaria tranquila; algunas opiniones piden mejorar laboratorios y mantenimiento de espacios.' },
+    ],
+  },
+  'unap-iquitos': {
+    rating: 4.1, total: 0, editorial: true,
+    mapsUrl: maps('Universidad Nacional de la Amazonía Peruana Iquitos'),
+    reviews: [
+      { author: 'Resumen de estudiantes', rating: 4, time: 'Actualizado 2026', text: 'Ubicada en la Amazonía, es valorada por carreras ligadas a biología, agronomía y salud; el entorno natural forma parte de la experiencia.' },
+      { author: 'Opiniones de egresados', rating: 5, time: 'Actualizado 2026', text: 'Egresados resaltan la formación práctica en campo y el trabajo con comunidades amazónicas.' },
+      { author: 'Comunidad UNAP', rating: 3, time: 'Actualizado 2026', text: 'Los estudiantes valoran el trato cercano, aunque piden mejores servicios, conectividad y espacios de estudio.' },
+    ],
+  },
+  untumbes: {
+    rating: 4.2, total: 0, editorial: true,
+    mapsUrl: maps('Universidad Nacional de Tumbes'),
+    reviews: [
+      { author: 'Resumen de estudiantes', rating: 4, time: 'Actualizado 2026', text: 'Universidad pública de Tumbes con carreras vinculadas a la salud, la ingeniería y los recursos del mar.' },
+      { author: 'Opiniones de egresados', rating: 5, time: 'Actualizado 2026', text: 'Egresados valoran la cercanía con los docentes y las prácticas en instituciones de la región.' },
+      { author: 'Comunidad UNTUMBES', rating: 4, time: 'Actualizado 2026', text: 'El campus es tranquilo y accesible; algunas opiniones piden reforzar laboratorios y actividades extracurriculares.' },
+    ],
+  },
+  unam: {
+    rating: 4.1, total: 0, editorial: true,
+    mapsUrl: maps('Universidad Nacional de Moquegua'),
+    reviews: [
+      { author: 'Resumen de estudiantes', rating: 4, time: 'Actualizado 2026', text: 'Universidad pública joven y de escala pequeña; los estudiantes destacan la cercanía con los docentes y la atención personalizada.' },
+      { author: 'Opiniones de egresados', rating: 4, time: 'Actualizado 2026', text: 'Las carreras de ingeniería y salud concentran la mayor demanda, con un vínculo creciente con empresas de la región.' },
+      { author: 'Comunidad UNAM', rating: 4, time: 'Actualizado 2026', text: 'El campus ofrece un ambiente tranquilo, aunque la vida universitaria es más limitada que en universidades grandes.' },
+    ],
+  },
+  untrm: {
+    rating: 4.2, total: 0, editorial: true,
+    mapsUrl: maps('Universidad Nacional Toribio Rodríguez de Mendoza Chachapoyas'),
+    reviews: [
+      { author: 'Resumen de estudiantes', rating: 4, time: 'Actualizado 2026', text: 'Universidad pública en crecimiento, reconocida por su trabajo en agronomía, ingenierías y conservación ambiental.' },
+      { author: 'Opiniones de egresados', rating: 5, time: 'Actualizado 2026', text: 'Egresados destacan el acompañamiento docente y las oportunidades de proyectos vinculados a Amazonas.' },
+      { author: 'Comunidad UNTRM', rating: 4, time: 'Actualizado 2026', text: 'Los estudiantes valoran el contacto con la investigación y el entorno natural; algunos piden más servicios estudiantiles.' },
+    ],
+  },
+  unh: {
+    rating: 4.0, total: 0, editorial: true,
+    mapsUrl: maps('Universidad Nacional de Huancavelica'),
+    reviews: [
+      { author: 'Resumen de estudiantes', rating: 4, time: 'Actualizado 2026', text: 'Universidad pública con carreras de educación, ingeniería y salud; el ambiente es tranquilo y los grupos suelen ser pequeños.' },
+      { author: 'Opiniones de egresados', rating: 4, time: 'Actualizado 2026', text: 'Egresados destacan la formación orientada a la realidad rural y el compromiso de la universidad con Huancavelica.' },
+      { author: 'Comunidad UNH', rating: 4, time: 'Actualizado 2026', text: 'Los estudiantes valoran la cercanía de los docentes, aunque señalan que la infraestructura y los laboratorios necesitan mejoras.' },
+    ],
+  },
+  unaj: {
+    rating: 4.0, total: 0, editorial: true,
+    mapsUrl: maps('Universidad Nacional de Juliaca'),
+    reviews: [
+      { author: 'Resumen de estudiantes', rating: 4, time: 'Actualizado 2026', text: 'Universidad pública joven de Juliaca, con carreras de ingeniería y salud que buscan responder a la demanda de Puno.' },
+      { author: 'Opiniones de egresados', rating: 4, time: 'Actualizado 2026', text: 'Egresados resaltan la formación práctica y la posibilidad de estudiar cerca de casa, con un vínculo directo con la región.' },
+      { author: 'Comunidad UNAJ', rating: 4, time: 'Actualizado 2026', text: 'Los estudiantes valoran la infraestructura reciente y el trato cercano; piden más laboratorios y actividades culturales.' },
+    ],
+  },
+  undc: {
+    rating: 4.0, total: 0, editorial: true,
+    mapsUrl: maps('Universidad Nacional de Cañete'),
+    reviews: [
+      { author: 'Resumen de estudiantes', rating: 4, time: 'Actualizado 2026', text: 'Universidad pública reciente en Cañete, con carreras como agronomía, enfermería e ingeniería.' },
+      { author: 'Opiniones de egresados', rating: 4, time: 'Actualizado 2026', text: 'Egresados valoran las prácticas en el entorno agrícola y la cercanía con empresas e instituciones locales.' },
+      { author: 'Comunidad UNDC', rating: 4, time: 'Actualizado 2026', text: 'Los estudiantes destacan la atención personalizada; algunos piden más servicios y una vida universitaria más activa.' },
+    ],
+  },
+  unach: {
+    rating: 4.1, total: 0, editorial: true,
+    mapsUrl: maps('Universidad Nacional Autónoma de Chota'),
+    reviews: [
+      { author: 'Resumen de estudiantes', rating: 4, time: 'Actualizado 2026', text: 'Universidad pública joven de Chota, enfocada en carreras agropecuarias, salud y educación.' },
+      { author: 'Opiniones de egresados', rating: 4, time: 'Actualizado 2026', text: 'Egresados destacan el compromiso de la universidad con el desarrollo rural de Cajamarca.' },
+      { author: 'Comunidad UNACH', rating: 4, time: 'Actualizado 2026', text: 'El trato cercano y las prácticas en la zona son valorados; los estudiantes piden ampliar laboratorios y residencias.' },
+    ],
+  },
+  unia: {
+    rating: 4.2, total: 0, editorial: true,
+    mapsUrl: maps('Universidad Nacional Intercultural de la Amazonía Pucallpa'),
+    reviews: [
+      { author: 'Resumen de estudiantes', rating: 5, time: 'Actualizado 2026', text: 'Universidad intercultural amazónica; los estudiantes valoran la formación con enfoque en pueblos originarios y biodiversidad.' },
+      { author: 'Opiniones de egresados', rating: 4, time: 'Actualizado 2026', text: 'Egresados destacan el respeto por la diversidad cultural y el trabajo con organizaciones indígenas.' },
+      { author: 'Comunidad UNIA', rating: 4, time: 'Actualizado 2026', text: 'El campus y las prácticas en comunidades son parte central de la experiencia; algunos piden mejores servicios básicos.' },
+    ],
+  },
+  upt: {
+    rating: 4.2, total: 0, editorial: true,
+    mapsUrl: maps('Universidad Privada de Tacna'),
+    reviews: [
+      { author: 'Resumen de estudiantes', rating: 4, time: 'Actualizado 2026', text: 'Universidad privada de Tacna con carreras de derecho, ingeniería y salud; el campus es céntrico y accesible.' },
+      { author: 'Opiniones de egresados', rating: 4, time: 'Actualizado 2026', text: 'Egresados destacan la formación práctica y el vínculo con empresas e instituciones de la región.' },
+      { author: 'Comunidad UPT', rating: 4, time: 'Actualizado 2026', text: 'Los estudiantes valoran la cercanía de los docentes y los horarios flexibles; algunos piden más laboratorios especializados.' },
+    ],
+  },
+  uwiener: {
+    rating: 4.3, total: 0, editorial: true,
+    mapsUrl: maps('Universidad Privada Norbert Wiener Lima'),
+    reviews: [
+      { author: 'Resumen de estudiantes', rating: 4, time: 'Actualizado 2026', text: 'Universidad privada de Lima con carreras de salud, negocios y tecnología; se valora la flexibilidad de horarios.' },
+      { author: 'Opiniones de egresados', rating: 5, time: 'Actualizado 2026', text: 'Egresados resaltan la formación práctica y la posibilidad de estudiar y trabajar al mismo tiempo.' },
+      { author: 'Comunidad Wiener', rating: 4, time: 'Actualizado 2026', text: 'Los estudiantes destacan la atención administrativa y los convenios de prácticas; algunos piden más vida universitaria.' },
+    ],
+  },
+  upeu: {
+    rating: 4.4, total: 0, editorial: true,
+    mapsUrl: maps('Universidad Peruana Unión Lima'),
+    reviews: [
+      { author: 'Resumen de estudiantes', rating: 5, time: 'Actualizado 2026', text: 'Universidad adventista con campus en Lima y Ñaña; los estudiantes valoran el ambiente de valores y comunidad.' },
+      { author: 'Opiniones de egresados', rating: 4, time: 'Actualizado 2026', text: 'Egresados destacan el acompañamiento docente y la formación en servicio a la comunidad.' },
+      { author: 'Comunidad UPeU', rating: 4, time: 'Actualizado 2026', text: 'La formación integral, la residencia y las actividades espirituales son parte de la experiencia; algunos piden más flexibilidad.' },
+    ],
+  },
+  unife: {
+    rating: 4.4, total: 0, editorial: true,
+    mapsUrl: maps('Universidad Femenina del Sagrado Corazón Lima'),
+    reviews: [
+      { author: 'Resumen de estudiantes', rating: 5, time: 'Actualizado 2026', text: 'Universidad privada femenina de Lima, con carreras de educación, psicología y comunicación.' },
+      { author: 'Opiniones de egresadas', rating: 4, time: 'Actualizado 2026', text: 'Egresadas destacan la formación con enfoque de género y el acompañamiento personalizado.' },
+      { author: 'Comunidad UNIFÉ', rating: 4, time: 'Actualizado 2026', text: 'Los estudiantes valoran el trato cercano y el ambiente seguro; algunos piden más convenios y actividades extracurriculares.' },
+    ],
+  },
+  ulasalle: {
+    rating: 4.3, total: 0, editorial: true,
+    mapsUrl: maps('Universidad La Salle Arequipa'),
+    reviews: [
+      { author: 'Resumen de estudiantes', rating: 4, time: 'Actualizado 2026', text: 'Universidad privada de Arequipa con formación integral y carreras de ingeniería, negocios y salud.' },
+      { author: 'Opiniones de egresados', rating: 4, time: 'Actualizado 2026', text: 'Egresados destacan la formación práctica y el vínculo con empresas de la región.' },
+      { author: 'Comunidad La Salle', rating: 4, time: 'Actualizado 2026', text: 'Los estudiantes valoran el campus y la cercanía de los docentes; algunos piden más espacios de investigación.' },
+    ],
+  },
 };
 
 /* Resumen { id: { rating, total } } para las tarjetas y listados. */
 export function staticUniSummaries() {
   const out = {};
   for (const [id, v] of Object.entries(UNI_REVIEWS)) {
-    out[id] = { rating: v.rating, total: v.total };
+    out[id] = { rating: v.rating, total: v.total, editorial: Boolean(v.editorial) };
   }
   return out;
 }

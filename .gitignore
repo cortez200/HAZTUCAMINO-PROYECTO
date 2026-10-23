@@ -8,4 +8,8 @@ client/dist/
 server/dist/
 *.sqlite
 *.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+htc-users-backup.json
+*.backup.json
 server/htc.sqlite

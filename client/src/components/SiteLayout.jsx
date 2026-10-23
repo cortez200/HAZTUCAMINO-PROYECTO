@@ -7,6 +7,7 @@ const NAV = [
   { to: '/', label: 'Inicio', end: true },
   { to: '/carreras', label: 'Carreras' },
   { to: '/test', label: 'Test vocacional' },
+  { to: '/examenes', label: 'Exámenes' },
   { to: '/simulaciones', label: 'Simulaciones' },
   { to: '/planes', label: 'Planes' }
 ];
@@ -27,7 +28,7 @@ function AccountMenu() {
   if (!account) {
     return (
       <div className="row gap-8">
-        <Link to="/login" className="btn btn-ghost btn-sm">Entrar</Link>
+        <Link to="/login" className="btn btn-ghost btn-sm nav-login">Entrar</Link>
         <Link to="/register" className="btn btn-primary btn-sm">Empezar gratis</Link>
       </div>
     );
@@ -73,7 +74,7 @@ export default function SiteLayout({ children }) {
         <div className="container site-nav">
           <Link to="/" className="brand" style={{ textDecoration: 'none', color: 'var(--text)', padding: 0 }}>
             <span className="logo"><Icon name="Compass" size={19} color="#fff" /></span>
-            <span>Haz Tu Camino</span>
+            <span>HAZ TU CAMINO</span>
           </Link>
 
           <nav className="site-links">
@@ -126,9 +127,9 @@ export default function SiteLayout({ children }) {
       <footer className="site-footer">
         <div className="container footer-grid">
           <div>
-            <Link to="/" className="brand" style={{ textDecoration: 'none', color: 'var(--text)', padding: 0 }}>
+            <Link to="/" className="brand" style={{ textDecoration: 'none', color: '#fff', padding: 0 }}>
               <span className="logo"><Icon name="Compass" size={18} color="#fff" /></span>
-              <span>Haz Tu Camino</span>
+              <span>HAZ TU CAMINO</span>
             </Link>
             <p className="muted small mt-8" style={{ maxWidth: 280 }}>
               Orientación vocacional para estudiantes de Perú. Descubre tu camino con información y práctica.
@@ -138,6 +139,7 @@ export default function SiteLayout({ children }) {
             <h2 className="foot-title">Explora</h2>
             <Link to="/carreras" className="foot-link">Carreras</Link>
             <Link to="/test" className="foot-link">Test vocacional</Link>
+            <Link to="/examenes" className="foot-link">Banco de preguntas</Link>
             <Link to="/simulaciones" className="foot-link">Simulaciones</Link>
             <Link to="/planes" className="foot-link">Planes</Link>
           </div>
@@ -145,8 +147,17 @@ export default function SiteLayout({ children }) {
             <h2 className="foot-title">Institución</h2>
             <Link to="/instituciones" className="foot-link">Para colegios</Link>
             <Link to="/instituciones" className="foot-link">Solicitar información</Link>
-            <Link to="/login" className="foot-link">Iniciar sesión</Link>
-            <Link to="/register" className="foot-link">Crear cuenta</Link>
+            {account ? (
+              <>
+                <Link to="/cuenta" className="foot-link">Mi cuenta</Link>
+                <Link to="/resultados" className="foot-link">Mis resultados</Link>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="foot-link">Iniciar sesión</Link>
+                <Link to="/register" className="foot-link">Crear cuenta</Link>
+              </>
+            )}
           </div>
         </div>
         <div className="container footer-bottom">

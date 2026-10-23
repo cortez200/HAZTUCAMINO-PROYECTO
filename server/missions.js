@@ -1789,4 +1789,51 @@ for (const mission of MISSIONS) {
   mission.tier = FREE_MISSION_IDS.has(mission.id) ? 'free' : 'premium';
 }
 
+/* --------------------------- video "cómo se resuelve" ---------------------------
+   Video corto por misión que se muestra ANTES de empezar y explica, paso a
+   paso, cómo resolver el reto. Usa la URL de inserción (embed) de YouTube:
+     'https://www.youtube.com/embed/VIDEO_ID'
+   Deja el valor en '' mientras no haya video: la sección no se mostrará.
+   También se pueden pegar/editar estos enlaces desde el panel de administración
+   (Catálogo → Misiones → Video cómo se resuelve). */
+export const MISSION_VIDEOS = {
+  'ing-software-carrito': '',
+  'ing-software-claves': '',
+  'medicina-abdomen': '',
+  'medicina-torax': '',
+  'enfermeria-postop': '',
+  'psicologia-entrevista': '',
+  'nutricion-deportista': '',
+  'ing-industrial-lote': '',
+  'ing-civil-viga': '',
+  'mecatronica-sensor': '',
+  'biologia-celula': '',
+  'quimica-disolucion': '',
+  'matematica-mcd': '',
+  'fisica-proyectil': '',
+  'administracion-presupuesto': '',
+  'contabilidad-resultados': '',
+  'marketing-campana': '',
+  'economia-gasto-publico': '',
+  'educacion-sesion': '',
+  'trabajo-social-familia': '',
+  'sociologia-encuesta': '',
+  'turismo-destinos': '',
+  'diseno-grafico-principios': '',
+  'arquitectura-ambiente': '',
+  'audiovisual-produccion': '',
+  'moda-prendas': '',
+  'derecho-despido': '',
+  'periodismo-noticia': '',
+  'comunicacion-modelo': '',
+  'relaciones-tratado': '',
+  'agronomia-fertilizacion': '',
+  'ambiental-presupuesto': '',
+  'veterinaria-paciente': '',
+  'biologia-marina-censo': ''
+};
+for (const mission of MISSIONS) {
+  if (MISSION_VIDEOS[mission.id]) mission.video = MISSION_VIDEOS[mission.id];
+}
+
 export const MISSION_BY_ID = (id) => MISSIONS.find((m) => m.id === id);

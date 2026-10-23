@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../lib/api.js';
+import { UNI_REVIEWS } from '../lib/uniReviewsData.js';
 import { Card } from './ui.jsx';
 import { Stars } from './Stars.jsx';
 import Icon from './Icon.jsx';
@@ -12,19 +13,28 @@ export default function GoogleReviews({ uni }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  /* Respaldo local: garantiza que los comentarios se muestren aunque la API
+     no esté disponible (backend antiguo, sin conexión, etc.). */
+  const fallback = UNI_REVIEWS[uni.id] || null;
+
   useEffect(() => {
     let alive = true;
     setLoading(true);
     setData(null);
     api.universityReviews(uni.id)
       .then((r) => { if (alive) setData(r); })
-      .catch(() => { if (alive) setData({ enabled: true, rating: null, total: 0, reviews: [] }); })
+      .catch(() => { if (alive) setData(null); })
       .finally(() => { if (alive) setLoading(false); });
     return () => { alive = false; };
   }, [uni.id]);
 
-  const reviews = data?.reviews || [];
-  const hasScore = data?.rating != null;
+  /* Preferimos los datos frescos de la API; si no trae comentarios, usamos el respaldo. */
+  const reviews = data?.reviews?.length ? data.reviews : (fallback?.reviews || []);
+  const rating = data?.rating ?? fallback?.rating ?? null;
+  const total = data?.total ?? fallback?.total ?? 0;
+  const mapsUrl = data?.mapsUrl || fallback?.mapsUrl || null;
+  const editorial = data ? Boolean(data.editorial) : Boolean(fallback?.editorial);
+  const hasScore = rating != null;
 
   return (
     <Card className="card-pad g-reviews">
@@ -33,29 +43,29 @@ export default function GoogleReviews({ uni }) {
           <UniLogo uni={uni} size={54} />
           <div className="g-head-meta">
             <h3 className="g-uni-name">{uni.nombre}</h3>
-            <span className="g-uni-sub"><Icon name="MapPin" size={12} /> {uni.ciudad} · Google Maps</span>
+            <span className="g-uni-sub"><Icon name="MapPin" size={12} /> {uni.ciudad} · {editorial ? 'Resumen de opiniones' : 'Google Maps'}</span>
           </div>
         </div>
 
         {hasScore && (
           <div className="g-score">
             <div className="g-score-big">
-              <span className="g-score-num">{Number(data.rating).toFixed(1)}</span>
+              <span className="g-score-num">{Number(rating).toFixed(1)}</span>
               <div className="g-score-col">
-                <Stars value={data.rating} size={16} />
-                <span className="g-score-count">{Number(data.total || 0).toLocaleString()} opiniones</span>
+                <Stars value={rating} size={16} />
+                <span className="g-score-count">{editorial ? 'Resumen de estudiantes' : `${Number(total || 0).toLocaleString()} opiniones`}</span>
               </div>
             </div>
-            {data.mapsUrl && (
-              <a className="btn btn-outline btn-sm" href={data.mapsUrl} target="_blank" rel="noreferrer">
-                Ver en Google Maps <Icon name="ExternalLink" size={12} />
+            {mapsUrl && (
+              <a className="btn btn-outline btn-sm" href={mapsUrl} target="_blank" rel="noreferrer">
+                {editorial ? 'Ver más opiniones' : 'Ver en Google Maps'} <Icon name="ExternalLink" size={12} />
               </a>
             )}
           </div>
         )}
       </div>
 
-      {loading ? (
+      {loading && reviews.length === 0 ? (
         <div className="g-loading"><span className="g-spinner" /> Cargando opiniones de Google Maps…</div>
       ) : reviews.length === 0 ? (
         <div className="review-empty">
@@ -63,8 +73,8 @@ export default function GoogleReviews({ uni }) {
           <div>
             <strong>Sin comentarios disponibles</strong>
             <div className="tiny dim">
-              {data?.mapsUrl
-                ? <a href={data.mapsUrl} target="_blank" rel="noreferrer">Ver en Google Maps <Icon name="ExternalLink" size={11} /></a>
+              {mapsUrl
+                ? <a href={mapsUrl} target="_blank" rel="noreferrer">Ver en Google Maps <Icon name="ExternalLink" size={11} /></a>
                 : 'Esta universidad aún no tiene reseñas públicas.'}
             </div>
           </div>
@@ -72,7 +82,7 @@ export default function GoogleReviews({ uni }) {
       ) : (
         <>
           <div className="g-list-head">
-            <Icon name="MessageCircle" size={14} /> Lo que dicen los estudiantes
+            <Icon name="MessageCircle" size={14} /> {editorial ? 'Resumen de opiniones' : 'Lo que dicen los estudiantes'}
             <span className="g-count">{reviews.length}</span>
           </div>
           <div className="g-review-grid">
@@ -97,15 +107,17 @@ export default function GoogleReviews({ uni }) {
         </>
       )}
 
-      {data?.mapsUrl && (
+      {mapsUrl && (
         <div className="g-foot">
           <span className="tiny dim row gap-6">
             <Icon name="MapPin" size={13} />
-            Opiniones publicadas por usuarios en Google Maps
+            {editorial ? 'Resumen elaborado con opiniones públicas de estudiantes' : 'Opiniones publicadas por usuarios en Google Maps'}
           </span>
-          <a href={data.mapsUrl} target="_blank" rel="noreferrer" className="g-powered" aria-label="Powered by Google">
-            <img src={GOOGLE_LOGO} alt="Powered by Google" height={16} />
-          </a>
+          {!editorial && (
+            <a href={mapsUrl} target="_blank" rel="noreferrer" className="g-powered" aria-label="Powered by Google">
+              <img src={GOOGLE_LOGO} alt="Powered by Google" height={16} />
+            </a>
+          )}
         </div>
       )}
     </Card>

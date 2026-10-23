@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { carrera, area, CARRERAS, universidad, simDeArea, primeraMisionDeCarrera, missionsDeCarrera } from '../lib/data.js';
-import { buildMalla } from '../lib/mallas.js';
 import { areaScores } from '../lib/scoring.js';
 import { useAuth, useToast } from '../lib/store.jsx';
 import { api } from '../lib/api.js';
@@ -31,9 +30,14 @@ export default function CarreraDetalle() {
   const c = carrera(id);
   const { account, toggleSaved } = useAuth();
   const toast = useToast();
-  const [uniSel, setUniSel] = useState(c ? c.universidades[0].id : null);
   const [revSel, setRevSel] = useState(c ? c.universidades[0].id : null);
   const [uniSummary, setUniSummary] = useState({});
+  const revRef = useRef(null);
+
+  const verOpiniones = (id) => {
+    setRevSel(id);
+    revRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   useEffect(() => {
     api.universityReviewSummary().then((r) => setUniSummary(r.summaries || {})).catch(() => {});
@@ -61,15 +65,11 @@ export default function CarreraDetalle() {
   const misiones = missionsDeCarrera(c.id);
   const vid = (c.video || '').split('/').pop();
 
-  const privadas = c.universidades.filter((o) => o.tipo === 'Privada');
   const hayPublica = c.universidades.some((o) => o.tipo === 'Pública');
-  const minMensual = privadas.length ? Math.min(...privadas.map((o) => o.min)) : null;
-  const maxMensual = privadas.length ? Math.max(...privadas.map((o) => o.max)) : null;
+  const minMensual = c.universidades.length ? Math.min(...c.universidades.map((o) => o.min)) : null;
+  const maxMensual = c.universidades.length ? Math.max(...c.universidades.map((o) => o.max)) : null;
 
-  const sel = c.universidades.find((o) => o.id === uniSel) || c.universidades[0];
-  const selUni = universidad(sel.id);
   const revUni = universidad(revSel) || universidad(c.universidades[0].id);
-  const malla = buildMalla(c, sel);
 
   const onSave = () => {
     toggleSaved(c.id);
@@ -119,9 +119,9 @@ export default function CarreraDetalle() {
           <div className="tiny muted bold">MENSUALIDAD</div>
           <div className="row gap-6 bold mt-8" style={{ fontSize: '1.15rem' }}>
             <Icon name="Wallet" size={18} color="var(--primary)" />
-            {minMensual ? `S/ ${minMensual.toLocaleString()}+` : 'Según universidad'}
+            {minMensual ? `Desde S/ ${minMensual.toLocaleString()}` : 'Según universidad'}
           </div>
-          <div className="tiny dim mt-8">{minMensual ? `hasta S/ ${maxMensual.toLocaleString()} /mes en privadas` : 'En públicas, pensión baja'}</div>
+          <div className="tiny dim mt-8">{maxMensual ? `Hasta S/ ${maxMensual.toLocaleString()} /mes según universidad` : 'Consulta con cada universidad'}</div>
         </Card>
         <Card className="card-pad">
           <div className="tiny muted bold">UNIVERSIDADES</div>
@@ -156,11 +156,11 @@ export default function CarreraDetalle() {
         </Card>
       )}
 
-      {/* ---------------- Dónde estudiarla ---------------- */}
+      {/* ---------------- Dónde estudiarías ---------------- */}
       <section className="mt-32">
         <div className="row between wrap gap-12 mb-16">
           <div>
-            <h2 className="section-title" style={{ fontSize: '1.5rem' }}>Dónde estudiarla</h2>
+            <h2 className="section-title" style={{ fontSize: '1.5rem' }}>Dónde estudiarías</h2>
             <p className="section-sub" style={{ fontSize: '.95rem' }}>Universidades que ofrecen {c.nombre} y su mensualidad estimada.</p>
           </div>
         </div>
@@ -180,7 +180,11 @@ export default function CarreraDetalle() {
                       <div className="row gap-6 mt-8" style={{ alignItems: 'center' }}>
                         <Stars value={uniSummary[o.id].rating} size={13} />
                         <span className="small bold">{Number(uniSummary[o.id].rating).toFixed(1)}</span>
-                        <span className="tiny dim">· {Number(uniSummary[o.id].total || 0).toLocaleString()} opiniones en Google</span>
+                        <span className="tiny dim">
+                          {uniSummary[o.id].editorial
+                            ? '· resumen de opiniones'
+                            : `· ${Number(uniSummary[o.id].total || 0).toLocaleString()} opiniones en Google`}
+                        </span>
                       </div>
                     )}
                     <div className="row gap-12 wrap small dim mt-8">
@@ -189,16 +193,16 @@ export default function CarreraDetalle() {
                     </div>
                     <div className="row between gap-8 mt-12 wrap">
                       <span className="bold" style={{ color: 'var(--primary-700)' }}>
-                        {o.tipo === 'Pública' ? 'Pensión baja (pública)' : `S/ ${o.min.toLocaleString()} – ${o.max.toLocaleString()} /mes`}
+                        S/ {o.min.toLocaleString()} – {o.max.toLocaleString()} /mes
                       </span>
                       <div className="row gap-8">
                         <a href={u.web} target="_blank" rel="noreferrer" className="btn btn-ghost btn-sm">Web <Icon name="ExternalLink" size={13} /></a>
-                        <button className={`btn btn-sm ${revSel === o.id ? 'btn-soft' : 'btn-outline'}`} onClick={() => setRevSel(o.id)}>
+                        <button className={`btn btn-sm ${revSel === o.id ? 'btn-soft' : 'btn-outline'}`} onClick={() => verOpiniones(o.id)}>
                           Opiniones
                         </button>
-                        <button className={`btn btn-sm ${uniSel === o.id ? 'btn-soft' : 'btn-outline'}`} onClick={() => setUniSel(o.id)}>
-                          Ver malla
-                        </button>
+                        <Link to={`/carreras/${c.id}/malla/${o.id}`} className="btn btn-sm btn-outline">
+                          Ver malla <Icon name="ArrowRight" size={13} />
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -210,11 +214,11 @@ export default function CarreraDetalle() {
       </section>
 
       {/* ---------------- Opiniones (Google Maps) ---------------- */}
-      <section className="mt-32">
+      <section className="mt-32" ref={revRef} style={{ scrollMarginTop: 80 }}>
         <div className="row between wrap gap-12 mb-16">
           <div>
             <h2 className="section-title" style={{ fontSize: '1.5rem' }}>Opiniones de las universidades</h2>
-            <p className="section-sub" style={{ fontSize: '.95rem' }}>Calificación y comentarios reales publicados por estudiantes en Google Maps.</p>
+            <p className="section-sub" style={{ fontSize: '.95rem' }}>Calificación y comentarios de estudiantes sobre cada universidad.</p>
           </div>
           <div className="row wrap gap-8">
             {c.universidades.map((o) => (
@@ -226,34 +230,6 @@ export default function CarreraDetalle() {
           </div>
         </div>
         {revUni && <GoogleReviews key={revUni.id} uni={revUni} />}
-      </section>
-
-      {/* ---------------- Malla curricular ---------------- */}
-      <section className="mt-32">
-        <div className="row between wrap gap-12 mb-16">
-          <div>
-            <h2 className="section-title" style={{ fontSize: '1.5rem' }}>Malla curricular</h2>
-            <p className="section-sub" style={{ fontSize: '.95rem' }}>Cursos por ciclo en {selUni.nombre}.</p>
-          </div>
-          <div className="row wrap gap-8">
-            {c.universidades.map((o) => (
-              <button key={o.id} className={`chip ${uniSel === o.id ? 'on' : ''}`} onClick={() => setUniSel(o.id)}>
-                {universidad(o.id).corto}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="malla">
-          {malla.map((cic) => (
-            <div key={cic.ciclo} className="malla-ciclo">
-              <div className="malla-ciclo-head">Ciclo {cic.ciclo}</div>
-              <ul>
-                {cic.cursos.map((curso, i) => <li key={i}>{curso}</li>)}
-              </ul>
-            </div>
-          ))}
-        </div>
-        <p className="tiny muted mt-16">Malla referencial de ejemplo. La malla oficial puede variar por universidad y año.</p>
       </section>
 
       {/* ---------------- Información ---------------- */}

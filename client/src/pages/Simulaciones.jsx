@@ -104,7 +104,7 @@ export default function Simulaciones() {
           <div className="sim-hero-inner">
             <div className="sim-hero-main">
               <div className="row gap-8">
-                <Icon name="TrendingUp" size={18} color="#e0e7ff" />
+                <Icon name="TrendingUp" size={18} color="#bff8f2" />
                 <span className="sim-hero-title">Tu progreso</span>
               </div>
               <p className="sim-hero-sub">

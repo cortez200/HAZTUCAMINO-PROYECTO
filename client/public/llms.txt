@@ -1,13 +1,16 @@
 # Haz Tu Camino
 
-> Plataforma de orientación vocacional para estudiantes de Perú: test, fichas de carreras con universidades y mallas curriculares, y simulaciones interactivas.
+> Plataforma de orientación vocacional para estudiantes de Perú: test, fichas de 32 carreras con universidades y mallas curriculares, simulaciones interactivas, banco de preguntas y exámenes de admisión reales.
 
 ## Páginas principales
 
-- [Inicio](/#/): portada, cómo funciona y carreras destacadas.
+- [Inicio](/#/): portada, cómo funciona, carreras destacadas y acceso a exámenes.
 - [Carreras](/#/carreras): catálogo de 32 carreras por área.
+- [Detalle de carrera](/#/carreras/medicina): descripción, universidades, costos y acceso a mallas.
+- [Malla curricular](/#/carreras/medicina/malla/upch): malla por universidad con ciclos y cursos.
 - [Test vocacional](/#/test): cuestionario de 32 preguntas (5 minutos).
 - [Simulaciones](/#/simulaciones): casos interactivos con video, decisiones y puntaje.
+- [Exámenes](/#/examenes): banco de 36 preguntas explicadas, simulacro de 10 preguntas y 12 fuentes oficiales de admisión.
 - [Planes](/#/planes): comparación de planes Gratis y Premium.
 - [Para colegios](/#/instituciones): solicitud institucional.
 - [Iniciar sesión](/#/login) y [Crear cuenta](/#/register).
@@ -16,7 +19,10 @@
 
 - Perfil de afinidad por 8 áreas profesionales.
 - 32 carreras con descripción, habilidades, lugares de trabajo y cursos.
-- Ficha por carrera con universidades, mensualidad estimada y malla curricular por universidad.
+- 49 universidades con mensualidad estimada y malla curricular por universidad.
+- Banco de preguntas de admisión por curso, con explicación de respuestas.
+- Simulacro cronometrado de 10 preguntas y revisión de resultados.
+- Enlaces a exámenes, solucionarios y portales oficiales de UNI, UNMSM y PUCP.
 - 8 simulaciones de profesiones (3 gratis, 5 con plan Premium).
 - Comparador de carreras (Premium).
 
@@ -24,6 +30,6 @@
 
 - Frontend: React + Vite.
 - Backend: Node.js + Express (API REST).
-- Persistencia: archivo JSON en el servidor.
+- Persistencia: SQLite.
 
-Nota: las mensualidades y mallas son datos de referencia.
+Nota: las mensualidades, mallas y preguntas de práctica son datos de referencia; los exámenes oficiales se consultan en su fuente original.

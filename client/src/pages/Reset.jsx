@@ -7,11 +7,11 @@ import Icon from '../components/Icon.jsx';
 import AuthLayout from '../components/AuthLayout.jsx';
 
 const STRENGTH = [
-  { label: 'Muy débil', color: '#dc2626', width: 20 },
-  { label: 'Débil', color: '#dc2626', width: 35 },
-  { label: 'Aceptable', color: '#d97706', width: 60 },
-  { label: 'Buena', color: '#0891b2', width: 80 },
-  { label: 'Segura', color: '#059669', width: 100 }
+  { label: 'Muy débil', color: '#d92d4b', width: 20 },
+  { label: 'Débil', color: '#d92d4b', width: 35 },
+  { label: 'Aceptable', color: '#b45f06', width: 60 },
+  { label: 'Buena', color: '#13a89e', width: 80 },
+  { label: 'Segura', color: '#0b8f7a', width: 100 }
 ];
 
 function score(pw) {

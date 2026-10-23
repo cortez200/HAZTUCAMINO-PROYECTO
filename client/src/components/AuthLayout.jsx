@@ -11,10 +11,10 @@ export default function AuthLayout({ headline, text, points = [], children }) {
     <div style={{ minHeight: '100vh', display: 'grid', gridTemplateColumns: '1fr 1fr' }} className="auth-grid">
       <div className="auth-side" style={{ position: 'relative', background: 'var(--text)' }}>
         <Img src={SIDE} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: .55 }} icon="GraduationCap" />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(160deg, rgba(79,70,229,.88), rgba(15,23,42,.9))' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(520px 420px at 18% 18%, rgba(19,168,158,.38), transparent 62%), radial-gradient(460px 400px at 88% 82%, rgba(255,122,89,.26), transparent 60%), linear-gradient(160deg, rgba(6,20,43,.92), rgba(11,36,80,.95) 58%, rgba(58,91,217,.86))' }} />
         <div style={{ position: 'absolute', inset: 0, padding: 44, color: '#fff', display: 'flex', flexDirection: 'column', gap: 20 }}>
           <Link to="/" className="row gap-8" style={{ color: '#fff', textDecoration: 'none', fontWeight: 800 }}>
-            <Icon name="Compass" size={22} color="#fff" /> Haz Tu Camino
+            <Icon name="Compass" size={22} color="#fff" /> HAZ TU CAMINO
           </Link>
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <h2 style={{ fontSize: '1.95rem', fontWeight: 800, maxWidth: 400, lineHeight: 1.2 }}>{headline}</h2>
@@ -23,7 +23,7 @@ export default function AuthLayout({ headline, text, points = [], children }) {
               <ul style={{ listStyle: 'none', padding: 0, margin: '26px 0 0', display: 'grid', gap: 13 }}>
                 {points.map((p) => (
                   <li key={p} className="row gap-8" style={{ alignItems: 'flex-start', fontSize: '.95rem', opacity: .95 }}>
-                    <Icon name="CheckCircle2" size={18} color="#a5b4fc" style={{ flex: 'none', marginTop: 2 }} />
+                    <Icon name="CheckCircle2" size={18} color="#7ff0e5" style={{ flex: 'none', marginTop: 2 }} />
                     <span>{p}</span>
                   </li>
                 ))}
@@ -34,8 +34,11 @@ export default function AuthLayout({ headline, text, points = [], children }) {
         </div>
       </div>
 
-      <main style={{ display: 'grid', placeItems: 'center', padding: '30px 20px', background: 'var(--bg)' }}>
-        <div style={{ width: '100%', maxWidth: 430 }}>{children}</div>
+      <main className="auth-main" style={{ display: 'grid', placeItems: 'center', padding: '30px 20px', background: 'transparent' }}>
+        <div style={{ width: '100%', maxWidth: 430 }}>
+          <Link to="/" className="standalone-brand auth-brand"><span className="logo"><Icon name="Compass" size={18} color="#fff" /></span> HAZ TU CAMINO</Link>
+          {children}
+        </div>
       </main>
 
       <style>{`@media (max-width: 900px){ .auth-grid{ grid-template-columns:1fr !important; } .auth-side{ display:none !important; } }`}</style>

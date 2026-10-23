@@ -40,7 +40,7 @@ export function Stat({ value, label, icon, tone }) {
     <div className="stat">
       <div className="row gap-8 between">
         <div className="k" style={tone ? { color: tone } : undefined}>{value}</div>
-        {icon && <Icon name={icon} size={18} color="#94a3b8" />}
+        {icon && <Icon name={icon} size={18} color="var(--muted)" />}
       </div>
       <div className="l">{label}</div>
     </div>

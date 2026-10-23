@@ -10,7 +10,7 @@ import {
 import {
   loadUsers, loadRequests, saveUser, saveRequest,
   savePurchase, loadPurchases, saveVisit, loadVisits, visitSummary,
-  deleteUser,
+  deleteUser, backupUsers,
   catalogSeeded, markCatalogSeeded, seedCatalog, loadCatalog,
   upsertCatalogItem, deleteCatalogItem,
   metaGet, metaSet,
@@ -35,6 +35,7 @@ let db = { users: loadUsers(), requests: loadRequests() };
 function persist() {
   for (const u of Object.values(db.users)) saveUser(u);
   for (const r of db.requests) saveRequest(r);
+  backupUsers();
 }
 
 /* -------------------------- catálogo editable --------------------------
@@ -80,9 +81,26 @@ if (!metaGet(MISSION_TIERS_KEY)) {
   metaSet(MISSION_TIERS_KEY, new Date().toISOString());
 }
 
+/* Migración: copia el video "cómo se resuelve" a las misiones que ya estaban
+   guardadas en SQLite y aún no lo tienen. Solo rellena cuando falta, así respeta
+   el video que el admin haya puesto desde el panel. */
+const MISSION_VIDEO_KEY = 'catalog_mission_video_v1';
+if (!metaGet(MISSION_VIDEO_KEY)) {
+  const sourceById = new Map(MISSIONS.map((m) => [m.id, m]));
+  for (const mission of (loadCatalog().missions || [])) {
+    if (mission.video != null) continue;
+    const source = sourceById.get(mission.id);
+    if (source && source.video) {
+      mission.video = source.video;
+      upsertCatalogItem('missions', mission.id, mission);
+    }
+  }
+  metaSet(MISSION_VIDEO_KEY, new Date().toISOString());
+}
+
 /* Migración: agrega universidades nuevas y las asocia a las carreras una sola
    vez (no pisa las ediciones que el admin haya hecho en el panel). */
-const UNI_SYNC_KEY = 'catalog_universities_v2';
+const UNI_SYNC_KEY = 'catalog_universities_v3';
 if (!metaGet(UNI_SYNC_KEY)) {
   const cat = loadCatalog();
   const haveUni = new Set((cat.universities || []).map((u) => u.id));
@@ -101,13 +119,76 @@ if (!metaGet(UNI_SYNC_KEY)) {
   metaSet(UNI_SYNC_KEY, new Date().toISOString());
 }
 
+/* Migración: corrige etiquetas cortas de universidades nuevas para evitar
+   confusiones entre siglas repetidas (por ejemplo, UNAP de Puno y UNAP de Iquitos). */
+const UNI_LABELS_KEY = 'catalog_university_labels_v1';
+if (!metaGet(UNI_LABELS_KEY)) {
+  const cat = loadCatalog();
+  const newIds = new Set(['unap-iquitos', 'untumbes', 'unam', 'untrm', 'unh', 'unaj', 'undc', 'unach', 'unia', 'upt', 'uwiener', 'upeu', 'unife', 'ulasalle']);
+  for (const stored of (cat.universities || [])) {
+    if (!newIds.has(stored.id)) continue;
+    const source = UNIVERSIDADES.find((u) => u.id === stored.id);
+    if (source && source.corto && stored.corto !== source.corto) {
+      stored.corto = source.corto;
+      upsertCatalogItem('universities', stored.id, stored);
+    }
+  }
+  metaSet(UNI_LABELS_KEY, new Date().toISOString());
+}
+
+const PUBLIC_PENSION_KEY = 'catalog_public_pension_v1';
+if (!metaGet(PUBLIC_PENSION_KEY)) {
+  const cat = loadCatalog();
+  const sourceById = new Map(UNIVERSIDADES.filter((u) => u.tipo === 'Pública').map((u) => [u.id, u.pension]));
+  for (const stored of (cat.universities || [])) {
+    const pension = sourceById.get(stored.id);
+    if (!pension) continue;
+    if (stored.pension?.min !== pension.min || stored.pension?.max !== pension.max) {
+      stored.pension = { ...pension };
+      upsertCatalogItem('universities', stored.id, stored);
+    }
+  }
+  for (const career of (cat.careers || [])) {
+    let careerChanged = false;
+    for (const o of (career.universidades || [])) {
+      const pension = sourceById.get(o.id);
+      if (!pension) continue;
+      if (o.min !== pension.min || o.max !== pension.max) {
+        o.min = pension.min;
+        o.max = pension.max;
+        careerChanged = true;
+      }
+    }
+    if (careerChanged) upsertCatalogItem('careers', career.id, career);
+  }
+  metaSet(PUBLIC_PENSION_KEY, new Date().toISOString());
+}
+
+/* Migración: actualiza las imágenes de las carreras que ya estaban guardadas
+   en SQLite con las nuevas fotografías del catálogo. */
+const CAREER_IMAGES_KEY = 'catalog_career_images_v2';
+if (!metaGet(CAREER_IMAGES_KEY)) {
+  const cat = loadCatalog();
+  const sourceById = new Map(CARRERAS.map((c) => [c.id, c.img]));
+  for (const stored of (cat.careers || [])) {
+    const img = sourceById.get(stored.id);
+    if (img && stored.img !== img) {
+      stored.img = img;
+      upsertCatalogItem('careers', stored.id, stored);
+    }
+  }
+  metaSet(CAREER_IMAGES_KEY, new Date().toISOString());
+}
+
 /* -------------------------- seguridad -------------------------- */
 function hashPassword(password, salt = crypto.randomBytes(16).toString('hex')) {
   const hash = crypto.scryptSync(password, salt, 64).toString('hex');
   return { salt, hash };
 }
 function verifyPassword(password, salt, hash) {
-  const calc = crypto.scryptSync(password, salt, 64);
+  if (typeof password !== 'string' || !salt || !hash) return false;
+  let calc;
+  try { calc = crypto.scryptSync(password, salt, 64); } catch { return false; }
   const stored = Buffer.from(hash, 'hex');
   return calc.length === stored.length && crypto.timingSafeEqual(calc, stored);
 }
@@ -315,10 +396,11 @@ app.get('/api/universities/:id/reviews', async (req, res) => {
 
   res.json({
     enabled: true,
-    source: live ? 'Google Places' : 'Google Maps',
+    source: live ? 'Google Places' : (fallback?.editorial ? 'Resumen de opiniones' : 'Google Maps'),
     university: { id: u.id, nombre: u.nombre, corto: u.corto, ciudad: u.ciudad, color: u.color },
     rating: src?.rating ?? null,
     total: src?.total ?? 0,
+    editorial: Boolean(src?.editorial),
     mapsUrl: src?.mapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(u.nombre + ' ' + (u.ciudad || ''))}`,
     reviews: src?.reviews || [],
     fetchedAt: live ? cached.fetchedAt : null
@@ -340,7 +422,7 @@ app.post('/api/track', (req, res) => {
 });
 
 /* auth */
-const VERIFY_TTL = 24 * 60 * 60 * 1000;   // 24 h
+const VERIFY_TTL = 7 * 24 * 60 * 60 * 1000; // 7 días
 const RESET_TTL = 30 * 60 * 1000;         // 30 min
 
 async function sendVerificationEmail(u, base) {
@@ -371,7 +453,7 @@ app.post('/api/auth/register', async (req, res) => {
     persist();
     // El correo se manda en segundo plano para no retrasar la respuesta.
     sendVerificationEmail(existing, base).catch((e) => console.error('[auth] No se pudo enviar el correo de verificación:', e?.message || e));
-    return res.status(200).json({ ok: true, email: mail, account: publicAccount(existing), verificationSent: true });
+    return res.status(200).json({ ok: true, email: mail, account: publicAccount(existing), token: signToken(mail), verificationSent: true });
   }
 
   const { salt, hash } = hashPassword(password);
@@ -381,7 +463,7 @@ app.post('/api/auth/register', async (req, res) => {
   // La cuenta queda pendiente de confirmar: no se inicia sesión todavía.
   // El correo (que confirma la dirección) se envía en segundo plano.
   sendVerificationEmail(db.users[mail], base).catch((e) => console.error('[auth] No se pudo enviar el correo de verificación:', e?.message || e));
-  res.status(201).json({ ok: true, email: mail, account: publicAccount(db.users[mail]), verificationSent: true });
+  res.status(201).json({ ok: true, email: mail, account: publicAccount(db.users[mail]), token: signToken(mail), verificationSent: true });
 });
 
 app.post('/api/auth/login', (req, res) => {
@@ -391,13 +473,11 @@ app.post('/api/auth/login', (req, res) => {
   const u = db.users[mail];
   if (!u) return res.status(404).json({ error: 'Ese correo no está registrado. Crea una cuenta.' });
   if (!verifyPassword(password, u.pwdSalt, u.pwdHash)) return res.status(401).json({ error: 'Contraseña incorrecta.' });
-  if (!u.emailVerified) {
-    return res.status(403).json({
-      error: 'Tu correo aún no está confirmado. Revisa tu bandeja (y el spam) o reenvía el correo de confirmación.',
-      needsVerification: true, email: mail
-    });
-  }
-  res.json({ token: signToken(mail), account: publicAccount(u) });
+  res.json({
+    token: signToken(mail),
+    account: publicAccount(u),
+    needsVerification: !u.emailVerified
+  });
 });
 
 /* Reenvía el correo de confirmación. */
@@ -721,6 +801,7 @@ app.delete('/api/admin/users/:email', adminAuth, (req, res) => {
   if (!db.users[mail]) return res.status(404).json({ error: 'Ese usuario ya no existe.' });
   delete db.users[mail];
   deleteUser(mail);
+  backupUsers();
   res.json({ ok: true, email: mail });
 });
 

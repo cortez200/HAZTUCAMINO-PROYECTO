@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import { CARRERAS, AREAS, area, universidad, missionsDeCarrera, isPremium, isFreeMission } from '../lib/data.js';
+import { CARRERAS, area, universidad, missionsDeCarrera, isPremium, isFreeMission } from '../lib/data.js';
 import { areaScores, careerScores } from '../lib/scoring.js';
 import { useAuth } from '../lib/store.jsx';
-import { areaVars, Badge, Btn, Card, EmptyState } from '../components/ui.jsx';
+import { areaVars, Badge, Card, EmptyState } from '../components/ui.jsx';
 import CareerCard from '../components/CareerCard.jsx';
 import Icon from '../components/Icon.jsx';
 import UniLogo from '../components/UniLogo.jsx';
@@ -36,8 +36,7 @@ export default function Resultados() {
       : recMissions.find(isFreeMission) || recMissions[0])
     : null;
   const recMissionLocked = recMission && !isFreeMission(recMission) && !isPremium(account);
-  const recPrivadas = recomendada ? recomendada.universidades.filter((o) => o.tipo === 'Privada') : [];
-  const recDesde = recPrivadas.length ? Math.min(...recPrivadas.map((o) => o.min)) : null;
+  const recDesde = recomendada?.universidades?.length ? Math.min(...recomendada.universidades.map((o) => o.min)) : null;
 
   return (
     <>
@@ -73,7 +72,7 @@ export default function Resultados() {
               <p className="dim mt-8" style={{ maxWidth: 620 }}>{recomendada.descripcion}</p>
               <div className="row gap-16 wrap mt-16 small bold">
                 <span className="row gap-6"><Icon name="Building2" size={16} color="var(--area)" /> {recomendada.universidades.length} universidades</span>
-                <span className="row gap-6"><Icon name="Wallet" size={16} color="var(--area)" /> {recDesde ? `Desde S/ ${recDesde.toLocaleString()}/mes` : 'Pensión baja (pública)'}</span>
+                <span className="row gap-6"><Icon name="Wallet" size={16} color="var(--area)" /> {recDesde ? `Desde S/ ${recDesde.toLocaleString()}/mes` : 'Según universidad'}</span>
                 <span className="row gap-6"><Icon name="CalendarClock" size={16} color="var(--area)" /> {recomendada.duracion} ciclos</span>
               </div>
               <div className="row gap-12 wrap mt-24">
@@ -136,7 +135,7 @@ export default function Resultados() {
             <div className="row gap-8 bold" style={{ color: 'var(--warn)' }}>
               <Icon name="HelpCircle" size={18} /> Áreas por descubrir
             </div>
-            <p className="small mt-8" style={{ color: '#92400e' }}>
+            <p className="small mt-8" style={{ color: 'var(--warn)' }}>
               Marcaste dudas en: {unknown.map((u) => u.nombre).join(', ')}. Explora esas áreas con calma y vuelve a intentarlo cuando quieras.
             </p>
           </div>
@@ -164,7 +163,7 @@ export default function Resultados() {
               {CARRERAS.filter((c) => c.area === a.id).map((c) => (
                 <Link key={c.id} to={`/carreras/${c.id}`} className="row between gap-8" style={{ padding: '9px 0', textDecoration: 'none', color: 'inherit' }}>
                   <span className="small bold truncate">{c.nombre}</span>
-                  <Icon name="ChevronRight" size={16} color="#94a3b8" />
+                  <Icon name="ChevronRight" size={16} color="var(--muted)" />
                 </Link>
               ))}
             </div>

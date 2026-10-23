@@ -11,11 +11,15 @@ function Boot({ title, message }) {
   return (
     <div style={{
       minHeight: '100vh', display: 'grid', placeItems: 'center', padding: 24,
-      fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'center', color: '#0f172a'
+      fontFamily: 'Inter, system-ui, sans-serif', textAlign: 'center', color: 'var(--text)'
     }}>
       <div style={{ maxWidth: 420 }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 9, fontWeight: 800, color: 'var(--navy)', marginBottom: 14, letterSpacing: '-.02em' }}>
+          <span style={{ width: 34, height: 34, borderRadius: 10, background: 'linear-gradient(135deg, var(--primary), var(--teal) 55%, var(--violet))', display: 'grid', placeItems: 'center', color: '#fff' }}>◆</span>
+          HAZ TU CAMINO
+        </div>
         <h1 style={{ fontSize: 20, margin: '0 0 8px' }}>{title}</h1>
-        <p style={{ color: '#64748b', lineHeight: 1.5, margin: 0 }}>{message}</p>
+        <p style={{ color: 'var(--muted)', lineHeight: 1.5, margin: 0 }}>{message}</p>
       </div>
     </div>
   );

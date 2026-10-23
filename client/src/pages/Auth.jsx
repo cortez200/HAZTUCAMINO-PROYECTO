@@ -31,9 +31,15 @@ export default function Auth({ mode }) {
     setBusy(true);
     try {
       if (register) {
-        await signup({ name: form.name.trim(), email: form.email.trim(), password: form.password, nivel });
-        setPending({ email: form.email.trim() });
-        toast('Cuenta creada. Confirma tu correo para ingresar.', 'Mail');
+        const res = await signup({ name: form.name.trim(), email: form.email.trim(), password: form.password, nivel });
+        if (res?.token) {
+          toast('Cuenta creada. ¡Bienvenido!', 'CheckCircle2');
+          const from = location.state?.from;
+          nav(typeof from === 'string' && from.startsWith('/') && !from.startsWith('//') ? from : '/', { replace: true });
+        } else {
+          setPending({ email: form.email.trim() });
+          toast('Cuenta creada. Revisa tu correo para confirmarla.', 'Mail');
+        }
       } else {
         await login({ email: form.email.trim(), password: form.password });
         toast('¡Hola de nuevo!', 'CheckCircle2');
@@ -87,7 +93,7 @@ export default function Auth({ mode }) {
               </div>
               <h1 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Confirma tu registro</h1>
               <p className="dim mt-8 mb-24">
-                Enviamos un correo de confirmación a <b>{pending.email}</b>. Ábrelo y pulsa el enlace para activar tu cuenta e <b>ingresar automáticamente</b>.
+                Tu cuenta está creada. Enviamos un correo a <b>{pending.email}</b> para confirmarla; puedes ingresar ahora y verificarla cuando quieras.
               </p>
               <Btn variant="primary" type="button" className="btn-block btn-lg" onClick={resend} disabled={busy} icon={busy ? 'Clock' : 'Mail'}>
                 {busy ? 'Reenviando…' : 'Reenviar correo'}

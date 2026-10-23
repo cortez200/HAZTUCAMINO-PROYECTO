@@ -10,6 +10,8 @@ import Test from './pages/Test.jsx';
 import Resultados from './pages/Resultados.jsx';
 import Carreras from './pages/Carreras.jsx';
 import CarreraDetalle from './pages/CarreraDetalle.jsx';
+import Malla from './pages/Malla.jsx';
+import Examenes from './pages/Examenes.jsx';
 import Comparar from './pages/Comparar.jsx';
 import Simulaciones from './pages/Simulaciones.jsx';
 import Simulacion from './pages/Simulacion.jsx';
@@ -51,6 +53,8 @@ function Site() {
         <Route index element={<Landing />} />
         <Route path="carreras" element={<Carreras />} />
         <Route path="carreras/:id" element={<CarreraDetalle />} />
+        <Route path="carreras/:id/malla/:uniId" element={<Malla />} />
+        <Route path="examenes" element={<Examenes />} />
         <Route path="simulaciones" element={<Simulaciones />} />
         <Route path="simulaciones/mision/:id" element={<Mision />} />
         <Route path="simulaciones/:id" element={<Simulacion />} />

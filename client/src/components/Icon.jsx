@@ -10,7 +10,7 @@ import {
   ClipboardCheck, BadgeCheck, Wifi, Battery, Eye, EyeOff, Flame, Award, Trophy,
   Bug, Coins, Paintbrush, Type, TreePine, Waves, Presentation, Megaphone, Droplet, Thermometer, FolderKanban, Hand, KeyRound,
   Code, Terminal, Brain, ScanLine, Syringe, Medal, Hourglass, Unlock,
-  Calculator, ChevronLeft, Puzzle, PlayCircle, Flag, Landmark, Trees, Bird, Mountain
+  Calculator, ChevronLeft, Puzzle, PlayCircle, Flag, Landmark, Trees, Bird, Mountain, Pause
 } from 'lucide-react';
 
 const MAP = {
@@ -25,7 +25,7 @@ const MAP = {
   ClipboardCheck, BadgeCheck, Wifi, Battery, Eye, EyeOff, Flame, Award, Trophy,
   Bug, Coins, Paintbrush, Type, TreePine, Waves, Presentation, Megaphone, Droplet, Thermometer, FolderKanban, Hand, KeyRound,
   Code, Terminal, Brain, ScanLine, Syringe, Medal, Hourglass, Unlock,
-  Calculator, ChevronLeft, Puzzle, PlayCircle, Flag, Landmark, Trees, Bird, Mountain
+  Calculator, ChevronLeft, Puzzle, PlayCircle, Flag, Landmark, Trees, Bird, Mountain, Pause
 };
 
 export default function Icon({ name, size = 18, ...rest }) {

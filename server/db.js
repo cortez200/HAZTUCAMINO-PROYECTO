@@ -2,11 +2,13 @@
 // Reemplaza el archivo db.json: guarda usuarios y solicitudes de instituciones.
 
 import { DatabaseSync } from 'node:sqlite';
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DB_PATH = process.env.HTC_DB || path.join(__dirname, 'htc.sqlite');
+const BACKUP_PATH = process.env.HTC_BACKUP || path.join(path.dirname(DB_PATH), 'htc-users-backup.json');
 
 export const sqlite = new DatabaseSync(DB_PATH);
 
@@ -172,7 +174,52 @@ export function saveRequest(r) {
   insertReqStmt.run(r.id, r.center, r.region, r.tipo, r.contacto, r.mensaje, r.at);
 }
 
+const USER_COLUMNS = 'email,name,nivel,plan,done,answers,unknown,sims,saved,history,progress,created_at,premium_since,pwd_salt,pwd_hash,email_verified,plan_until';
+
+/* Copia de seguridad legible de las cuentas. Se guarda junto a la base de datos
+   y permite recuperar la tabla si el archivo SQLite se reinicia o se corrompe. */
+export function backupUsers() {
+  try {
+    const rows = sqlite.prepare(`SELECT ${USER_COLUMNS} FROM users ORDER BY created_at`).all();
+    fs.mkdirSync(path.dirname(BACKUP_PATH), { recursive: true });
+    const tmp = BACKUP_PATH + '.tmp';
+    fs.writeFileSync(tmp, JSON.stringify({ at: new Date().toISOString(), users: rows }, null, 2));
+    fs.renameSync(tmp, BACKUP_PATH);
+    return rows.length;
+  } catch (e) {
+    console.error('[db] No se pudo crear el respaldo de usuarios:', e?.message || e);
+    return 0;
+  }
+}
+
+function restoreUsersIfEmpty() {
+  try {
+    const count = sqlite.prepare('SELECT COUNT(*) AS n FROM users').get().n;
+    if (count > 0 || !fs.existsSync(BACKUP_PATH)) return 0;
+    const data = JSON.parse(fs.readFileSync(BACKUP_PATH, 'utf8'));
+    if (!data || !Array.isArray(data.users) || !data.users.length) return 0;
+    const stmt = sqlite.prepare(`INSERT OR REPLACE INTO users (${USER_COLUMNS}) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`);
+    let restored = 0;
+    for (const u of data.users) {
+      if (!u || !u.email) continue;
+      stmt.run(
+        u.email, u.name || 'Sin nombre', u.nivel || 'secundaria', u.plan || 'free', u.done ? 1 : 0,
+        u.answers || '{}', u.unknown || '[]', u.sims || '{}', u.saved || '[]', u.history || '[]',
+        u.progress || '{}', u.created_at || null, u.premium_since || null,
+        u.pwd_salt || null, u.pwd_hash || null, u.email_verified ? 1 : 0, u.plan_until || null
+      );
+      restored += 1;
+    }
+    if (restored) console.warn('[db] Base de usuarios restaurada desde respaldo:', restored);
+    return restored;
+  } catch (e) {
+    console.error('[db] No se pudo restaurar el respaldo de usuarios:', e?.message || e);
+    return 0;
+  }
+}
+
 export function loadUsers() {
+  restoreUsersIfEmpty();
   const users = {};
   for (const row of sqlite.prepare('SELECT * FROM users').all()) {
     const u = rowToUser(row);
