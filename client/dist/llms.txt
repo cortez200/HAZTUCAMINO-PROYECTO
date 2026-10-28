@@ -1,0 +1,34 @@
+# Haz Tu Camino
+
+> Plataforma de orientación vocacional para estudiantes de Perú: test, fichas de 32 carreras con universidades y mallas curriculares, banco de preguntas y exámenes de admisión reales.
+
+## Páginas principales
+
+- [Inicio](/#/): portada, cómo funciona, carreras destacadas y acceso a exámenes.
+- [Carreras](/#/carreras): catálogo de 32 carreras por área.
+- [Detalle de carrera](/#/carreras/medicina): descripción, universidades, costos y acceso a mallas.
+- [Malla curricular](/#/carreras/medicina/malla/upch): malla por universidad con ciclos y cursos.
+- [Test vocacional](/#/test): cuestionario de 32 preguntas (5 minutos).
+- [Becas](/#/becas): becas y créditos del Perú, con universidades donde postular, requisitos, estados del proceso y módulos de estudio.
+- [Exámenes](/#/examenes): banco de 36 preguntas explicadas, simulacro de 10 preguntas y 12 fuentes oficiales de admisión.
+- [Planes](/#/planes): comparación de planes Gratis y Premium.
+- [Para colegios](/#/instituciones): solicitud institucional.
+- [Iniciar sesión](/#/login) y [Crear cuenta](/#/register).
+
+## Qué ofrece
+
+- Perfil de afinidad por 8 áreas profesionales.
+- 32 carreras con descripción, habilidades, lugares de trabajo y cursos.
+- 49 universidades con mensualidad estimada y malla curricular por universidad.
+- Banco de preguntas de admisión por curso, con explicación de respuestas.
+- Simulacro cronometrado de 10 preguntas y revisión de resultados.
+- Enlaces a exámenes, solucionarios y portales oficiales de UNI, UNMSM y PUCP.
+- Comparador de carreras (Premium).
+
+## Tecnología
+
+- Frontend: React + Vite.
+- Backend: Node.js + Express (API REST).
+- Persistencia: SQLite.
+
+Nota: las mensualidades, mallas y preguntas de práctica son datos de referencia; los exámenes oficiales se consultan en su fuente original.
