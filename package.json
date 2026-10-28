@@ -8,7 +8,7 @@
     "dev": "concurrently -n api,web -c blue,green \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
     "dev:server": "npm run dev --prefix server",
     "dev:client": "npm run dev --prefix client",
-    "build": "npm run build --prefix client",
+    "build": "node scripts/gen-catalog.mjs && npm run build --prefix client",
     "start": "npm run start --prefix server"
   },
   "devDependencies": {

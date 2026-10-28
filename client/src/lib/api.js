@@ -1,6 +1,17 @@
 ﻿import { getToken } from './token.js';
 
-const BASE = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:4000/api' : '/api');
+/* Base del API.
+   - Sin VITE_API_URL: en dev usa el proxy de Vite (http://localhost:4000/api)
+     y en producción '/api' (mismo origen).
+   - Con VITE_API_URL: se normaliza para aceptar el dominio con o sin "/api"
+     (acepta barras finales). Así en Render basta con poner el dominio del API. */
+function resolveBase() {
+  const raw = import.meta.env.VITE_API_URL;
+  if (!raw) return import.meta.env.DEV ? 'http://localhost:4000/api' : '/api';
+  const clean = String(raw).trim().replace(/\/+$/, '');
+  return /\/api$/.test(clean) ? clean : clean + '/api';
+}
+const BASE = resolveBase();
 
 async function request(path, options = {}) {
   const method = options.method || 'GET';
