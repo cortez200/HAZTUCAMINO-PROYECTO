@@ -8,7 +8,7 @@ const NAV = [
   { to: '/carreras', label: 'Carreras' },
   { to: '/test', label: 'Test vocacional' },
   { to: '/examenes', label: 'Exámenes' },
-  { to: '/simulaciones', label: 'Simulaciones' },
+  { to: '/becas', label: 'Becas' },
   { to: '/planes', label: 'Planes' }
 ];
 
@@ -140,7 +140,7 @@ export default function SiteLayout({ children }) {
             <Link to="/carreras" className="foot-link">Carreras</Link>
             <Link to="/test" className="foot-link">Test vocacional</Link>
             <Link to="/examenes" className="foot-link">Banco de preguntas</Link>
-            <Link to="/simulaciones" className="foot-link">Simulaciones</Link>
+            <Link to="/becas" className="foot-link">Becas</Link>
             <Link to="/planes" className="foot-link">Planes</Link>
           </div>
           <div>
@@ -168,3 +168,10 @@ export default function SiteLayout({ children }) {
     </div>
   );
 }
+
+
+
+
+
+
+

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { CARRERAS, area, universidad, missionsDeCarrera, isPremium, isFreeMission } from '../lib/data.js';
+import { CARRERAS, area, universidad } from '../lib/data.js';
 import { areaScores, careerScores } from '../lib/scoring.js';
 import { useAuth } from '../lib/store.jsx';
 import { areaVars, Badge, Card, EmptyState } from '../components/ui.jsx';
@@ -29,13 +29,6 @@ export default function Resultados() {
   const careersByIds = rankedCareers.slice(0, 8);
   const recomendada = rankedCareers[0];
   const recAr = recomendada ? area(recomendada.area) : null;
-  const recMissions = recomendada ? missionsDeCarrera(recomendada.id) : [];
-  const recMission = recMissions.length
-    ? (isPremium(account)
-      ? recMissions.find((m) => !isFreeMission(m)) || recMissions[0]
-      : recMissions.find(isFreeMission) || recMissions[0])
-    : null;
-  const recMissionLocked = recMission && !isFreeMission(recMission) && !isPremium(account);
   const recDesde = recomendada?.universidades?.length ? Math.min(...recomendada.universidades.map((o) => o.min)) : null;
 
   return (
@@ -77,14 +70,7 @@ export default function Resultados() {
               </div>
               <div className="row gap-12 wrap mt-24">
                 <Link to={`/carreras/${recomendada.id}`} className="btn btn-primary"><Icon name="Info" size={16} /> Ver información completa</Link>
-                {recMission ? (
-                  <Link to={`/simulaciones/mision/${recMission.id}`} className="btn btn-outline">
-                    <Icon name={recMissionLocked ? 'Lock' : 'Gamepad2'} size={16} />
-                    Hacer simulación{recMissionLocked ? ' · Premium' : ''}
-                  </Link>
-                ) : (
-                  <Link to="/simulaciones" className="btn btn-outline"><Icon name="Gamepad2" size={16} /> Ver simulaciones</Link>
-                )}
+                <Link to="/becas" className="btn btn-outline"><Icon name="GraduationCap" size={16} /> Ver becas</Link>
               </div>
             </div>
             <span style={{ width: 76, height: 76, borderRadius: 20, background: 'var(--area-soft)', color: 'var(--area)', display: 'grid', placeItems: 'center', flex: 'none' }}>
@@ -182,7 +168,7 @@ export default function Resultados() {
         ))}
       </div>
       <div className="row gap-12 mt-24">
-        <Link to="/simulaciones" className="btn btn-outline"><Icon name="Gamepad2" size={17} /> Probar simulaciones</Link>
+        <Link to="/becas" className="btn btn-outline"><Icon name="GraduationCap" size={17} /> Ver becas</Link>
         <Link to="/comparar" className="btn btn-soft"><Icon name="SlidersHorizontal" size={17} /> Comparar carreras</Link>
       </div>
     </>

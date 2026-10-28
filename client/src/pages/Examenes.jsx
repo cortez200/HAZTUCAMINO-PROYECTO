@@ -155,7 +155,7 @@ export default function Examenes() {
           <div className="stat"><div className="k">{ADMISSION_QUESTIONS.length}</div><div className="l">preguntas explicadas</div></div>
           <div className="stat"><div className="k">{REAL_EXAMS.length}</div><div className="l">fuentes oficiales</div></div>
           <div className="stat"><div className="k">6</div><div className="l">cursos</div></div>
-          <div className="stat"><div className="k">10 min</div><div className="l">simulacro</div></div>
+          <div className="stat"><div className="k">10 min</div><div className="l">practica</div></div>
         </div>
       </section>
 
@@ -180,7 +180,7 @@ export default function Examenes() {
               {mode === 'examen' && !done && (
                 <span className="badge badge-warn row gap-6"><Icon name="Timer" size={14} /> {fmt(seconds)}</span>
               )}
-              <Btn variant="outline" size="sm" icon="Shuffle" onClick={startExam}>Simulacro 10 preguntas</Btn>
+              <Btn variant="outline" size="sm" icon="Shuffle" onClick={startExam}>Practica de 10 preguntas</Btn>
             </div>
           </div>
 
@@ -188,13 +188,13 @@ export default function Examenes() {
             <Card className="card-pad">
               <div className="row between wrap gap-16">
                 <div>
-                  <div className="tiny muted bold">{mode === 'examen' ? 'RESULTADO DEL SIMULACRO' : 'RESULTADO DE LA PRÁCTICA'}</div>
+                  <div className="tiny muted bold">{mode === 'examen' ? 'RESULTADO DEL EXAMEN' : 'RESULTADO DE LA PRÁCTICA'}</div>
                   <div style={{ fontSize: '2.3rem', fontWeight: 800, marginTop: 4 }}>{score} / {order.length}</div>
                   <div className="small dim">{pct}% de respuestas correctas · {answeredCount} respondidas</div>
                 </div>
                 <div className="row gap-8 wrap">
                   <Btn variant="outline" icon="RotateCcw" onClick={restart}>Repetir</Btn>
-                  <Btn variant="primary" icon="Play" onClick={startExam}>Nuevo simulacro</Btn>
+                  <Btn variant="primary" icon="Play" onClick={startExam}>Nueva practica</Btn>
                 </div>
               </div>
               <Progress value={pct} style={{ marginTop: 18 }} />

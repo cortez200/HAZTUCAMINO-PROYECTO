@@ -21,10 +21,8 @@ sqlite.exec(`
     done          INTEGER NOT NULL DEFAULT 0,
     answers       TEXT NOT NULL DEFAULT '{}',
     unknown       TEXT NOT NULL DEFAULT '[]',
-    sims          TEXT NOT NULL DEFAULT '{}',
     saved         TEXT NOT NULL DEFAULT '[]',
     history       TEXT NOT NULL DEFAULT '[]',
-    progress      TEXT NOT NULL DEFAULT '{}',
     created_at    TEXT,
     premium_since TEXT,
     pwd_salt      TEXT,
@@ -107,11 +105,6 @@ if (!userCols.includes('email_verified')) {
 if (!userCols.includes('plan_until')) {
   sqlite.exec('ALTER TABLE users ADD COLUMN plan_until TEXT');
 }
-/* Migración: progreso de misiones (XP, insignias, historial por carrera).
-   En bases existentes arranca vacío sin tocar los datos previos (sims, answers…). */
-if (!userCols.includes('progress')) {
-  sqlite.exec("ALTER TABLE users ADD COLUMN progress TEXT NOT NULL DEFAULT '{}'");
-}
 
 const str = (v, fallback) => {
   try { return JSON.stringify(v ?? fallback); } catch { return JSON.stringify(fallback); }
@@ -125,8 +118,7 @@ function rowToUser(r) {
   return {
     email: r.email, name: r.name, nivel: r.nivel, plan: r.plan,
     done: !!r.done, answers: parse(r.answers, {}), unknown: parse(r.unknown, []),
-    sims: parse(r.sims, {}), saved: parse(r.saved, []), history: parse(r.history, []),
-    progress: parse(r.progress, {}),
+    saved: parse(r.saved, []), history: parse(r.history, []),
     createdAt: r.created_at, premiumSince: r.premium_since || undefined,
     planSince: r.premium_since || undefined, planUntil: r.plan_until || undefined,
     emailVerified: !!r.email_verified,
@@ -135,8 +127,8 @@ function rowToUser(r) {
 }
 
 const upsertStmt = sqlite.prepare(`
-  INSERT INTO users (email,name,nivel,plan,done,answers,unknown,sims,saved,history,progress,created_at,premium_since,pwd_salt,pwd_hash,email_verified,plan_until)
-  VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+  INSERT INTO users (email,name,nivel,plan,done,answers,unknown,saved,history,created_at,premium_since,pwd_salt,pwd_hash,email_verified,plan_until)
+  VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
   ON CONFLICT(email) DO UPDATE SET
     name          = excluded.name,
     nivel         = excluded.nivel,
@@ -144,10 +136,8 @@ const upsertStmt = sqlite.prepare(`
     done          = excluded.done,
     answers       = excluded.answers,
     unknown       = excluded.unknown,
-    sims          = excluded.sims,
     saved         = excluded.saved,
     history       = excluded.history,
-    progress      = excluded.progress,
     created_at    = excluded.created_at,
     premium_since = excluded.premium_since,
     pwd_salt      = excluded.pwd_salt,
@@ -159,8 +149,7 @@ const upsertStmt = sqlite.prepare(`
 export function saveUser(u) {
   upsertStmt.run(
     u.email, u.name, u.nivel, u.plan, u.done ? 1 : 0,
-    str(u.answers, {}), str(u.unknown, []), str(u.sims, {}), str(u.saved, []), str(u.history, []),
-    str(u.progress, {}),
+    str(u.answers, {}), str(u.unknown, []), str(u.saved, []), str(u.history, []),
     u.createdAt || null, u.premiumSince || null, u.pwdSalt || null, u.pwdHash || null,
     u.emailVerified ? 1 : 0, u.planUntil || null
   );
@@ -174,7 +163,7 @@ export function saveRequest(r) {
   insertReqStmt.run(r.id, r.center, r.region, r.tipo, r.contacto, r.mensaje, r.at);
 }
 
-const USER_COLUMNS = 'email,name,nivel,plan,done,answers,unknown,sims,saved,history,progress,created_at,premium_since,pwd_salt,pwd_hash,email_verified,plan_until';
+const USER_COLUMNS = 'email,name,nivel,plan,done,answers,unknown,saved,history,created_at,premium_since,pwd_salt,pwd_hash,email_verified,plan_until';
 
 /* Copia de seguridad legible de las cuentas. Se guarda junto a la base de datos
    y permite recuperar la tabla si el archivo SQLite se reinicia o se corrompe. */
@@ -198,14 +187,14 @@ function restoreUsersIfEmpty() {
     if (count > 0 || !fs.existsSync(BACKUP_PATH)) return 0;
     const data = JSON.parse(fs.readFileSync(BACKUP_PATH, 'utf8'));
     if (!data || !Array.isArray(data.users) || !data.users.length) return 0;
-    const stmt = sqlite.prepare(`INSERT OR REPLACE INTO users (${USER_COLUMNS}) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`);
+    const stmt = sqlite.prepare(`INSERT OR REPLACE INTO users (${USER_COLUMNS}) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`);
     let restored = 0;
     for (const u of data.users) {
       if (!u || !u.email) continue;
       stmt.run(
         u.email, u.name || 'Sin nombre', u.nivel || 'secundaria', u.plan || 'free', u.done ? 1 : 0,
-        u.answers || '{}', u.unknown || '[]', u.sims || '{}', u.saved || '[]', u.history || '[]',
-        u.progress || '{}', u.created_at || null, u.premium_since || null,
+        u.answers || '{}', u.unknown || '[]', u.saved || '[]', u.history || '[]',
+        u.created_at || null, u.premium_since || null,
         u.pwd_salt || null, u.pwd_hash || null, u.email_verified ? 1 : 0, u.plan_until || null
       );
       restored += 1;
@@ -275,8 +264,8 @@ export function visitSummary() {
 }
 
 /* ---------------- catálogo editable (panel admin) ----------------
-   Cada entidad del catálogo (carreras, áreas, universidades, simulaciones y
-   planes) se guarda como un documento JSON. Se siembra una vez desde data.js
+   Cada entidad del catálogo (carreras, áreas, universidades y planes)
+   se guarda como un documento JSON. Se siembra una vez desde data.js
    y a partir de ahí el panel admin puede crear, editar y borrar. */
 export function catalogSeeded() {
   const row = sqlite.prepare("SELECT value FROM meta WHERE key = 'catalog_seeded'").get();
@@ -311,6 +300,10 @@ export function upsertCatalogItem(kind, id, obj) {
 }
 export function deleteCatalogItem(kind, id) {
   sqlite.prepare('DELETE FROM catalog WHERE kind = ? AND id = ?').run(kind, String(id));
+}
+/* Elimina todas las filas de un tipo de catálogo (limpieza de migraciones). */
+export function deleteCatalogKind(kind) {
+  sqlite.prepare('DELETE FROM catalog WHERE kind = ?').run(kind);
 }
 
 /* ---------------- metadatos genéricos (migraciones) ---------------- */

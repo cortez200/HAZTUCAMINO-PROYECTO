@@ -5,13 +5,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-  AREAS, CARRERAS, PREGUNTAS, OPCIONES, SIMS, NIVELES, FREE_SIMS, UNIVERSIDADES, PLANS, FREE_TEST_LIMIT, area as findArea
+  AREAS, CARRERAS, PREGUNTAS, OPCIONES, NIVELES, UNIVERSIDADES, PLANS, FREE_TEST_LIMIT
 } from './data.js';
 import {
   loadUsers, loadRequests, saveUser, saveRequest,
   savePurchase, loadPurchases, saveVisit, loadVisits, visitSummary,
   deleteUser, backupUsers,
-  catalogSeeded, markCatalogSeeded, seedCatalog, loadCatalog,
+  catalogSeeded, markCatalogSeeded, seedCatalog, loadCatalog, deleteCatalogKind,
   upsertCatalogItem, deleteCatalogItem,
   metaGet, metaSet,
   saveReview, deleteReview, loadReviews, loadMyReview, reviewSummaries, reviewDistribution,
@@ -20,7 +20,6 @@ import {
 import { sendMail, verificationEmail, resetEmail, institutionEmail, institutionAdminEmail } from './mailer.js';
 import { fetchUniversityReviews, hasGoogle } from './google.js';
 import { staticUniReviews, staticUniSummaries } from './uniReviews.js';
-import { MISSIONS } from './missions.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SECRET = process.env.HTC_SECRET || 'htc-dev-secret-change-me';
@@ -37,65 +36,24 @@ function persist() {
   for (const r of db.requests) saveRequest(r);
   backupUsers();
 }
-
 /* -------------------------- catálogo editable --------------------------
-   El catálogo (carreras, áreas, universidades, simulaciones y planes) se
+   El catálogo (carreras, áreas, universidades y planes) se
    siembra una sola vez desde data.js y luego se gestiona desde el panel admin. */
-const CATALOG_KINDS = ['areas', 'careers', 'universities', 'simulations', 'plans', 'missions'];
+const CATALOG_KINDS = ['areas', 'careers', 'universities', 'plans'];
 if (!catalogSeeded()) {
   seedCatalog('areas', AREAS);
   seedCatalog('careers', CARRERAS);
   seedCatalog('universities', UNIVERSIDADES);
-  seedCatalog('simulations', SIMS);
   seedCatalog('plans', PLANS);
-  seedCatalog('missions', MISSIONS);
   markCatalogSeeded();
 }
-/* Migración: siembra las misiones (simuladores por carrera) en bases de datos
-   creadas antes de esta función. INSERT OR IGNORE respeta las ediciones del admin. */
-const MISSIONS_SEED_KEY = 'catalog_missions_v1';
-if (!metaGet(MISSIONS_SEED_KEY)) {
-  seedCatalog('missions', MISSIONS);
-  metaSet(MISSIONS_SEED_KEY, new Date().toISOString());
-}
 
-/* Migración: siembra las misiones de las 30 carreras nuevas (motores worksheet,
-   match y allocate incluidos). INSERT OR IGNORE respeta las ediciones del admin
-   y no duplica las misiones ya existentes. */
-const MISSIONS_SEED_V2_KEY = 'catalog_missions_v2';
-if (!metaGet(MISSIONS_SEED_V2_KEY)) {
-  seedCatalog('missions', MISSIONS);
-  metaSet(MISSIONS_SEED_V2_KEY, new Date().toISOString());
-}
-
-/* Migración: aplica los niveles Gratis/Premium también a misiones que ya
-   estaban guardadas en SQLite. Conserva Gratis solo en las dos misiones base. */
-const MISSION_TIERS_KEY = 'catalog_mission_tiers_v1';
-if (!metaGet(MISSION_TIERS_KEY)) {
-  const FREE_MISSION_IDS = new Set(['ing-software-carrito', 'medicina-abdomen']);
-  const catalogMissions = loadCatalog().missions || [];
-  for (const mission of catalogMissions) {
-    mission.tier = FREE_MISSION_IDS.has(mission.id) ? 'free' : 'premium';
-    upsertCatalogItem('missions', mission.id, mission);
-  }
-  metaSet(MISSION_TIERS_KEY, new Date().toISOString());
-}
-
-/* Migración: copia el video "cómo se resuelve" a las misiones que ya estaban
-   guardadas en SQLite y aún no lo tienen. Solo rellena cuando falta, así respeta
-   el video que el admin haya puesto desde el panel. */
-const MISSION_VIDEO_KEY = 'catalog_mission_video_v1';
-if (!metaGet(MISSION_VIDEO_KEY)) {
-  const sourceById = new Map(MISSIONS.map((m) => [m.id, m]));
-  for (const mission of (loadCatalog().missions || [])) {
-    if (mission.video != null) continue;
-    const source = sourceById.get(mission.id);
-    if (source && source.video) {
-      mission.video = source.video;
-      upsertCatalogItem('missions', mission.id, mission);
-    }
-  }
-  metaSet(MISSION_VIDEO_KEY, new Date().toISOString());
+/* Migración: elimina del catálogo guardado elementos que ya no existen en el
+   proyecto (funcionalidades retiradas). Así la base queda limpia también. */
+const CATALOG_CLEANUP_KEY = 'catalog_cleanup_v1';
+if (!metaGet(CATALOG_CLEANUP_KEY)) {
+  for (const kind of ['missions', 'simulations']) deleteCatalogKind(kind);
+  metaSet(CATALOG_CLEANUP_KEY, new Date().toISOString());
 }
 
 /* Migración: agrega universidades nuevas y las asocia a las carreras una sola
@@ -166,7 +124,7 @@ if (!metaGet(PUBLIC_PENSION_KEY)) {
 
 /* Migración: actualiza las imágenes de las carreras que ya estaban guardadas
    en SQLite con las nuevas fotografías del catálogo. */
-const CAREER_IMAGES_KEY = 'catalog_career_images_v2';
+const CAREER_IMAGES_KEY = 'catalog_career_images_v3';
 if (!metaGet(CAREER_IMAGES_KEY)) {
   const cat = loadCatalog();
   const sourceById = new Map(CARRERAS.map((c) => [c.id, c.img]));
@@ -268,23 +226,20 @@ function adminAuth(req, res, next) {
 /* -------------------------- helpers -------------------------- */
 const newAccount = (name, email, nivel, emailVerified = false) => ({
   email, name, nivel, plan: 'free', done: false, emailVerified,
-  answers: {}, unknown: [], sims: {}, saved: [], history: [], progress: {},
+  answers: {}, unknown: [], saved: [], history: [],
   createdAt: new Date().toISOString(), planSince: null, planUntil: null
 });
 const isPremium = (u) => u && (u.plan === 'premium' || u.plan === 'super');
 const testAttempts = (u) => (u && Array.isArray(u.history) ? u.history.length : 0);
 function publicAccount(u) {
   if (!u) return null;
-  const progress = u.progress && typeof u.progress === 'object' ? u.progress : {};
   return {
     email: u.email, name: u.name, nivel: u.nivel, plan: u.plan, done: u.done,
     emailVerified: u.emailVerified,
     planSince: u.planSince || u.premiumSince || undefined,
     planUntil: u.planUntil || undefined,
-    answers: u.answers, unknown: u.unknown, sims: u.sims, saved: u.saved,
-    history: u.history, createdAt: u.createdAt,
-    progress,
-    missions: progress.missions || {}
+    answers: u.answers, unknown: u.unknown, saved: u.saved,
+    history: u.history, createdAt: u.createdAt
   };
 }
 function areaScores(acc) {
@@ -322,7 +277,7 @@ app.get('/api/catalog', (_req, res) => {
   const cat = loadCatalog();
   res.json({
     areas: cat.areas || [], careers: cat.careers || [], preguntas: PREGUNTAS, opciones: OPCIONES,
-    simulations: cat.simulations || [], missions: cat.missions || [], niveles: NIVELES, freeSims: FREE_SIMS,
+    niveles: NIVELES,
     universities: cat.universities || [], plans: cat.plans || [], freeTestLimit: FREE_TEST_LIMIT
   });
 });
@@ -591,95 +546,6 @@ app.post('/api/account/change-password', auth, (req, res) => {
   res.json({ ok: true });
 });
 
-app.post('/api/account/sims', auth, (req, res) => {
-  const { simId, score } = req.body || {};
-  const sim = SIMS.find((s) => s.id === simId);
-  if (!sim) return res.status(400).json({ error: 'Simulación no válida.' });
-  if (!isPremium(req.user)) {
-    return res.status(402).json({ error: 'Las simulaciones son parte del plan Premium. Actívalo para continuar.', premiumRequired: true });
-  }
-  const num = Math.max(0, Math.min(20, Number(score) || 0));
-  req.user.sims = { ...(req.user.sims || {}), [simId]: num };
-  persist();
-  res.json({ account: publicAccount(req.user) });
-});
-
-/* -------------------- misiones (simuladores por carrera) -------------------- */
-/* Lee las misiones del catálogo editable (así el admin manda); si por alguna
-   razón no estuvieran sembradas, cae a las misiones de data. */
-const missionsFromCatalog = () => {
-  const cat = loadCatalog();
-  return (cat.missions && cat.missions.length) ? cat.missions : MISSIONS;
-};
-function careerProgressFor(progress, careerId, allMissions) {
-  const list = allMissions.filter((m) => m.careerId === careerId);
-  let completed = 0; let bestPct = 0; let attempts = 0;
-  for (const m of list) {
-    const mp = (progress.missions || {})[m.id];
-    if (!mp) continue;
-    const total = Number(m.objetivos) || 1;
-    if ((Number(mp.best) || 0) >= total) completed += 1;
-    attempts += Number(mp.attempts) || 0;
-    const pct = (Number(mp.best) || 0) / total;
-    if (pct > bestPct) bestPct = pct;
-  }
-  return { careerId, total: list.length, completed, bestPct: Math.round(bestPct * 100), attempts };
-}
-
-app.post('/api/account/mission', auth, (req, res) => {
-  const allMissions = missionsFromCatalog();
-  const missionId = String(req.body?.missionId || '');
-  const mission = allMissions.find((m) => m.id === missionId);
-  if (!mission) return res.status(400).json({ error: 'Misión no válida.' });
-  if (mission.tier === 'premium' && !isPremium(req.user)) {
-    return res.status(402).json({ error: 'Esta misión es parte del plan Premium. Actívalo para continuar.', premiumRequired: true });
-  }
-
-  const total = Math.max(1, Number(mission.objetivos) || 1);
-  let score = Number(req.body?.score);
-  if (!Number.isFinite(score)) score = 0;
-  score = Math.max(0, Math.min(total, Math.round(score)));
-  const timeMs = Math.max(0, Math.min(30 * 60 * 1000, Number(req.body?.timeMs) || 0));
-  const now = new Date().toISOString();
-
-  const p = req.user.progress && typeof req.user.progress === 'object' ? req.user.progress : {};
-  p.missions = p.missions && typeof p.missions === 'object' ? p.missions : {};
-  p.history = Array.isArray(p.history) ? p.history : [];
-
-  const prev = p.missions[mission.id] || { best: 0, attempts: 0, timeMs: 0 };
-  const pct = score / total;
-
-  p.missions[mission.id] = {
-    best: Math.max(Number(prev.best) || 0, score),
-    total,
-    attempts: (Number(prev.attempts) || 0) + 1,
-    last: score,
-    timeMs: (Number(prev.timeMs) || 0) + timeMs,
-    lastAt: now,
-    careerId: mission.careerId,
-    engine: mission.engine
-  };
-
-  p.byCareer = p.byCareer && typeof p.byCareer === 'object' ? p.byCareer : {};
-  p.byCareer[mission.careerId] = careerProgressFor(p, mission.careerId, allMissions);
-
-  p.history.unshift({
-    missionId: mission.id, careerId: mission.careerId, titulo: mission.titulo,
-    score, total, pct: Math.round(pct * 100), timeMs, at: now
-  });
-  p.history = p.history.slice(0, 100);
-
-  req.user.progress = p;
-  persist();
-  res.json({
-    account: publicAccount(req.user),
-    result: {
-      missionId: mission.id, score, total, pct: Math.round(pct * 100)
-    }
-  });
-});
-
-const PLAN_DAYS = { premium: 30, super: 365 };
 app.post('/api/account/subscribe', auth, (req, res) => {
   const planId = String(req.body?.plan || 'premium');
   const plan = PLANS.find((p) => p.id === planId && p.id !== 'free');
@@ -784,7 +650,6 @@ app.get('/api/admin/users', adminAuth, (_req, res) => {
     emailVerified: !!u.emailVerified, done: !!u.done,
     tests: Array.isArray(u.history) ? u.history.length : 0,
     saved: Array.isArray(u.saved) ? u.saved.length : 0,
-    sims: u.sims ? Object.keys(u.sims).length : 0,
     createdAt: u.createdAt || null, planUntil: u.planUntil || null
   })).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
   res.json({ users });

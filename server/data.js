@@ -1,5 +1,5 @@
 // Datos del dominio "Haz Tu Camino" (auto-generado).
-// Contenido: 8 areas, 32 carreras (con universidades), 32 preguntas, 8 simulaciones, 49 universidades.
+// Contenido: 8 areas, 32 carreras (con universidades), 32 preguntas y 49 universidades.
 
 export const UNIVERSIDADES = [
   {
@@ -697,7 +697,7 @@ export const CARRERAS = [
         "duracion": 12
       }
     ],
-    "img": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/slGS-dcQUJY"
   },
   {
@@ -761,7 +761,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1765896387387-0538bc9f997e?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/Pfk6gsdHKH4"
   },
   {
@@ -825,7 +825,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1714976694810-85add1a29c96?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/lxqX2EzHV7Y"
   },
   {
@@ -889,7 +889,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1675270336539-ffbc2d85f5e1?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/Xv86zN0Z-lA"
   },
   {
@@ -953,7 +953,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1619410283995-43d9134e7656?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/ICt3tBrxvBw"
   },
   {
@@ -1017,7 +1017,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1598299803204-b73796f43289?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/b9IGKjaRF1o"
   },
   {
@@ -1081,7 +1081,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1768926968986-a88590ce5025?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/DbmAhEEQdI4"
   },
   {
@@ -1145,7 +1145,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1643359905563-f747213c9703?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/W2J6LcU9A38"
   },
   {
@@ -1209,7 +1209,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1581091007718-0c50d599bfd0?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/rtElx43PAAI"
   },
   {
@@ -1273,7 +1273,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1532187643603-ba119ca4109e?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1554475901-4538ddfbccc2?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/4gA_3SaU4Xk"
   },
   {
@@ -1337,7 +1337,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1635372722656-389f87a941b7?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/4vCaKJp7Mvo"
   },
   {
@@ -1362,7 +1362,7 @@ export const CARRERAS = [
       "Física moderna"
     ],
     "emprender": [
-      "Desarrollo de simulaciones",
+      "Modelado y análisis de datos",
       "Asesoría en energía renovable"
     ],
     "especializaciones": [
@@ -1401,7 +1401,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1781330173674-c7e809277fbe?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/19ZAOEDkqGI"
   },
   {
@@ -1465,7 +1465,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1541746972996-4e0b0f43e02a?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/v4AkkgcxgFs"
   },
   {
@@ -1529,7 +1529,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1709880945165-d2208c6ad2ec?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/y-19upJwmw4"
   },
   {
@@ -1593,7 +1593,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1586936893354-362ad6ae47ba?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/JbDQJEXNvBM"
   },
   {
@@ -1657,7 +1657,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1591696205602-2f950c417cb9?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/SsFt-OgZWj8"
   },
   {
@@ -1721,7 +1721,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/DpDupSbcte0"
   },
   {
@@ -1785,7 +1785,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1762955911431-4c44c7c3f408?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/Gw5e5Hw4DEU"
   },
   {
@@ -1849,7 +1849,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1652793822328-47340b1b4407?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/MQijiA5Kz-M"
   },
   {
@@ -1913,7 +1913,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1759038085950-1234ca8f5fed?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/p-BvGLJroCM"
   },
   {
@@ -1977,7 +1977,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1572044162444-ad60f128bdea?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/YhD5KcxC4Mo"
   },
   {
@@ -2041,7 +2041,7 @@ export const CARRERAS = [
         "duracion": 11
       }
     ],
-    "img": "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/TaAshEVWa2E"
   },
   {
@@ -2105,7 +2105,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1612548403247-aa2873e9422d?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/RpnKCUSpYz8"
   },
   {
@@ -2169,7 +2169,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1673201229733-69d19c5c4a87?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/Wf_IuHoikGE"
   },
   {
@@ -2233,7 +2233,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1774898988393-5c752e4d55e9?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/WbZGNK4bN1E"
   },
   {
@@ -2297,7 +2297,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/gIq-y5EvZqY"
   },
   {
@@ -2361,7 +2361,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1767474365536-ef81bfa24c8a?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/PiKcHXnN8Hg"
   },
   {
@@ -2425,7 +2425,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1763811939066-e984d42551e7?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/d7AKdTCJLSI"
   },
   {
@@ -2489,7 +2489,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/Q9CfrOXKs_A"
   },
   {
@@ -2553,7 +2553,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1623173812294-068421ec52ee?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/t58bi5PNrmc"
   },
   {
@@ -2617,7 +2617,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1770836037793-95bdbf190f71?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/Q4bQXcajlBo"
   },
   {
@@ -2681,7 +2681,7 @@ export const CARRERAS = [
         "duracion": 10
       }
     ],
-    "img": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=1200&q=70",
+    "img": "https://images.unsplash.com/photo-1682687981630-cefe9cd73072?auto=format&fit=crop&w=1200&q=70",
     "video": "https://www.youtube.com/embed/13gWLFN9saQ"
   }
 ];
@@ -2873,592 +2873,6 @@ export const OPCIONES = [
   }
 ];
 
-export const SIMS = [
-  {
-    "id": "salud-sim",
-    "area": "salud",
-    "titulo": "Atender pacientes en una emergencia",
-    "situaciones": [
-      {
-        "t": "Llegan tres pacientes a la vez… ¿a quién ayudas primero?",
-        "ops": [
-          {
-            "v": "Atiendes al que está más grave (dolor de pecho)",
-            "pts": 1,
-            "fb": "¡Exacto! Priorizar por gravedad salva vidas (triaje)."
-          },
-          {
-            "v": "Atiendes por orden de llegada",
-            "pts": 0,
-            "fb": "En emergencias se prioriza por urgencia, no por turno."
-          },
-          {
-            "v": "Atiendes al caso más rápido de resolver",
-            "pts": 0,
-            "fb": "La rapidez no siempre indica urgencia real."
-          }
-        ]
-      },
-      {
-        "t": "Un paciente no está siguiendo su tratamiento…",
-        "ops": [
-          {
-            "v": "Preguntas por qué no lo sigue y buscas opciones",
-            "pts": 1,
-            "fb": "Bien: entender la causa permite acompañar mejor."
-          },
-          {
-            "v": "Le reclamas por no cumplirlo",
-            "pts": 0,
-            "fb": "Reclamar aleja al paciente del equipo de salud."
-          },
-          {
-            "v": "Lo dejas pasar",
-            "pts": 0,
-            "fb": "Todo paciente merece acompañamiento."
-          }
-        ]
-      },
-      {
-        "t": "La familia está preocupada por un diagnóstico…",
-        "ops": [
-          {
-            "v": "Explicas con calma y palabras simples",
-            "pts": 1,
-            "fb": "Comunicar claro reduce miedo y dudas."
-          },
-          {
-            "v": "Usas términos técnicos",
-            "pts": 0,
-            "fb": "El tecnicismo confunde a las familias."
-          },
-          {
-            "v": "Evitas el tema",
-            "pts": 0,
-            "fb": "La información clara es parte del cuidado."
-          }
-        ]
-      }
-    ],
-    "video": "https://www.youtube.com/embed/slGS-dcQUJY",
-    "caso": {
-      "titulo": "Primer turno en emergencias",
-      "contexto": "Es tu primer día en el servicio de emergencias de un hospital. Llegan varios pacientes y cada decisión cuenta para salvar vidas.",
-      "objetivo": "Aprender a priorizar por gravedad, comunicar con claridad y acompañar al paciente."
-    }
-  },
-  {
-    "id": "tec-sim",
-    "area": "tecnologia",
-    "titulo": "Encontrar el error en una secuencia lógica",
-    "situaciones": [
-      {
-        "t": "El programa no inicia en la computadora…",
-        "ops": [
-          {
-            "v": "Revisas el código paso a paso buscando el error",
-            "pts": 1,
-            "fb": "Depurar por partes es el método correcto."
-          },
-          {
-            "v": "Reinicias la computadora",
-            "pts": 0,
-            "fb": "Reiniciar no corrige un error lógico del código."
-          },
-          {
-            "v": "Boras todo y empiezas de cero",
-            "pts": 0,
-            "fb": "Perder el trabajo no es la solución."
-          }
-        ]
-      },
-      {
-        "t": "La app funciona lento…",
-        "ops": [
-          {
-            "v": "Revisas qué parte demora más (cuello de botella)",
-            "pts": 1,
-            "fb": "Medir y ubicar el cuello de botella es clave."
-          },
-          {
-            "v": "Agregas más funciones a la vez",
-            "pts": 0,
-            "fb": "Sumar funciones empeora el rendimiento."
-          },
-          {
-            "v": "Ignoras el problema",
-            "pts": 0,
-            "fb": "La lentitud aleja a los usuarios."
-          }
-        ]
-      },
-      {
-        "t": "El robot no sigue la línea…",
-        "ops": [
-          {
-            "v": "Pruebas el sensor paso a paso y ajustas valores",
-            "pts": 1,
-            "fb": "Probar cada componente es depurar bien."
-          },
-          {
-            "v": "Cambias el robot completo",
-            "pts": 0,
-            "fb": "Cambiar todo no enseña dónde está el fallo."
-          },
-          {
-            "v": "Revisas solo la vista",
-            "pts": 0,
-            "fb": "El problema suele estar en el sensor o la lógica."
-          }
-        ]
-      }
-    ],
-    "video": "https://www.youtube.com/embed/ICt3tBrxvBw",
-    "caso": {
-      "titulo": "Sprint crítico",
-      "contexto": "Tu equipo debe entregar un módulo en 3 días y aparecen fallos en producción. La presión sube y debes decidir con datos.",
-      "objetivo": "Priorizar tareas, depurar errores y comunicar decisiones técnicas con criterio."
-    }
-  },
-  {
-    "id": "neg-sim",
-    "area": "negocios",
-    "titulo": "Fijar el precio de un producto",
-    "situaciones": [
-      {
-        "t": "Debes ponerle precio a un café…",
-        "ops": [
-          {
-            "v": "Calculas costos, margen y precio de la competencia",
-            "pts": 1,
-            "fb": "Un precio sano se basa en costos y mercado."
-          },
-          {
-            "v": "Pones el precio más barato del barrio",
-            "pts": 0,
-            "fb": "Barato no siempre significa rentable."
-          },
-          {
-            "v": "Pones un precio alto al azar",
-            "pts": 0,
-            "fb": "Sin costos calculados puedes perder dinero."
-          }
-        ]
-      },
-      {
-        "t": "Un cliente te pide una rebaja grande…",
-        "ops": [
-          {
-            "v": "Ofreces un descuento pequeño y amable",
-            "pts": 1,
-            "fb": "Negociar sin dañar tu margen es buena práctica."
-          },
-          {
-            "v": "Aceptas sin condiciones",
-            "pts": 0,
-            "fb": "Ceder todo baja tu rentabilidad."
-          },
-          {
-            "v": "Te niegas sin escuchar",
-            "pts": 0,
-            "fb": "Escuchar es parte de vender."
-          }
-        ]
-      },
-      {
-        "t": "Tu producto no se está vendiendo…",
-        "ops": [
-          {
-            "v": "Preguntas a clientes y ajustas el producto",
-            "pts": 1,
-            "fb": "Escuchar al mercado orienta mejoras."
-          },
-          {
-            "v": "Bajas el precio al mínimo",
-            "pts": 0,
-            "fb": "El precio bajo no arregla un producto que no encaja."
-          },
-          {
-            "v": "Lo dejas igual",
-            "pts": 0,
-            "fb": "Nada cambia si no pruebas nada."
-          }
-        ]
-      }
-    ],
-    "video": "https://www.youtube.com/embed/v4AkkgcxgFs",
-    "caso": {
-      "titulo": "Lanzamiento con presupuesto limitado",
-      "contexto": "Debes lanzar un producto al mercado con recursos escasos. Cada sol invertido tiene que rendir.",
-      "objetivo": "Analizar el mercado, priorizar inversión y tomar decisiones rentables."
-    }
-  },
-  {
-    "id": "cie-sim",
-    "area": "ciencias",
-    "titulo": "Diseñar un experimento correcto",
-    "situaciones": [
-      {
-        "t": "Quieres saber si más luz ayuda a crecer las plantas…",
-        "ops": [
-          {
-            "v": "Haces dos grupos: con luz y sin luz (solo varías eso)",
-            "pts": 1,
-            "fb": "Un buen experimento cambia una sola variable."
-          },
-          {
-            "v": "Cambias luz y agua a la vez",
-            "pts": 0,
-            "fb": "Cambiar varias variables confunde el resultado."
-          },
-          {
-            "v": "Anotas solo lo que recuerdas",
-            "pts": 0,
-            "fb": "Registrar datos es parte del método."
-          }
-        ]
-      },
-      {
-        "t": "Tu hipótesis no coincide con los datos…",
-        "ops": [
-          {
-            "v": "Revisas el proceso y repites el experimento",
-            "pts": 1,
-            "fb": "Repetir valida y descarta errores."
-          },
-          {
-            "v": "Escribes un resultado falso",
-            "pts": 0,
-            "fb": "Falsificar datos rompe la ciencia."
-          },
-          {
-            "v": "Ignoras los datos raros",
-            "pts": 0,
-            "fb": "Los datos raros suelen ser pistas."
-          }
-        ]
-      },
-      {
-        "t": "Un resultado se repite y no entiendes por qué…",
-        "ops": [
-          {
-            "v": "Investigas en fuentes confiables",
-            "pts": 1,
-            "fb": "Buscar conocimiento es parte de investigar."
-          },
-          {
-            "v": "Copias respuestas de un foro sin verificar",
-            "pts": 0,
-            "fb": "Verificar la información es clave."
-          },
-          {
-            "v": "Lo dejas pasar",
-            "pts": 0,
-            "fb": "La curiosidad mueve a la ciencia."
-          }
-        ]
-      }
-    ],
-    "video": "https://www.youtube.com/embed/4gA_3SaU4Xk",
-    "caso": {
-      "titulo": "Experimento fuera de control",
-      "contexto": "Un experimento clave arroja resultados distintos a lo esperado. Tus hipótesis iniciales ya no encajan.",
-      "objetivo": "Formular hipótesis, registrar datos y validar resultados con rigor científico."
-    }
-  },
-  {
-    "id": "edu-sim",
-    "area": "educacion",
-    "titulo": "Ayudar a un estudiante en apuros",
-    "situaciones": [
-      {
-        "t": "Un estudiante se atrasa en clase…",
-        "ops": [
-          {
-            "v": "Preguntas qué le cuesta y adaptas tu explicación",
-            "pts": 1,
-            "fb": "Adaptarse a cada estudiante es enseñar."
-          },
-          {
-            "v": "Le dices que se esfuerce más",
-            "pts": 0,
-            "fb": "Sin diagnóstico, la frase no ayuda."
-          },
-          {
-            "v": "Lo dejas pasar",
-            "pts": 0,
-            "fb": "Detectar a tiempo previene el abandono."
-          }
-        ]
-      },
-      {
-        "t": "Dos grupos pelean en un taller…",
-        "ops": [
-          {
-            "v": "Escuchas a ambas partes y propones un acuerdo",
-            "pts": 1,
-            "fb": "Mediar con escucha resuelve conflictos."
-          },
-          {
-            "v": "Castigas a todos por igual",
-            "pts": 0,
-            "fb": "Castigar sin escuchar no educa."
-          },
-          {
-            "v": "Ignoras el conflicto",
-            "pts": 0,
-            "fb": "Los conflictos escalan si se ignoran."
-          }
-        ]
-      },
-      {
-        "t": "Un vecino pide ayuda para un trámite…",
-        "ops": [
-          {
-            "v": "Le explicas los pasos con paciencia",
-            "pts": 1,
-            "fb": "Acompañar empodera a las personas."
-          },
-          {
-            "v": "Le haces todo sin explicar",
-            "pts": 0,
-            "fb": "Sin explicación no aprende a hacerlo solo."
-          },
-          {
-            "v": "Le dices que busque en internet",
-            "pts": 0,
-            "fb": "Muchas personas necesitan apoyo presencial."
-          }
-        ]
-      }
-    ],
-    "video": "https://www.youtube.com/embed/DpDupSbcte0",
-    "caso": {
-      "titulo": "Grupo desmotivado",
-      "contexto": "Un aula de secundaria perdió el interés y debes reconectar con los estudiantes antes de que se pierda el bimestre.",
-      "objetivo": "Adaptar la enseñanza, motivar y gestionar el aula con empatía."
-    }
-  },
-  {
-    "id": "art-sim",
-    "area": "arte",
-    "titulo": "Elegir el diseño más legible",
-    "situaciones": [
-      {
-        "t": "Eliges la tipografía de un afiche…",
-        "ops": [
-          {
-            "v": "Usas una letra clara con buen contraste",
-            "pts": 1,
-            "fb": "La legibilidad es la base del diseño."
-          },
-          {
-            "v": "Usas muchas fuentes distintas",
-            "pts": 0,
-            "fb": "Muchas fuentes distraen y confunden."
-          },
-          {
-            "v": "Letra decorativa muy pequeña",
-            "pts": 0,
-            "fb": "Lo bonito no debe sacrificar la lectura."
-          }
-        ]
-      },
-      {
-        "t": "Diseñas un logo para una librería…",
-        "ops": [
-          {
-            "v": "Un símbolo simple que se entienda al instante",
-            "pts": 1,
-            "fb": "Simple y memorable = buen logo."
-          },
-          {
-            "v": "Un dibujo con 15 colores y detalles",
-            "pts": 0,
-            "fb": "El exceso de detalle complica la marca."
-          },
-          {
-            "v": "Copias el logo de otra marca",
-            "pts": 0,
-            "fb": "Copiar no es diseñar."
-          }
-        ]
-      },
-      {
-        "t": "El cliente pide \"algo más moderno\"…",
-        "ops": [
-          {
-            "v": "Muestras 2 propuestas y pides su opinión",
-            "pts": 1,
-            "fb": "Opciones y diálogo mejoran el diseño."
-          },
-          {
-            "v": "Rehaces hasta que él decide todo",
-            "pts": 0,
-            "fb": "Sin criterio propio el diseño pierde valor."
-          },
-          {
-            "v": "Cobras extra solo por empezar de nuevo",
-            "pts": 0,
-            "fb": "El proceso colaborativo se acuerda al inicio."
-          }
-        ]
-      }
-    ],
-    "video": "https://www.youtube.com/embed/YhD5KcxC4Mo",
-    "caso": {
-      "titulo": "Rediseño contrarreloj",
-      "contexto": "Un cliente necesita renovar su marca en una semana y el primer concepto fue rechazado.",
-      "objetivo": "Traducir un brief en propuestas visuales claras y defendibles."
-    }
-  },
-  {
-    "id": "der-sim",
-    "area": "derecho",
-    "titulo": "Argumentar de forma ordenada",
-    "situaciones": [
-      {
-        "t": "Defiendes un tema en clase de debate…",
-        "ops": [
-          {
-            "v": "Preparas argumentos con datos y evidencias",
-            "pts": 1,
-            "fb": "Argumentar con bases gana debates."
-          },
-          {
-            "v": "Hablas más fuerte que los demás",
-            "pts": 0,
-            "fb": "El volumen no sustituye a la razón."
-          },
-          {
-            "v": "Atacas a la otra persona",
-            "pts": 0,
-            "fb": "Se debaten ideas, no personas."
-          }
-        ]
-      },
-      {
-        "t": "Escribes una nota sobre un tema difícil…",
-        "ops": [
-          {
-            "v": "Revisas fuentes y confirmas los datos",
-            "pts": 1,
-            "fb": "Verificar es parte de informar bien."
-          },
-          {
-            "v": "Publicas rápido lo primero que encuentras",
-            "pts": 0,
-            "fb": "Publicar sin verificar desinforma."
-          },
-          {
-            "v": "Inventas una opinión sin bases",
-            "pts": 0,
-            "fb": "La opinión necesita sustento."
-          }
-        ]
-      },
-      {
-        "t": "Organizas una mesa redonda…",
-        "ops": [
-          {
-            "v": "Planeas preguntas y turnos claros",
-            "pts": 1,
-            "fb": "Ordenar el diálogo mejora el debate."
-          },
-          {
-            "v": "Dejas que todos hablen de pronto",
-            "pts": 0,
-            "fb": "Sin orden no hay conversación."
-          },
-          {
-            "v": "No te preparas",
-            "pts": 0,
-            "fb": "La preparación hace la diferencia."
-          }
-        ]
-      }
-    ],
-    "video": "https://www.youtube.com/embed/WbZGNK4bN1E",
-    "caso": {
-      "titulo": "Asesoría compleja",
-      "contexto": "Una persona llega con un conflicto legal delicado y confía en tu criterio para orientarla.",
-      "objetivo": "Analizar hechos, aplicar la norma y argumentar una posición sólida."
-    }
-  },
-  {
-    "id": "nat-sim",
-    "area": "naturaleza",
-    "titulo": "Repartir el agua entre cultivos",
-    "situaciones": [
-      {
-        "t": "Riegas tus cultivos en tiempo seco…",
-        "ops": [
-          {
-            "v": "Riegas según lo que necesita cada cultivo",
-            "pts": 1,
-            "fb": "Cada cultivo pide distinta cantidad de agua."
-          },
-          {
-            "v": "Regas todo con la misma cantidad",
-            "pts": 0,
-            "fb": "El agua mal repartida daña cultivos."
-          },
-          {
-            "v": "Riegas a la hora de más calor",
-            "pts": 0,
-            "fb": "Riego a medio día evapora y desperdicia."
-          }
-        ]
-      },
-      {
-        "t": "Notas plagas y quieres proteger tus plantas…",
-        "ops": [
-          {
-            "v": "Buscas métodos naturales o controlados",
-            "pts": 1,
-            "fb": "Proteger cultivos sin dañar el ecosistema."
-          },
-          {
-            "v": "Usas el químico más fuerte que encuentres",
-            "pts": 0,
-            "fb": "El exceso de químico contamina el suelo."
-          },
-          {
-            "v": "Ignoras las plagas",
-            "pts": 0,
-            "fb": "Las plagas se propagan rápido."
-          }
-        ]
-      },
-      {
-        "t": "Diseñas un proyecto ambiental en tu barrio…",
-        "ops": [
-          {
-            "v": "Planteas separar residuos y reforestar zonas verdes",
-            "pts": 1,
-            "fb": "Acciones simples generan gran impacto."
-          },
-          {
-            "v": "Solo pintas carteles",
-            "pts": 0,
-            "fb": "Un letrero sin acción no cambia hábitos."
-          },
-          {
-            "v": "Esperas a que otros lo hagan",
-            "pts": 0,
-            "fb": "El cambio empieza con iniciativa."
-          }
-        ]
-      }
-    ],
-    "video": "https://www.youtube.com/embed/FnhVtot9PA0",
-    "caso": {
-      "titulo": "Alerta en el campo",
-      "contexto": "Detectas un problema ambiental en una zona de cultivo que afecta a varias familias.",
-      "objetivo": "Diagnosticar el problema y proponer soluciones sostenibles."
-    }
-  }
-];
 
 export const NIVELES = [
   {
@@ -3475,10 +2889,8 @@ export const NIVELES = [
   }
 ];
 
-export const FREE_SIMS = ["salud-sim","tec-sim","neg-sim"];
-
 /* Planes de suscripción. `free` es el predeterminado; `premium` (mensual) y
-   `super` (anual) desbloquean todas las simulaciones y los tests ilimitados. */
+   `super` (anual) desbloquean los tests ilimitados y las herramientas avanzadas. */
 export const PLANS = [
   {
     "id": "free",
@@ -3493,7 +2905,7 @@ export const PLANS = [
       { "t": "Carrera recomendada y las 32 carreras", "on": true },
       { "t": "Guardar carreras favoritas", "on": true },
       { "t": "Tests ilimitados", "on": false },
-      { "t": "Simulaciones de profesiones", "on": false },
+      { "t": "Becas y financiamiento", "on": true },
       { "t": "Comparador de carreras", "on": false }
     ]
   },
@@ -3508,7 +2920,7 @@ export const PLANS = [
     "destacado": true,
     "features": [
       { "t": "Tests ilimitados", "on": true },
-      { "t": "Las 8 simulaciones desbloqueadas", "on": true },
+      { "t": "Becas y financiamiento", "on": true },
       { "t": "Comparador de carreras", "on": true },
       { "t": "Guardar carreras favoritas", "on": true },
       { "t": "Soporte prioritario", "on": true },
@@ -3539,8 +2951,6 @@ export const FREE_TEST_LIMIT = 2;
 export const area = (id) => AREAS.find((a) => a.id === id);
 export const carrera = (id) => CARRERAS.find((c) => c.id === id);
 export const universidad = (id) => UNIVERSIDADES.find((u) => u.id === id);
-export const simDeArea = (areaId) => SIMS.find((s) => s.area === areaId);
-export const isFreeSim = (id) => FREE_SIMS.includes(id);
 
 /* -------------------------------------------------------------------------
    Enriquecimiento: además de las universidades base de cada carrera, se

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { carrera, area, CARRERAS, universidad, simDeArea, primeraMisionDeCarrera, missionsDeCarrera } from '../lib/data.js';
+import { carrera, area, CARRERAS, universidad } from '../lib/data.js';
 import { areaScores } from '../lib/scoring.js';
 import { useAuth, useToast } from '../lib/store.jsx';
 import { api } from '../lib/api.js';
@@ -60,9 +60,6 @@ export default function CarreraDetalle() {
   const saved = (account?.saved || []).includes(c.id);
   const score = account?.done ? areaScores(account.answers).find((s) => s.id === c.area) : null;
   const related = CARRERAS.filter((x) => x.area === c.area && x.id !== c.id);
-  const sim = simDeArea(c.area);
-  const mision = primeraMisionDeCarrera(c.id);
-  const misiones = missionsDeCarrera(c.id);
   const vid = (c.video || '').split('/').pop();
 
   const hayPublica = c.universidades.some((o) => o.tipo === 'Pública');
@@ -93,12 +90,7 @@ export default function CarreraDetalle() {
       <div className="row wrap gap-12 mt-16">
         <Btn variant={saved ? 'soft' : 'primary'} icon={saved ? 'BookmarkCheck' : 'Bookmark'} onClick={onSave}>
           {saved ? 'Guardada' : 'Guardar carrera'}
-        </Btn>
-        {mision ? (
-          <Link to={`/simulaciones/mision/${mision.id}`} className="btn btn-primary"><Icon name="Gamepad2" size={16} /> Simular la carrera</Link>
-        ) : sim ? (
-          <Link to={`/simulaciones/${sim.id}`} className="btn btn-soft" title="Simulador específico en desarrollo"><Icon name="Hourglass" size={16} /> Simulación del área</Link>
-        ) : null}
+        </Btn>
         <Link to={`/comparar?c=${c.id}`} className="btn btn-outline"><Icon name="SlidersHorizontal" size={16} /> Comparar</Link>
         <a href={`https://www.youtube.com/watch?v=${vid}`} target="_blank" rel="noreferrer" className="btn btn-outline"><Icon name="Youtube" size={17} /> Ver video</a>
       </div>
@@ -241,15 +233,6 @@ export default function CarreraDetalle() {
           <Section icon="GraduationCap" title="Cursos que llevarás" items={c.cursos} />
           <Section icon="TrendingUp" title="Puedes emprender en" items={c.emprender} />
           <Section icon="Star" title="Especializaciones" items={c.especializaciones} />
-          {sim && (
-            <Card className="card-pad">
-              <div className="row gap-8 mb-16">
-                <Icon name="Gamepad2" size={18} color="var(--primary)" /> <h2 style={{ fontSize: '1rem', fontWeight: 700, margin: 0 }}>Vívelo en una simulación</h2>
-              </div>
-              <p className="dim small mb-16">Mira un video de la profesión y resuelve un caso real de {ar.nombre} paso a paso.</p>
-              <Link to={`/simulaciones/${sim.id}`} className="btn btn-primary"><Icon name="Play" size={16} /> Ir a la simulación</Link>
-            </Card>
-          )}
         </div>
       </section>
 

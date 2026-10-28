@@ -12,10 +12,10 @@ export default function Img({ src, alt = '', className, style, icon = 'Compass',
         className={className}
         style={{
           ...style,
-          background: 'linear-gradient(135deg, var(--primary-soft), var(--teal-soft))',
+          background: 'linear-gradient(135deg, var(--area-soft, var(--primary-soft)), var(--teal-soft))',
           display: 'grid',
           placeItems: 'center',
-          color: 'var(--primary)',
+          color: 'var(--area-dark, var(--primary))',
           aspectRatio: ratio
         }}
         role="img"

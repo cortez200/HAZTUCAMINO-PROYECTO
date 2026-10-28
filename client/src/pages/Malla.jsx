@@ -114,8 +114,8 @@ export default function Malla() {
             <Link to={`/carreras/${c.id}`} className="btn btn-outline" style={{ borderColor: 'rgba(255,255,255,.4)', color: '#fff', background: 'transparent' }}>
               Ver la carrera
             </Link>
-            <Link to="/simulaciones" className="btn" style={{ background: 'var(--accent)', color: 'var(--navy)' }}>
-              Ir a simulaciones <Icon name="ArrowRight" size={16} />
+            <Link to="/becas" className="btn" style={{ background: 'var(--accent)', color: 'var(--navy)' }}>
+              Ver becas <Icon name="ArrowRight" size={16} />
             </Link>
           </div>
         </div>

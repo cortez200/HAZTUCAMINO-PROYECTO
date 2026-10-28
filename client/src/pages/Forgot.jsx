@@ -48,7 +48,7 @@ export default function Forgot() {
   return (
     <AuthLayout
       headline="¿Perdiste tu contraseña? No pierdes tu camino."
-      text="Recupera el acceso en segundos y continúa con tu test vocacional, carreras y simulaciones donde lo dejaste."
+      text="Recupera el acceso en segundos y continua con tu test vocacional, carreras y becas donde lo dejaste."
       points={[
         'Enlace seguro que caduca en 30 minutos',
         'Sin necesidad de recordar tu contraseña anterior',

@@ -32,7 +32,7 @@ export default function Perfil() {
   const savePwd = async () => {
     setSavingPwd(true);
     try {
-      await api.changePassword(pwd);
+      await api.changePassword(pwd.current, pwd.next);
       setPwd({ current: '', next: '' });
       toast('Contraseña actualizada', 'ShieldCheck');
     } catch (e) { toast(e.message, 'Info'); }
@@ -99,7 +99,7 @@ export default function Perfil() {
           <div className="row gap-8 bold mb-16"><Icon name="BarChart3" size={18} color="var(--primary)" /> Tu actividad</div>
           <div className="grid cols-2" style={{ gap: 12 }}>
             <div><div className="bold" style={{ fontSize: '1.3rem' }}>{others}/32</div><div className="muted small">Preguntas respondidas</div></div>
-            <div><div className="bold" style={{ fontSize: '1.3rem' }}>{Object.keys(account?.sims || {}).length}/8</div><div className="muted small">Simulaciones</div></div>
+            <div><div className="bold" style={{ fontSize: '1.3rem' }}>{(account?.saved || []).length}</div><div className="muted small">Carreras guardadas</div></div>
           </div>
           <Progress value={(others / 32) * 100} style={{ marginTop: 16 }} />
         </Card>

@@ -13,7 +13,7 @@ const SCHOOL = 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?aut
 const STEPS = [
   { icon: 'ClipboardList', t: 'Haz el test', d: '32 preguntas cortas de "me gusta / no me gusta". Toma 5 minutos.' },
   { icon: 'GraduationCap', t: 'Descubre tu carrera', d: 'Te recomendamos carreras con universidades, mensualidades y malla curricular real.' },
-  { icon: 'Gamepad2', t: 'Vívelo antes de decidir', d: 'Videos y simulaciones por área con puntaje, antes de elegir.' }
+    { icon: 'GraduationCap', t: 'Descubre becas', d: 'Becas reales de PRONABEC y el Ministerio de Educacion para financiar tus estudios.' }
 ];
 
 export default function Landing() {

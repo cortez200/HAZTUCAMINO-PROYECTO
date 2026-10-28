@@ -11,7 +11,7 @@ export default function AuthLayout({ headline, text, points = [], children }) {
     <div style={{ minHeight: '100vh', display: 'grid', gridTemplateColumns: '1fr 1fr' }} className="auth-grid">
       <div className="auth-side" style={{ position: 'relative', background: 'var(--text)' }}>
         <Img src={SIDE} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: .55 }} icon="GraduationCap" />
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(520px 420px at 18% 18%, rgba(19,168,158,.38), transparent 62%), radial-gradient(460px 400px at 88% 82%, rgba(255,122,89,.26), transparent 60%), linear-gradient(160deg, rgba(6,20,43,.92), rgba(11,36,80,.95) 58%, rgba(58,91,217,.86))' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(520px 420px at 18% 18%, rgba(16,148,133,.40), transparent 62%), radial-gradient(460px 400px at 88% 82%, rgba(245,158,11,.28), transparent 60%), linear-gradient(160deg, rgba(5,18,31,.93), rgba(11,36,80,.95) 58%, rgba(47,79,209,.88))' }} />
         <div style={{ position: 'absolute', inset: 0, padding: 44, color: '#fff', display: 'flex', flexDirection: 'column', gap: 20 }}>
           <Link to="/" className="row gap-8" style={{ color: '#fff', textDecoration: 'none', fontWeight: 800 }}>
             <Icon name="Compass" size={22} color="#fff" /> HAZ TU CAMINO

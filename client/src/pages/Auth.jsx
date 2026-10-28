@@ -110,13 +110,13 @@ export default function Auth({ mode }) {
   const copy = register
     ? {
         headline: 'Empieza a decidir con datos, no con dudas.',
-        text: 'Crea tu cuenta gratis y desbloquea test, carreras y simulaciones en minutos.',
-        points: ['Test vocacional en 5 minutos', '32 carreras con datos reales', 'Simulaciones por área con puntaje']
+        text: 'Crea tu cuenta gratis y desbloquea test, carreras y becas en minutos.',
+        points: ['Test vocacional en 5 minutos', '32 carreras con datos reales', 'Becas reales de PRONABEC y MINEDU']
       }
     : {
         headline: 'Tu decisión merece datos, no solo intuición.',
-        text: 'Miles de estudiantes usan test, carreras y simulaciones para elegir mejor.',
-        points: ['Continúa tu test donde lo dejaste', 'Guarda y compara tus carreras', 'Resultados y simulaciones a un clic']
+        text: 'Miles de estudiantes usan test, carreras y becas para elegir mejor.',
+        points: ['Continúa tu test donde lo dejaste', 'Guarda y compara tus carreras', 'Resultados y becas a un clic']
       };
 
   return (

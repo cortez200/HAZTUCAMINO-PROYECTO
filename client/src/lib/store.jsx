@@ -1,5 +1,6 @@
-import { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { api, getToken, setToken } from './api.js';
+﻿import { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import { api } from './api.js';
+import { getToken, setToken } from './token.js';
 import Icon from '../components/Icon.jsx';
 
 /* ---------------------------- Toasts ---------------------------- */
@@ -64,7 +65,7 @@ export function AuthProvider({ children }) {
   const logout = useCallback(() => { setToken(null); setAccount(null); }, []);
 
   const verifySession = useCallback(async (token) => {
-    const r = await api.verifyEmail(token);
+    const r = await api.verify(token);
     if (r.token) { setToken(r.token); setAccount(r.account); }
     return r;
   }, []);
@@ -77,14 +78,6 @@ export function AuthProvider({ children }) {
     const { account } = await api.submitTest(payload);
     setAccount(account); return account;
   }, []);
-  const saveSim = useCallback(async (simId, score) => {
-    const { account } = await api.saveSim(simId, score);
-    setAccount(account); return account;
-  }, []);
-  const submitMission = useCallback(async (payload) => {
-    const res = await api.submitMission(payload);
-    setAccount(res.account); return res;
-  }, []);
   const subscribe = useCallback(async (plan) => {
     const r = await api.subscribe(plan);
     setAccount(r.account); return r;
@@ -93,11 +86,11 @@ export function AuthProvider({ children }) {
     const r = await api.cancelPlan();
     setAccount(r.account); return r;
   }, []);
-  const resendVerification = useCallback((email) => api.resendVerification(email), []);
+  const resendVerification = useCallback((email) => api.resend({ email }), []);
 
   const value = {
     account, loading, login, register, logout, setAccount, verifySession,
-    toggleSaved, submitTest, saveSim, submitMission, subscribe, cancelPlan, resendVerification
+    toggleSaved, submitTest, subscribe, cancelPlan, resendVerification
   };
   return <AuthCtx.Provider value={value}>{children}</AuthCtx.Provider>;
 }

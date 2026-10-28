@@ -9,7 +9,9 @@ export default function CareerCard({ career, saved, onSave }) {
   return (
     <div className="media-card" style={areaVars(ar)}>
       <Link to={`/carreras/${career.id}`} style={{ position: 'relative', display: 'block' }}>
-        <Img src={career.img} alt={career.nombre} className="thumb" icon={ar.icon} ratio="16 / 10" />
+        <span className="thumb-wrap">
+          <Img src={career.img} alt={career.nombre} className="thumb" icon={ar.icon} ratio="16 / 10" />
+        </span>
         <span style={{ position: 'absolute', top: 10, left: 10 }}>
           <Badge tone="area" icon={ar.icon}>{ar.nombre}</Badge>
         </span>

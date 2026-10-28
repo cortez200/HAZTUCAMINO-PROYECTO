@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
 import './styles.css';
-import './missions.css';
+
 import { api } from './lib/api.js';
 import { hydrateCatalog } from './lib/data.js';
 
@@ -15,7 +15,7 @@ function Boot({ title, message }) {
     }}>
       <div style={{ maxWidth: 420 }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 9, fontWeight: 800, color: 'var(--navy)', marginBottom: 14, letterSpacing: '-.02em' }}>
-          <span style={{ width: 34, height: 34, borderRadius: 10, background: 'linear-gradient(135deg, var(--primary), var(--teal) 55%, var(--violet))', display: 'grid', placeItems: 'center', color: '#fff' }}>◆</span>
+          <span style={{ width: 34, height: 34, borderRadius: 10, background: 'linear-gradient(135deg, var(--primary), var(--teal) 55%, var(--violet))', display: 'grid', placeItems: 'center', color: '#fff' }}>â—†</span>
           HAZ TU CAMINO
         </div>
         <h1 style={{ fontSize: 20, margin: '0 0 8px' }}>{title}</h1>
