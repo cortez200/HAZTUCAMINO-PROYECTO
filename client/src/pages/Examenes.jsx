@@ -8,9 +8,13 @@ import {
 } from '../lib/admission.js';
 import { Badge, Btn, Card, Progress } from '../components/ui.jsx';
 import Icon from '../components/Icon.jsx';
+import { useAuth } from '../lib/store.jsx';
+import { isPremium } from '../lib/data.js';
 
 const LETTERS = ['A', 'B', 'C', 'D', 'E'];
 const ALL = 'todas';
+/* Curso disponible sin plan: el primero del banco. */
+const FREE_AREA = 'razonamiento';
 
 function shuffle(list) {
   const a = [...list];
@@ -28,6 +32,9 @@ function fmt(seconds) {
 }
 
 export default function Examenes() {
+  const { account } = useAuth();
+  const premium = isPremium(account);
+  const freeArea = ADMISSION_AREAS.find((a) => a.id === FREE_AREA);
   const [tab, setTab] = useState('practica');
   const [filter, setFilter] = useState(ALL);
   const [examFilter, setExamFilter] = useState(ALL);
@@ -41,10 +48,10 @@ export default function Examenes() {
   const [seconds, setSeconds] = useState(0);
 
   const byId = useMemo(() => new Map(ADMISSION_QUESTIONS.map((q) => [q.id, q])), []);
-  const filtered = useMemo(
-    () => (filter === ALL ? ADMISSION_QUESTIONS : ADMISSION_QUESTIONS.filter((q) => q.area === filter)),
-    [filter]
-  );
+  const filtered = useMemo(() => {
+    if (!premium) return ADMISSION_QUESTIONS.filter((q) => q.area === FREE_AREA);
+    return filter === ALL ? ADMISSION_QUESTIONS : ADMISSION_QUESTIONS.filter((q) => q.area === filter);
+  }, [filter, premium]);
   const exams = useMemo(
     () => (examFilter === ALL ? REAL_EXAMS : REAL_EXAMS.filter((e) => e.uni === examFilter)),
     [examFilter]
@@ -59,6 +66,11 @@ export default function Examenes() {
     setAnswers({});
     setDone(false);
   }, [filtered]);
+
+  /* Sin plan solo está habilitado el curso gratis. */
+  useEffect(() => {
+    setFilter(premium ? ALL : FREE_AREA);
+  }, [premium]);
 
   useEffect(() => {
     if (mode !== 'examen' || done) return;
@@ -84,6 +96,7 @@ export default function Examenes() {
   };
 
   const startExam = () => {
+    if (!premium) return;
     const pool = filtered.length >= 10 ? filtered : ADMISSION_QUESTIONS;
     setMode('examen');
     setOrder(shuffle(pool).slice(0, 10).map((q) => q.id));
@@ -171,16 +184,42 @@ export default function Examenes() {
         <section className="mt-16">
           <div className="row between wrap gap-12 mb-16">
             <div className="row wrap gap-8">
-              <button className={`chip ${filter === ALL ? 'on' : ''}`} onClick={() => setFilter(ALL)}>Todas</button>
-              {ADMISSION_AREAS.map((a) => (
-                <button key={a.id} className={`chip ${filter === a.id ? 'on' : ''}`} onClick={() => setFilter(a.id)}>{a.label}</button>
-              ))}
+              <button
+                className={`chip ${filter === ALL ? 'on' : ''}`}
+                onClick={() => premium && setFilter(ALL)}
+                disabled={!premium}
+                title={premium ? undefined : 'Los 6 cursos están en Premium'}
+                style={!premium ? { opacity: .55, cursor: 'not-allowed' } : undefined}
+              >
+                {!premium && <Icon name="Lock" size={13} />} Todas
+              </button>
+              {ADMISSION_AREAS.map((a) => {
+                const locked = !premium && a.id !== FREE_AREA;
+                return (
+                  <button
+                    key={a.id}
+                    className={`chip ${filter === a.id ? 'on' : ''}`}
+                    onClick={() => !locked && setFilter(a.id)}
+                    disabled={locked}
+                    title={locked ? 'Disponible con Premium' : undefined}
+                    style={locked ? { opacity: .55, cursor: 'not-allowed' } : undefined}
+                  >
+                    {locked && <Icon name="Lock" size={13} />} {a.label}
+                  </button>
+                );
+              })}
             </div>
             <div className="row gap-8">
               {mode === 'examen' && !done && (
                 <span className="badge badge-warn row gap-6"><Icon name="Timer" size={14} /> {fmt(seconds)}</span>
               )}
-              <Btn variant="outline" size="sm" icon="Shuffle" onClick={startExam}>Practica de 10 preguntas</Btn>
+              {premium ? (
+                <Btn variant="outline" size="sm" icon="Shuffle" onClick={startExam}>Practica de 10 preguntas</Btn>
+              ) : (
+                <Link to="/planes" className="btn btn-outline btn-sm">
+                  <Icon name="Lock" size={15} /> Práctica cronometrada · Premium
+                </Link>
+              )}
             </div>
           </div>
 
@@ -194,7 +233,13 @@ export default function Examenes() {
                 </div>
                 <div className="row gap-8 wrap">
                   <Btn variant="outline" icon="RotateCcw" onClick={restart}>Repetir</Btn>
-                  <Btn variant="primary" icon="Play" onClick={startExam}>Nueva practica</Btn>
+                  {premium ? (
+                    <Btn variant="primary" icon="Play" onClick={startExam}>Nueva practica</Btn>
+                  ) : (
+                    <Link to="/planes" className="btn btn-primary">
+                      <Icon name="Lock" size={16} /> Más prácticas con Premium
+                    </Link>
+                  )}
                 </div>
               </div>
               <Progress value={pct} style={{ marginTop: 18 }} />
@@ -275,6 +320,25 @@ export default function Examenes() {
         </section>
       ) : (
         <section className="mt-16">
+          {!premium && (
+            <Card className="card-pad center mb-16" style={{ background: 'var(--primary-soft)', borderColor: 'var(--primary)', padding: '28px 24px' }}>
+              <span style={{ width: 52, height: 52, borderRadius: 15, background: 'linear-gradient(135deg, var(--primary), var(--violet))', color: '#fff', display: 'grid', placeItems: 'center', margin: '0 auto 12px' }}>
+                <Icon name="Lock" size={24} />
+              </span>
+              <Badge tone="primary" icon="Sparkles">Contenido Premium</Badge>
+              <h3 style={{ fontWeight: 800, fontSize: '1.15rem', margin: '12px 0 0' }}>Exámenes reales con Premium</h3>
+              <p className="dim small" style={{ maxWidth: 520, margin: '8px auto 0', lineHeight: 1.6 }}>
+                Desbloquea las {REAL_EXAMS.length} fuentes oficiales, las {ADMISSION_QUESTIONS.length} preguntas de los
+                6 cursos y las prácticas cronometradas. Hoy tienes gratis el banco de {freeArea?.label}.
+              </p>
+              <div className="row gap-10 mt-16" style={{ justifyContent: 'center', flexWrap: 'wrap' }}>
+                <Link to="/planes" className="btn btn-primary"><Icon name="Sparkles" size={17} /> Ver planes</Link>
+                <button className="btn btn-ghost" onClick={() => setTab('practica')}>Seguir practicando gratis</button>
+              </div>
+            </Card>
+          )}
+
+          <div style={!premium ? { filter: 'blur(4px)', opacity: .45, pointerEvents: 'none', userSelect: 'none' } : undefined} aria-hidden={!premium}>
           <div className="row between wrap gap-12 mb-16">
             <div>
               <h2 className="section-title" style={{ fontSize: '1.45rem' }}>Exámenes y fuentes oficiales</h2>
@@ -312,6 +376,7 @@ export default function Examenes() {
               de los exámenes oficiales. {ADMISSION_COPY.disclaimer}
             </p>
           </Card>
+          </div>
         </section>
       )}
 

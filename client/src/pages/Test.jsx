@@ -1,14 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PREGUNTAS, OPCIONES, area, isPremium, freeTestLimit } from '../lib/data.js';
 import { useAuth, useToast } from '../lib/store.jsx';
 import { areaVars, Badge, Btn, Card, Progress } from '../components/ui.jsx';
 import Icon from '../components/Icon.jsx';
 
+const TONO = {
+  ok: { bg: 'var(--ok-soft)', fg: 'var(--ok)' },
+  mid: { bg: 'var(--warn-soft)', fg: 'var(--warn)' },
+  no: { bg: 'var(--danger-soft)', fg: 'var(--danger)' },
+  dim: { bg: 'var(--primary-soft)', fg: 'var(--primary)' }
+};
+
 export default function Test() {
   const { account, submitTest } = useAuth();
   const toast = useToast();
   const nav = useNavigate();
+  const [phase, setPhase] = useState('intro');
   const [answers, setAnswers] = useState({});
   const [unknown, setUnknown] = useState([]);
   const [index, setIndex] = useState(0);
@@ -22,6 +30,55 @@ export default function Test() {
   const attempts = account?.history?.length || 0;
   const limit = freeTestLimit();
   const blocked = !premium && attempts >= limit;
+
+  const finish = async (finalAnswers, finalUnknown) => {
+    setBusy(true);
+    try {
+      await submitTest({ answers: finalAnswers, unknown: finalUnknown });
+      toast('Test completado. Mira tus resultados.', 'BarChart3');
+      nav('/resultados');
+    } catch (err) {
+      toast(err.message, 'Info');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const answer = (optId) => {
+    const opt = OPCIONES.find((o) => o.id === optId);
+    if (!opt || busy) return;
+    const nextAnswers = { ...answers, [q.id]: opt.pts };
+    let nextUnknown = unknown;
+    if (optId === 'unknown') {
+      nextUnknown = unknown.includes(q.area) ? unknown : [...unknown, q.area];
+    } else {
+      nextUnknown = unknown.filter((a) => a !== q.area);
+    }
+    setAnswers(nextAnswers);
+    setUnknown(nextUnknown);
+    if (index + 1 >= PREGUNTAS.length) finish(nextAnswers, nextUnknown);
+    else setIndex(index + 1);
+  };
+
+  const back = () => { if (index > 0 && !busy) setIndex(index - 1); };
+
+  /* Atajos de teclado: A/B/C/D responden, flecha izquierda retrocede,
+     Enter empieza el test desde la portada. */
+  useEffect(() => {
+    const onKey = (e) => {
+      if (busy) return;
+      if (phase === 'intro') {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPhase('test'); }
+        return;
+      }
+      const k = (e.key || '').toLowerCase();
+      const opt = OPCIONES.find((o) => (o.letra || '').toLowerCase() === k);
+      if (opt) { e.preventDefault(); answer(opt.id); }
+      else if (e.key === 'ArrowLeft') back();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  });
 
   if (blocked) {
     return (
@@ -42,33 +99,73 @@ export default function Test() {
     );
   }
 
-  const finish = async (finalAnswers, finalUnknown) => {
-    setBusy(true);
-    try {
-      await submitTest({ answers: finalAnswers, unknown: finalUnknown });
-      toast('Test completado. Mira tus resultados.', 'BarChart3');
-      nav('/resultados');
-    } catch (err) {
-      toast(err.message, 'Info');
-    } finally {
-      setBusy(false);
-    }
-  };
+  if (phase === 'intro') {
+    return (
+      <div style={areaVars(ar)}>
+        <div className="page-head">
+          <div>
+            <h1 className="page-title">Test vocacional</h1>
+            <p className="page-sub">Responde con sinceridad: no hay respuestas correctas.</p>
+          </div>
+          <Badge tone="soft" icon="Clock">≈ 10 minutos</Badge>
+        </div>
 
-  const answer = (optId) => {
-    const pts = optId === 'unknown' ? 0 : OPCIONES.find((o) => o.id === optId).pts;
-    const nextAnswers = { ...answers, [q.id]: pts };
-    let nextUnknown = unknown;
-    if (optId === 'unknown') {
-      nextUnknown = unknown.includes(q.area) ? unknown : [...unknown, q.area];
-    } else {
-      nextUnknown = unknown.filter((a) => a !== q.area);
-    }
-    setAnswers(nextAnswers);
-    setUnknown(nextUnknown);
-    if (index + 1 >= PREGUNTAS.length) finish(nextAnswers, nextUnknown);
-    else setIndex(index + 1);
-  };
+        <Card style={{ maxWidth: 720, margin: '0 auto', padding: 0, overflow: 'hidden', position: 'relative', boxShadow: '0 24px 60px -34px rgba(47,79,209,.45)' }}>
+          <div style={{ height: 6, background: 'linear-gradient(90deg, var(--primary), var(--teal) 55%, var(--violet))' }} />
+          <div style={{ padding: '30px 34px 28px', position: 'relative' }}>
+            <span aria-hidden style={{ position: 'absolute', top: -70, right: -70, width: 190, height: 190, borderRadius: '50%', background: 'radial-gradient(circle, rgba(123,97,255,.16), transparent 70%)', pointerEvents: 'none' }} />
+            <span aria-hidden style={{ position: 'absolute', bottom: -80, left: -80, width: 200, height: 200, borderRadius: '50%', background: 'radial-gradient(circle, rgba(16,148,133,.14), transparent 70%)', pointerEvents: 'none' }} />
+
+            <div className="center" style={{ position: 'relative' }}>
+              <span style={{ width: 52, height: 52, borderRadius: 15, background: 'linear-gradient(135deg, var(--primary), var(--violet))', color: '#fff', display: 'grid', placeItems: 'center', margin: '0 auto 12px', boxShadow: '0 12px 26px -12px rgba(47,79,209,.75)' }}>
+                <Icon name="Compass" size={26} />
+              </span>
+              <Badge tone="soft" icon="Sparkles">Haz Tu Camino · Test vocacional</Badge>
+
+              <h2 style={{ fontSize: 'clamp(1.35rem, 3.2vw, 1.8rem)', fontWeight: 800, margin: '14px auto 0', maxWidth: 560, lineHeight: 1.28, letterSpacing: '-.01em' }}>
+                Tu futuro no se descubre esperando, sino atreviéndote a dar el primer paso.{' '}
+                <span style={{ color: 'var(--primary)' }}>¡Hoy comienza tu camino!</span>
+              </h2>
+            </div>
+
+            <div className="grid cols-3 mt-24" style={{ position: 'relative' }}>
+              {[
+                { icon: 'User', t: 'Sé tú mismo', d: 'No respondas lo que otros esperan de ti.', bg: 'var(--primary-soft)', fg: 'var(--primary)' },
+                { icon: 'ChevronRight', t: 'Ve paso a paso', d: 'Concéntrate en la que tienes delante.', bg: 'var(--teal-soft)', fg: 'var(--teal)' },
+                { icon: 'Zap', t: 'No te rindas', d: 'Cada respuesta te acerca a conocerte.', bg: 'var(--warn-soft)', fg: 'var(--warn)' }
+              ].map((b) => (
+                <div key={b.t} className="card card-pad" style={{ textAlign: 'left', padding: 16, borderColor: 'var(--border-strong)' }}>
+                  <span style={{ width: 34, height: 34, borderRadius: 10, background: b.bg, color: b.fg, display: 'grid', placeItems: 'center', marginBottom: 9 }}>
+                    <Icon name={b.icon} size={17} />
+                  </span>
+                  <span className="bold" style={{ display: 'block', fontSize: '.95rem', lineHeight: 1.3 }}>{b.t}</span>
+                  <span className="dim small" style={{ display: 'block', marginTop: 5, lineHeight: 1.45 }}>{b.d}</span>
+                </div>
+              ))}
+            </div>
+
+            <p className="bold center mt-24" style={{ fontSize: '1rem', lineHeight: 1.5, maxWidth: 540, marginLeft: 'auto', marginRight: 'auto', position: 'relative' }}>
+              <Icon name="PenTool" size={16} style={{ verticalAlign: '-3px', marginRight: 6, color: 'var(--violet)' }} />
+              Tu historia la escribes tú: respira, confía en ti y empieza.
+            </p>
+
+            <div className="center mt-24" style={{ position: 'relative' }}>
+              <button
+                className="btn btn-lg"
+                onClick={() => setPhase('test')}
+                style={{ background: 'linear-gradient(135deg, var(--primary), var(--violet))', color: '#fff', border: 'none', padding: '14px 28px', boxShadow: '0 16px 30px -14px rgba(47,79,209,.8)' }}
+              >
+                ¡Quiero descubrir mi camino! <Icon name="ArrowRight" size={18} />
+              </button>
+              <p className="dim small" style={{ margin: '14px auto 0', lineHeight: 1.6 }}>
+                Puedes volver atrás y revisar tus respuestas · Responde con <strong>A</strong> · <strong>B</strong> · <strong>C</strong> · <strong>D</strong> o elige en pantalla.
+              </p>
+            </div>
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div style={areaVars(ar)}>
@@ -93,37 +190,41 @@ export default function Test() {
 
         <div className="center" style={{ padding: '10px 0 26px' }}>
           <Badge tone="area" icon={ar.icon}>{ar.nombre}</Badge>
-          <h2 style={{ fontSize: 'clamp(1.3rem, 3vw, 1.7rem)', fontWeight: 800, margin: '18px auto 0', maxWidth: 620 }}>
+          <h2 style={{ fontSize: 'clamp(1.2rem, 2.6vw, 1.6rem)', fontWeight: 800, margin: '18px auto 0', maxWidth: 680, lineHeight: 1.35 }}>
             {q.t}
           </h2>
         </div>
 
-        <div className="grid cols-3" style={{ maxWidth: 720, margin: '0 auto' }}>
-          {OPCIONES.map((o) => (
-            <button
-              key={o.id}
-              className="card card-pad center"
-              onClick={() => answer(o.id)}
-              disabled={busy}
-              style={{ cursor: 'pointer', borderColor: 'var(--border-strong)', gap: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '22px 14px' }}
-            >
-              <span style={{ width: 50, height: 50, borderRadius: 14, display: 'grid', placeItems: 'center', background: o.tone === 'ok' ? 'var(--ok-soft)' : o.tone === 'mid' ? 'var(--warn-soft)' : 'var(--danger-soft)', color: o.tone === 'ok' ? 'var(--ok)' : o.tone === 'mid' ? 'var(--warn)' : 'var(--danger)' }}>
-                <Icon name={o.icon} size={24} />
-              </span>
-              <span className="bold">{o.label}</span>
-            </button>
-          ))}
-        </div>
-
-        <div className="center mt-24">
-          <button className="btn btn-ghost btn-sm" onClick={() => answer('unknown')} disabled={busy}>
-            <Icon name="HelpCircle" size={16} /> Aún no lo sé / no aplica
-          </button>
+        <div className="grid cols-4" style={{ maxWidth: 860, margin: '0 auto' }}>
+          {OPCIONES.map((o) => {
+            const tono = TONO[o.tone] || TONO.dim;
+            return (
+              <button
+                key={o.id}
+                className="card card-pad center"
+                onClick={() => answer(o.id)}
+                disabled={busy}
+                title={`Tecla ${o.letra}`}
+                style={{ cursor: 'pointer', borderColor: 'var(--border-strong)', gap: 8, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 12px', position: 'relative' }}
+              >
+                <span
+                  className="bold small"
+                  style={{ position: 'absolute', top: 10, left: 10, width: 24, height: 24, borderRadius: 7, display: 'grid', placeItems: 'center', background: 'var(--surface-2, rgba(0,0,0,.05))', color: 'var(--muted)' }}
+                >
+                  {o.letra}
+                </span>
+                <span style={{ width: 48, height: 48, borderRadius: 14, display: 'grid', placeItems: 'center', background: tono.bg, color: tono.fg }}>
+                  <Icon name={o.icon} size={23} />
+                </span>
+                <span className="bold" style={{ fontSize: '.92rem', lineHeight: 1.3 }}>{o.label}</span>
+              </button>
+            );
+          })}
         </div>
 
         <hr className="divider" />
         <div className="row between">
-          <Btn variant="outline" icon="ArrowLeft" disabled={index === 0 || busy} onClick={() => setIndex(index - 1)}>Atrás</Btn>
+          <Btn variant="outline" icon="ArrowLeft" disabled={index === 0 || busy} onClick={back}>Atrás</Btn>
           <span className="muted small bold">{Object.keys(answers).length} respondidas</span>
         </div>
       </Card>

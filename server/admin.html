@@ -571,6 +571,19 @@
       .catch(function (e) { notify(e.message, 'err'); btn.disabled = false; });
   });
 
+  /* Eliminar una solicitud de institución (con confirmación). */
+  document.addEventListener('click', function (ev) {
+    var btn = ev.target.closest('.del-request');
+    if (!btn) return;
+    var id = btn.getAttribute('data-id');
+    if (!id) return;
+    if (!window.confirm('¿Eliminar esta solicitud de institución?\n\nSe quitará del panel. Esta acción no se puede deshacer.')) return;
+    btn.disabled = true;
+    api('/api/admin/requests/' + encodeURIComponent(id), { method: 'DELETE' })
+      .then(function () { notify('Solicitud eliminada', 'ok'); loadAll(); })
+      .catch(function (e) { notify(e.message, 'err'); btn.disabled = false; });
+  });
+
   /* Editar / eliminar elementos del catálogo. */
   document.addEventListener('click', function (ev) {
     var edit = ev.target.closest('.cat-edit');
@@ -1014,9 +1027,10 @@
         '<td>' + contact + '</td>' +
         '<td class="msg">' + esc(d.mensaje || '—') + '</td>' +
         '<td class="muted nowrap">' + fmtDate(d.at) + '</td>' +
+        '<td class="nowrap"><button class="icon-btn danger del-request" type="button" title="Eliminar solicitud" data-id="' + esc(d.id || '') + '">' + ico('bi-trash3') + '</button></td>' +
       '</tr>';
     }).join('');
-    return '<table class="demos-table"><thead><tr><th>Institución</th><th>Contacto</th><th>Mensaje</th><th>Fecha</th></tr></thead><tbody>' + rows + '</tbody></table>';
+    return '<table class="demos-table"><thead><tr><th>Institución</th><th>Contacto</th><th>Mensaje</th><th>Fecha</th><th></th></tr></thead><tbody>' + rows + '</tbody></table>';
   }
 
   /* ---------- arranque ---------- */

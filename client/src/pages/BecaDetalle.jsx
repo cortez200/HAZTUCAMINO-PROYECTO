@@ -1,6 +1,7 @@
 ﻿import { Link, useParams } from 'react-router-dom';
-import { BECAS, getBecaById, estadoPostulacion, etapasDePostulacion } from '../lib/becas.js';
-import { universidad } from '../lib/data.js';
+import { BECAS, getBecaById, estadoPostulacion, etapasDePostulacion, esBecaGratis, FREE_BECAS } from '../lib/becas.js';
+import { universidad, isPremium } from '../lib/data.js';
+import { useAuth } from '../lib/store.jsx';
 import { Card, Badge } from '../components/ui.jsx';
 import Icon from '../components/Icon.jsx';
 import UniLogo from '../components/UniLogo.jsx';
@@ -8,6 +9,8 @@ import UniLogo from '../components/UniLogo.jsx';
 export default function BecaDetalle() {
   const { id } = useParams();
   const b = getBecaById(id);
+  const { account } = useAuth();
+  const premium = isPremium(account);
 
   if (!b) {
     return (
@@ -20,6 +23,49 @@ export default function BecaDetalle() {
         </div>
         <Card className="card-pad">
           <Link to="/becas" className="btn btn-soft">Volver a Becas</Link>
+        </Card>
+      </>
+    );
+  }
+
+  /* Beca fuera del acceso gratuito: se pide Premium con CTA. */
+  if (!premium && !esBecaGratis(b.id)) {
+    const estado = estadoPostulacion(b);
+    return (
+      <>
+        <div className="beca-detail-crumb">
+          <Link to="/becas" className="crumb">
+            <Icon name="ArrowLeft" size={15} /> Volver a becas
+          </Link>
+        </div>
+
+        <Card className="card-pad center" style={{ position: 'relative', overflow: 'hidden', maxWidth: 640, margin: '0 auto', padding: '46px 34px 38px' }}>
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 6, background: 'linear-gradient(90deg, var(--primary), var(--teal) 55%, var(--violet))' }} />
+          <span style={{ width: 60, height: 60, borderRadius: 18, background: 'linear-gradient(135deg, var(--primary), var(--violet))', color: '#fff', display: 'grid', placeItems: 'center', margin: '0 auto 14px', boxShadow: '0 14px 30px -14px rgba(47,79,209,.8)' }}>
+            <Icon name="Lock" size={28} />
+          </span>
+          <div className="row gap-6 wrap" style={{ justifyContent: 'center' }}>
+            <Badge tone="primary" icon="Sparkles">Contenido Premium</Badge>
+            <Badge tone="area">{b.tipo}</Badge>
+            <Badge tone={estado.tone} icon={estado.icon}>{estado.label}</Badge>
+          </div>
+          <h1 style={{ fontSize: 'clamp(1.35rem, 3.2vw, 1.8rem)', fontWeight: 800, margin: '16px auto 0', maxWidth: 520, lineHeight: 1.25 }}>
+            {b.nombre}
+          </h1>
+          <p className="dim" style={{ maxWidth: 520, margin: '12px auto 0', lineHeight: 1.6 }}>
+            El detalle completo de esta beca —requisitos, etapas, módulos y universidades— está disponible con
+            Premium. También desbloqueas las otras {BECAS.length - FREE_BECAS.length} becas, el banco de preguntas
+            completo y las prácticas cronometradas.
+          </p>
+          <div className="row gap-12 mt-24" style={{ justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Link to="/planes" className="btn btn-primary btn-lg">
+              <Icon name="Sparkles" size={18} /> Ver planes
+            </Link>
+            <Link to="/becas" className="btn btn-ghost">Ver las becas gratis</Link>
+          </div>
+          <p className="dim small" style={{ margin: '16px auto 0' }}>
+            El plan Básico incluye {FREE_BECAS.length} becas completas para siempre.
+          </p>
         </Card>
       </>
     );

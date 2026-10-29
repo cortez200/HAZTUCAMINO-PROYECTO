@@ -292,6 +292,12 @@ export const BECAS = [
 export const tiposBeca = ['Todos', 'Pregrado', 'Posgrado', 'Técnico', 'Crédito'];
 export const entidadesBeca = ['Todos', 'PRONABEC'];
 
+/* Acceso sin plan: las primeras becas del listado se ven completas. Las
+   restantes requieren Premium (se muestran bloqueadas en la lista y en el
+   detalle). */
+export const FREE_BECAS = BECAS.slice(0, 4).map((b) => b.id);
+export const esBecaGratis = (id) => FREE_BECAS.includes(id);
+
 // Perfiles para el recomendador de becas.
 export const perfilesBeca = [
   { id: 'todas', label: 'Quiero ver todas las opciones', ids: null },

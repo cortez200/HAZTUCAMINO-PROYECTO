@@ -11,7 +11,7 @@ const HERO = 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=
 const SCHOOL = 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=1200&q=70';
 
 const STEPS = [
-  { icon: 'ClipboardList', t: 'Haz el test', d: '32 preguntas cortas de "me gusta / no me gusta". Toma 5 minutos.' },
+  { icon: 'ClipboardList', t: 'Haz el test', d: '204 frases de "me gusta / no me gusta / indiferente / no lo conozco". En 10 minutos lo tienes.' },
   { icon: 'GraduationCap', t: 'Descubre tu carrera', d: 'Te recomendamos carreras con universidades, mensualidades y malla curricular real.' },
     { icon: 'GraduationCap', t: 'Descubre becas', d: 'Becas reales de PRONABEC y el Ministerio de Educacion para financiar tus estudios.' }
 ];

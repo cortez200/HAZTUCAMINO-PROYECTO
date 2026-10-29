@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { NIVELES, area, isPremium, planLabel } from '../lib/data.js';
+import { NIVELES, PREGUNTAS, area, isPremium, planLabel } from '../lib/data.js';
 import { useAuth, useToast } from '../lib/store.jsx';
 import { api } from '../lib/api.js';
 import { areaVars, Badge, Btn, Card, Progress } from '../components/ui.jsx';
@@ -98,10 +98,10 @@ export default function Perfil() {
         <Card className="card-pad">
           <div className="row gap-8 bold mb-16"><Icon name="BarChart3" size={18} color="var(--primary)" /> Tu actividad</div>
           <div className="grid cols-2" style={{ gap: 12 }}>
-            <div><div className="bold" style={{ fontSize: '1.3rem' }}>{others}/32</div><div className="muted small">Preguntas respondidas</div></div>
+            <div><div className="bold" style={{ fontSize: '1.3rem' }}>{others}/{PREGUNTAS.length}</div><div className="muted small">Preguntas respondidas</div></div>
             <div><div className="bold" style={{ fontSize: '1.3rem' }}>{(account?.saved || []).length}</div><div className="muted small">Carreras guardadas</div></div>
           </div>
-          <Progress value={(others / 32) * 100} style={{ marginTop: 16 }} />
+          <Progress value={(others / (PREGUNTAS.length || 1)) * 100} style={{ marginTop: 16 }} />
         </Card>
 
         <Card className="card-pad">

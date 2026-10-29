@@ -111,7 +111,7 @@ export default function Auth({ mode }) {
     ? {
         headline: 'Empieza a decidir con datos, no con dudas.',
         text: 'Crea tu cuenta gratis y desbloquea test, carreras y becas en minutos.',
-        points: ['Test vocacional en 5 minutos', '32 carreras con datos reales', 'Becas reales de PRONABEC y MINEDU']
+        points: ['Test vocacional de 204 preguntas', '32 carreras con datos reales', 'Becas reales de PRONABEC y MINEDU']
       }
     : {
         headline: 'Tu decisión merece datos, no solo intuición.',

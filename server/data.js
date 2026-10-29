@@ -1,5 +1,6 @@
 // Datos del dominio "Haz Tu Camino" (auto-generado).
-// Contenido: 8 areas, 32 carreras (con universidades), 32 preguntas y 49 universidades.
+// Contenido: 8 areas, 32 carreras (con universidades), 204 preguntas (test de
+// intereses A/B/C/D) y 49 universidades.
 
 export const UNIVERSIDADES = [
   {
@@ -2687,190 +2688,217 @@ export const CARRERAS = [
 ];
 
 export const PREGUNTAS = [
-  {
-    "id": 1,
-    "area": "salud",
-    "t": "¿Te gustaría atender a una persona que se siente mal?"
-  },
-  {
-    "id": 2,
-    "area": "tecnologia",
-    "t": "¿Te gustaría armar o reparar aparatos?"
-  },
-  {
-    "id": 3,
-    "area": "ciencias",
-    "t": "¿Te gustaría hacer experimentos en un laboratorio?"
-  },
-  {
-    "id": 4,
-    "area": "negocios",
-    "t": "¿Te gustaría crear y dirigir tu propio negocio?"
-  },
-  {
-    "id": 5,
-    "area": "educacion",
-    "t": "¿Te gustaría enseñar algo a otras personas?"
-  },
-  {
-    "id": 6,
-    "area": "arte",
-    "t": "¿Te gustaría dibujar, pintar o diseñar?"
-  },
-  {
-    "id": 7,
-    "area": "derecho",
-    "t": "¿Te gustaría defender ideas o personas en un debate?"
-  },
-  {
-    "id": 8,
-    "area": "naturaleza",
-    "t": "¿Te gustaría cuidar plantas y cultivos?"
-  },
-  {
-    "id": 9,
-    "area": "salud",
-    "t": "¿Te gustaría aprender cómo funciona el cuerpo humano?"
-  },
-  {
-    "id": 10,
-    "area": "tecnologia",
-    "t": "¿Te gustaría programar una app o un videojuego?"
-  },
-  {
-    "id": 11,
-    "area": "ciencias",
-    "t": "¿Te gustaría analizar datos para encontrar patrones?"
-  },
-  {
-    "id": 12,
-    "area": "negocios",
-    "t": "¿Te gustaría llevar las cuentas y el presupuesto de una empresa?"
-  },
-  {
-    "id": 13,
-    "area": "educacion",
-    "t": "¿Te gustaría escuchar y acompañar a quien tiene un problema?"
-  },
-  {
-    "id": 14,
-    "area": "arte",
-    "t": "¿Te gustaría editar fotos y videos?"
-  },
-  {
-    "id": 15,
-    "area": "derecho",
-    "t": "¿Te gustaría escribir noticias o artículos?"
-  },
-  {
-    "id": 16,
-    "area": "naturaleza",
-    "t": "¿Te gustaría proteger y cuidar animales?"
-  },
-  {
-    "id": 17,
-    "area": "salud",
-    "t": "¿Te gustaría ayudar a alguien a recuperarse de una lesión?"
-  },
-  {
-    "id": 18,
-    "area": "tecnologia",
-    "t": "¿Te gustaría diseñar puentes, máquinas o edificios?"
-  },
-  {
-    "id": 19,
-    "area": "ciencias",
-    "t": "¿Te gustaría resolver problemas de matemática difíciles?"
-  },
-  {
-    "id": 20,
-    "area": "negocios",
-    "t": "¿Te gustaría vender y negociar con clientes?"
-  },
-  {
-    "id": 21,
-    "area": "educacion",
-    "t": "¿Te gustaría ayudar a mejorar tu comunidad?"
-  },
-  {
-    "id": 22,
-    "area": "arte",
-    "t": "¿Te gustaría crear música, teatro o baile?"
-  },
-  {
-    "id": 23,
-    "area": "derecho",
-    "t": "¿Te gustaría hablar o presentar frente al público?"
-  },
-  {
-    "id": 24,
-    "area": "naturaleza",
-    "t": "¿Te gustaría trabajar al aire libre?"
-  },
-  {
-    "id": 25,
-    "area": "salud",
-    "t": "¿Te gustaría estudiar cómo actúan las medicinas?"
-  },
-  {
-    "id": 26,
-    "area": "tecnologia",
-    "t": "¿Te gustaría automatizar tareas con robots o sensores?"
-  },
-  {
-    "id": 27,
-    "area": "ciencias",
-    "t": "¿Te gustaría investigar cómo funciona el universo o la materia?"
-  },
-  {
-    "id": 28,
-    "area": "negocios",
-    "t": "¿Te gustaría organizar equipos y proyectos?"
-  },
-  {
-    "id": 29,
-    "area": "educacion",
-    "t": "¿Te gustaría entender por qué las personas piensan y actúan así?"
-  },
-  {
-    "id": 30,
-    "area": "arte",
-    "t": "¿Te gustaría diseñar ropa, espacios o productos?"
-  },
-  {
-    "id": 31,
-    "area": "derecho",
-    "t": "¿Te gustaría conocer las leyes y cómo se aplican?"
-  },
-  {
-    "id": 32,
-    "area": "naturaleza",
-    "t": "¿Te gustaría buscar soluciones contra la contaminación?"
-  }
+  { "id": 1, "area": "ciencias", "t": "Investigar y experimentar en el campo de la mecánica, la óptica, la física nuclear, etc.", "c": ["fisica"] },
+  { "id": 2, "area": "ciencias", "t": "Estudiar la composición y estructura de la atmósfera y los astros (planetas, satélites, etc.).", "c": ["fisica"] },
+  { "id": 3, "area": "ciencias", "t": "Trabajar como analista clínico.", "c": ["quimica", "medicina"] },
+  { "id": 4, "area": "tecnologia", "t": "Proyectar y dirigir la construcción de edificios. Preparar los planos de edificios o zonas completas de la ciudad (barrios, parques, zonas comerciales, etc.).", "c": ["ing-civil", "arquitectura"] },
+  { "id": 5, "area": "arte", "t": "Ser arquitecto.", "c": ["arquitectura"] },
+  { "id": 6, "area": "salud", "t": "Diagnosticar y tratar enfermedades del cuerpo humano.", "c": ["medicina"] },
+  { "id": 7, "area": "salud", "t": "Ser médico.", "c": ["medicina"] },
+  { "id": 8, "area": "salud", "t": "Ser farmacéutico.", "c": ["medicina", "quimica"] },
+  { "id": 9, "area": "educacion", "t": "Investigar los orígenes de la raza humana consultando restos antiguos. Proyectar excavaciones para descubrir restos del pasado.", "c": ["sociologia"] },
+  { "id": 10, "area": "educacion", "t": "Ejercer la profesión de antropólogo.", "c": ["sociologia"] },
+  { "id": 11, "area": "derecho", "t": "Escribir novelas, cuentos, relatos u obras literarias para su publicación.", "c": ["periodismo", "comunicacion"] },
+  { "id": 12, "area": "derecho", "t": "Ser escritor profesional.", "c": ["periodismo", "comunicacion"] },
+  { "id": 13, "area": "educacion", "t": "Dar clases en un colegio, en un instituto o en la universidad.", "c": ["educacion"] },
+  { "id": 14, "area": "educacion", "t": "Dar clase a niños ciegos, sordos o mentalmente deficientes, utilizando procedimientos especiales.", "c": ["educacion", "trabajo-social"] },
+  { "id": 15, "area": "educacion", "t": "Trabajar como profesor.", "c": ["educacion"] },
+  { "id": 16, "area": "derecho", "t": "Formar parte del gobierno de un país. Intervenir en debates, preparación de leyes, decretos, etc.", "c": ["derecho"] },
+  { "id": 17, "area": "derecho", "t": "Ser abogado.", "c": ["derecho"] },
+  { "id": 18, "area": "negocios", "t": "Asesorar sobre problemas contables y financieros. Organizar y dirigir los servicios de control de presupuestos y contabilidad.", "c": ["contabilidad", "administracion"] },
+  { "id": 19, "area": "negocios", "t": "Ejercer la profesión de banquero.", "c": ["economia", "administracion"] },
+  { "id": 20, "area": "negocios", "t": "Ser empresario.", "c": ["administracion", "marketing"] },
+  { "id": 21, "area": "educacion", "t": "Proyectar y organizar actividades turísticas para ofrecérselas a los clientes.", "c": ["turismo"] },
+  { "id": 22, "area": "negocios", "t": "Trabajar como agente de seguros.", "c": ["administracion"] },
+  { "id": 23, "area": "negocios", "t": "Realizar anotaciones contables, preparar relaciones de pagos y cobros. Cobrar, pagar y comprobar que esto se ha hecho correctamente.", "c": ["contabilidad"] },
+  { "id": 24, "area": "negocios", "t": "Ser cajero de una empresa o de un banco.", "c": ["contabilidad"] },
+  { "id": 25, "area": "salud", "t": "Observar y analizar la actuación de los deportistas y enseñarles técnicas para remediar sus fallos.", "c": ["nutricion"] },
+  { "id": 26, "area": "naturaleza", "t": "Cuidar caballos y prepararlos para las carreras.", "c": ["veterinaria"] },
+  { "id": 27, "area": "derecho", "t": "Ser árbitro de fútbol.", "c": ["derecho"] },
+  { "id": 28, "area": "naturaleza", "t": "Criar en un acuario crustáceos, peces y moluscos. Organizar, controlar y administrar todos los aspectos de esta explotación.", "c": ["biologia-marina"] },
+  { "id": 29, "area": "naturaleza", "t": "Organizar y explotar una hacienda agrícola o forestal para obtener productos de la tierra y venderlos.", "c": ["agronomia"] },
+  { "id": 30, "area": "naturaleza", "t": "Realizar el trabajo de ganadero profesional.", "c": ["veterinaria", "agronomia"] },
+  { "id": 31, "area": "arte", "t": "Actuar en representaciones teatrales, rodajes de cine o televisión. Aprender un papel, ensayar e interpretar el personaje.", "c": ["audiovisual"] },
+  { "id": 32, "area": "arte", "t": "Tocar uno o varios instrumentos musicales actuando como solista o formando parte de una orquesta o de un grupo musical.", "c": ["audiovisual"] },
+  { "id": 33, "area": "arte", "t": "Ser bailarín profesional.", "c": ["audiovisual"] },
+  { "id": 34, "area": "arte", "t": "Crear y realizar dibujos acompañándolos con frases. Realizar ilustraciones para los libros.", "c": ["diseño-grafico"] },
+  { "id": 35, "area": "arte", "t": "Diseñar prendas de vestir, complementos (zapatos, bolsos, cinturones, etc.) o joyas.", "c": ["moda", "diseño-grafico"] },
+  { "id": 36, "area": "arte", "t": "Realizar el trabajo de decorador.", "c": ["arquitectura"] },
+  { "id": 37, "area": "derecho", "t": "Proteger a las personas que puedan encontrarse en un local, evitando que se cometan hechos delictivos en el mismo.", "c": ["derecho"] },
+  { "id": 38, "area": "derecho", "t": "Prevenir o apagar incendios, proteger o salvar a las personas durante estos. Estudiar los riesgos que puedan producirlos, para eliminarlos.", "c": ["derecho"] },
+  { "id": 39, "area": "derecho", "t": "Ser agente de seguridad.", "c": ["derecho"] },
+  { "id": 40, "area": "educacion", "t": "Hacer canotaje grupal o individual (kayak).", "c": ["turismo"] },
+  { "id": 41, "area": "arte", "t": "Realizar en un circo ejercicios con animales adiestrados (leones, etc.) o actuar en un trapecio.", "c": ["audiovisual"] },
+  { "id": 42, "area": "ciencias", "t": "Ser astronauta.", "c": ["fisica"] },
+  { "id": 43, "area": "tecnologia", "t": "Construir edificios y obras colocando ladrillos, puertas, cañerías, instalaciones eléctricas, etc.", "c": ["ing-civil"] },
+  { "id": 44, "area": "arte", "t": "Manejar y controlar el equipo y los aparatos transmisores en emisoras de radio y televisión.", "c": ["audiovisual", "comunicacion"] },
+  { "id": 45, "area": "tecnologia", "t": "Ejercer la profesión de carpintero.", "c": ["ing-civil"] },
+  { "id": 46, "area": "ciencias", "t": "Hacer pronósticos sobre la dirección de las masas de aire, temperatura y humedad del ambiente.", "c": ["fisica", "ambiental"] },
+  { "id": 47, "area": "ciencias", "t": "Trabajar como astrónomo profesional.", "c": ["fisica"] },
+  { "id": 48, "area": "ciencias", "t": "Ejercer la profesión de biólogo.", "c": ["biologia"] },
+  { "id": 49, "area": "tecnologia", "t": "Proyectar maquinaria para cultivos agrarios o para ganadería y dirigir su construcción.", "c": ["ing-industrial", "agronomia"] },
+  { "id": 50, "area": "negocios", "t": "Ser capitán de barco.", "c": ["administracion"] },
+  { "id": 51, "area": "salud", "t": "Curar por medio de ejercicios físicos o de masajes algunas enfermedades, por ejemplo, parálisis, torceduras, enfermedades nerviosas, etc.", "c": ["enfermeria", "medicina"] },
+  { "id": 52, "area": "naturaleza", "t": "Ser veterinario.", "c": ["veterinaria"] },
+  { "id": 53, "area": "educacion", "t": "Realizar investigaciones sobre la distribución de las razas humanas y la organización política, social y económica de determinadas zonas.", "c": ["sociologia"] },
+  { "id": 54, "area": "educacion", "t": "Realizar investigaciones y estudios sobre teología (ciencia que trata de Dios).", "c": ["educacion"] },
+  { "id": 55, "area": "educacion", "t": "Ejercer la profesión de arqueólogo.", "c": ["sociologia"] },
+  { "id": 56, "area": "derecho", "t": "Coordinar la redacción de una publicación (revista, periódico, etc.) examinando los trabajos que se presenten y seleccionando los que se van a publicar. Determinar su colocación en la página. Redactar los titulares, etc.", "c": ["periodismo", "comunicacion"] },
+  { "id": 57, "area": "derecho", "t": "Ser novelista.", "c": ["periodismo", "comunicacion"] },
+  { "id": 58, "area": "educacion", "t": "Preparar pruebas, exámenes y evaluaciones y calificar a los alumnos que los realizan.", "c": ["educacion"] },
+  { "id": 59, "area": "salud", "t": "Trabajar como rehabilitador de adictos.", "c": ["psicologia"] },
+  { "id": 60, "area": "educacion", "t": "Realizar el trabajo de orientador escolar.", "c": ["psicologia", "educacion"] },
+  { "id": 61, "area": "derecho", "t": "Intervenir en contratos y testamentos. Autorizar con tu firma escrituras y contratos.", "c": ["derecho"] },
+  { "id": 62, "area": "educacion", "t": "Trabajar como asistente social.", "c": ["trabajo-social"] },
+  { "id": 63, "area": "negocios", "t": "Dirigir las actividades de un banco o participar en ellas. Otorgar créditos, invertir dinero, etc.", "c": ["economia", "administracion"] },
+  { "id": 64, "area": "negocios", "t": "Ser economista.", "c": ["economia"] },
+  { "id": 65, "area": "negocios", "t": "Visitar a los profesionales de la medicina para mostrarles productos farmacéuticos, teniendo la preparación teórica y los conocimientos necesarios para explicar sus características.", "c": ["marketing", "quimica"] },
+  { "id": 66, "area": "educacion", "t": "Recibir a los clientes de un hotel o restaurante. Proporcionarles la información que necesitan.", "c": ["turismo"] },
+  { "id": 67, "area": "negocios", "t": "Trabajar como director de ventas.", "c": ["marketing", "administracion"] },
+  { "id": 68, "area": "negocios", "t": "Organizar las tareas de los empleados del departamento administrativo, distribuyendo el trabajo y controlando su realización.", "c": ["administracion"] },
+  { "id": 69, "area": "tecnologia", "t": "Trabajar como técnico de computadora.", "c": ["ing-software", "mecatronica"] },
+  { "id": 70, "area": "salud", "t": "Realizar ejercicios físicos bajo las órdenes de un entrenador o de un preparador.", "c": ["nutricion"] },
+  { "id": 71, "area": "salud", "t": "Entrenar a deportistas o equipos para perfeccionar sus conocimientos y aptitudes y mejorar la práctica del deporte.", "c": ["nutricion"] },
+  { "id": 72, "area": "salud", "t": "Trabajar como entrenador deportivo.", "c": ["nutricion"] },
+  { "id": 73, "area": "naturaleza", "t": "Dirigir los trabajos de una explotación forestal, determinar los árboles que se han de plantar, podar o trasladar y el momento más adecuado de hacerlo.", "c": ["agronomia", "ambiental"] },
+  { "id": 74, "area": "naturaleza", "t": "Criar ganado (ovejas, vacas, etc.) para aprovechar su carne, lana, leche u otros productos.", "c": ["veterinaria", "agronomia"] },
+  { "id": 75, "area": "naturaleza", "t": "Trabajar como director de un zoológico.", "c": ["veterinaria", "biologia"] },
+  { "id": 76, "area": "arte", "t": "Crear y escribir composiciones y canciones.", "c": ["audiovisual"] },
+  { "id": 77, "area": "arte", "t": "Dar recitales de canto o de música, como solista o formando parte de un grupo.", "c": ["audiovisual"] },
+  { "id": 78, "area": "arte", "t": "Ser actor profesional.", "c": ["audiovisual"] },
+  { "id": 79, "area": "arte", "t": "Restaurar cuadros, muebles y obras de arte, determinando qué tipo de reparación necesitan.", "c": ["diseño-grafico"] },
+  { "id": 80, "area": "arte", "t": "Crear esculturas con madera, arcilla, metal, etc. Crear pinturas figurativas o abstractas utilizando colores al óleo, acuarela u otros procedimientos.", "c": ["diseño-grafico"] },
+  { "id": 81, "area": "arte", "t": "Ser dibujante profesional.", "c": ["diseño-grafico"] },
+  { "id": 82, "area": "derecho", "t": "Detener a los que cometen delitos, perseguirlos y ponerlos a disposición de la autoridad judicial.", "c": ["derecho"] },
+  { "id": 83, "area": "derecho", "t": "Pertenecer al ejército y prestar servicio en organismos y establecimientos militares.", "c": ["derecho"] },
+  { "id": 84, "area": "derecho", "t": "Ser policía.", "c": ["derecho"] },
+  { "id": 85, "area": "ciencias", "t": "Descender a cavernas profundas para estudiar las características de la tierra.", "c": ["fisica", "ambiental"] },
+  { "id": 86, "area": "derecho", "t": "Investigar con carácter privado casos criminales o robos para descubrir a los autores.", "c": ["derecho"] },
+  { "id": 87, "area": "naturaleza", "t": "Ser submarinista profesional.", "c": ["biologia-marina"] },
+  { "id": 88, "area": "arte", "t": "Confeccionar ropa según un modelo.", "c": ["moda"] },
+  { "id": 89, "area": "tecnologia", "t": "Ajustar maquinaria e instalar equipos eléctricos o electrónicos en edificios, fábricas, tiendas, etc.", "c": ["mecatronica", "ing-civil"] },
+  { "id": 90, "area": "tecnologia", "t": "Ejercer la profesión de electricista.", "c": ["mecatronica", "ing-civil"] },
+  { "id": 91, "area": "naturaleza", "t": "Estudiar la vida vegetal (árboles y plantas). Hacer experimentos con los cultivos.", "c": ["agronomia", "biologia"] },
+  { "id": 92, "area": "naturaleza", "t": "Trabajar como geólogo profesional.", "c": ["ambiental"] },
+  { "id": 93, "area": "negocios", "t": "Coordinar las actividades a bordo de un barco. Dirigir las maniobras de entrada y salida de puerto.", "c": ["administracion"] },
+  { "id": 94, "area": "tecnologia", "t": "Aplicar la informática para analizar necesidades y problemas. Elaborar programas para computadora.", "c": ["ing-software"] },
+  { "id": 95, "area": "tecnologia", "t": "Ser ingeniero.", "c": ["ing-industrial", "ing-civil"] },
+  { "id": 96, "area": "salud", "t": "Aplicar los conocimientos de medicina para el tratamiento de las afecciones dentales. Localizar lesiones de la dentadura, empastes, etc.", "c": ["medicina"] },
+  { "id": 97, "area": "salud", "t": "Ejercer la profesión de auxiliar de enfermería.", "c": ["enfermeria"] },
+  { "id": 98, "area": "educacion", "t": "Difundir una doctrina religiosa, en el país propio o en el extranjero. Prestar desinteresadamente servicios educativos de ayuda, médicos, etc.", "c": ["trabajo-social", "educacion"] },
+  { "id": 99, "area": "educacion", "t": "Ser sacerdote.", "c": ["trabajo-social"] },
+  { "id": 100, "area": "arte", "t": "Trabajar como conservador de museos profesionales.", "c": ["diseño-grafico"] },
+  { "id": 101, "area": "derecho", "t": "Entrevistar a personas para publicar sus respuestas en la prensa, en la radio o en la televisión.", "c": ["periodismo"] },
+  { "id": 102, "area": "arte", "t": "Ser guionista de cine o de televisión.", "c": ["audiovisual"] },
+  { "id": 103, "area": "salud", "t": "Determinar qué personas son adecuadas para realizar determinados estudios o trabajos, estudiando sus aptitudes y su personalidad.", "c": ["psicologia"] },
+  { "id": 104, "area": "educacion", "t": "Trabajar como profesor de educación especial.", "c": ["educacion"] },
+  { "id": 105, "area": "derecho", "t": "Representar a tu país o a tu gobierno en otros países. Proteger los derechos de los compatriotas que viven en el extranjero.", "c": ["relaciones", "derecho"] },
+  { "id": 106, "area": "derecho", "t": "Intervenir ante los tribunales de justicia en nombre de la ley, representando a un cliente o al Estado.", "c": ["derecho"] },
+  { "id": 107, "area": "derecho", "t": "Ser diplomático.", "c": ["relaciones", "derecho"] },
+  { "id": 108, "area": "negocios", "t": "Dirigir un establecimiento comercial propio, organizando y planificando las operaciones de compra y venta de mercancías.", "c": ["administracion", "marketing"] },
+  { "id": 109, "area": "negocios", "t": "Ser gerente de una empresa.", "c": ["administracion"] },
+  { "id": 110, "area": "negocios", "t": "Proyectar, crear o diseñar anuncios publicitarios.", "c": ["marketing", "diseño-grafico"] },
+  { "id": 111, "area": "derecho", "t": "Trabajar como profesional de relaciones públicas.", "c": ["relaciones", "comunicacion"] },
+  { "id": 112, "area": "negocios", "t": "Ser vendedor profesional.", "c": ["marketing"] },
+  { "id": 113, "area": "negocios", "t": "En las ventas de mercancías, recibir el dinero que entregan los clientes y devolver el cambio. Utilizar máquinas registradoras y entregar facturas de las cantidades recibidas.", "c": ["contabilidad"] },
+  { "id": 114, "area": "negocios", "t": "Ser teleoperador.", "c": ["administracion"] },
+  { "id": 115, "area": "negocios", "t": "Dirigir las competencias deportivas y aplicar las reglas establecidas para cada caso.", "c": ["administracion"] },
+  { "id": 116, "area": "salud", "t": "Ser atleta profesional.", "c": ["nutricion"] },
+  { "id": 117, "area": "salud", "t": "Ejercer la profesión de preparador físico.", "c": ["nutricion"] },
+  { "id": 118, "area": "naturaleza", "t": "Preparar redes, dirigir tareas de pesca, capturar pescado y llevarlo a puerto para su venta.", "c": ["biologia-marina", "agronomia"] },
+  { "id": 119, "area": "naturaleza", "t": "Ser ingeniero forestal.", "c": ["agronomia", "ambiental"] },
+  { "id": 120, "area": "naturaleza", "t": "Trabajar como agricultor profesional.", "c": ["agronomia"] },
+  { "id": 121, "area": "arte", "t": "Dirigir una orquesta, banda de música o conjunto. Elegir las composiciones que se van a interpretar.", "c": ["audiovisual"] },
+  { "id": 122, "area": "arte", "t": "Ser cantante profesional.", "c": ["audiovisual"] },
+  { "id": 123, "area": "arte", "t": "Ser compositor.", "c": ["audiovisual"] },
+  { "id": 124, "area": "arte", "t": "Manejar cámaras de cine o de televisión siguiendo el desarrollo de las escenas.", "c": ["audiovisual"] },
+  { "id": 125, "area": "arte", "t": "Ser escultor.", "c": ["diseño-grafico"] },
+  { "id": 126, "area": "arte", "t": "Trabajar como fotógrafo profesional.", "c": ["audiovisual", "diseño-grafico"] },
+  { "id": 127, "area": "derecho", "t": "Prestar servicios de protección, seguridad y vigilancia en haciendas, establecimientos, oficinas, etc.", "c": ["derecho"] },
+  { "id": 128, "area": "derecho", "t": "Ser bombero.", "c": ["derecho"] },
+  { "id": 129, "area": "derecho", "t": "Trabajar como seguridad en el palacio de justicia.", "c": ["derecho"] },
+  { "id": 130, "area": "tecnologia", "t": "Conducir autos a gran velocidad participando en carreras y competencias.", "c": ["ing-industrial"] },
+  { "id": 131, "area": "derecho", "t": "Ser detective profesional.", "c": ["derecho"] },
+  { "id": 132, "area": "tecnologia", "t": "Ser piloto de carreras.", "c": ["ing-industrial"] },
+  { "id": 133, "area": "tecnologia", "t": "Manejar máquinas para fabricar hilos o tejidos de punto.", "c": ["ing-industrial"] },
+  { "id": 134, "area": "arte", "t": "Ejercer la profesión de modista o sastre.", "c": ["moda"] },
+  { "id": 135, "area": "tecnologia", "t": "Trabajar como albañil profesional.", "c": ["ing-civil"] },
+  { "id": 136, "area": "ciencias", "t": "Investigar por medio de la ciencia estadística. Realizar estudios en el campo de las matemáticas.", "c": ["matematica", "economia"] },
+  { "id": 137, "area": "ciencias", "t": "Ejercer la profesión de matemático.", "c": ["matematica"] },
+  { "id": 138, "area": "tecnologia", "t": "Conducir aviones, disponer las operaciones de despegue, aterrizaje y vuelo. Fijar el rumbo y vigilar los instrumentos del avión.", "c": ["ing-industrial"] },
+  { "id": 139, "area": "tecnologia", "t": "Ser controlador aéreo.", "c": ["ing-industrial"] },
+  { "id": 140, "area": "tecnologia", "t": "Ser piloto de avión.", "c": ["ing-industrial"] },
+  { "id": 141, "area": "naturaleza", "t": "Diagnosticar, prevenir y tratar las enfermedades que padezcan los animales. Administrarles los medicamentos necesarios.", "c": ["veterinaria"] },
+  { "id": 142, "area": "salud", "t": "Ser dentista.", "c": ["medicina"] },
+  { "id": 143, "area": "educacion", "t": "Realizar estudios e investigaciones sobre la actuación del hombre en el pasado y en el presente.", "c": ["sociologia"] },
+  { "id": 144, "area": "educacion", "t": "Ser historiador.", "c": ["sociologia"] },
+  { "id": 145, "area": "derecho", "t": "Analizar las cualidades (estéticas, de expresión, etc.) de obras literarias, artísticas, teatrales o musicales y escribir una crítica expresando el juicio que te has formado sobre ellas.", "c": ["periodismo", "comunicacion"] },
+  { "id": 146, "area": "derecho", "t": "Redactar noticias y comentar informaciones para publicarlas en la prensa o difundirlas por radio o por televisión.", "c": ["periodismo"] },
+  { "id": 147, "area": "derecho", "t": "Trabajar como locutor o presentador de radio o televisión.", "c": ["comunicacion", "periodismo"] },
+  { "id": 148, "area": "salud", "t": "Estudiar la conducta de las personas. Investigar problemas psicológicos en el campo de la educación, de la medicina o del trabajo.", "c": ["psicologia"] },
+  { "id": 149, "area": "educacion", "t": "Realizar el trabajo de psicólogo escolar.", "c": ["psicologia", "educacion"] },
+  { "id": 150, "area": "educacion", "t": "Investigar la naturaleza de los problemas de las personas, teniendo en cuenta los factores sociales, económicos, etc., y las relaciones de las sociedades humanas.", "c": ["sociologia", "trabajo-social"] },
+  { "id": 151, "area": "educacion", "t": "Ejercer la profesión de sociólogo.", "c": ["sociologia"] },
+  { "id": 152, "area": "derecho", "t": "Ser notario.", "c": ["derecho"] },
+  { "id": 153, "area": "negocios", "t": "Establecer el plan de una empresa, teniendo en cuenta su situación, resultados y perspectivas futuras.", "c": ["administracion", "economia"] },
+  { "id": 154, "area": "negocios", "t": "Trabajar como auditor profesional.", "c": ["contabilidad"] },
+  { "id": 155, "area": "negocios", "t": "Contratar pólizas de seguros. Entrevistarse con el cliente, determinar la clase de seguro que necesita y formalizar las pólizas.", "c": ["administracion", "marketing"] },
+  { "id": 156, "area": "negocios", "t": "Ejercer la profesión de publicista.", "c": ["marketing"] },
+  { "id": 157, "area": "negocios", "t": "Ordenar, clasificar y archivar documentos y facilitárselos a los jefes cuando lo soliciten. Atender las llamadas telefónicas.", "c": ["administracion"] },
+  { "id": 158, "area": "negocios", "t": "Organizar y controlar la recepción, almacenamiento y expedición de mercancías, anotando las entradas y las salidas.", "c": ["administracion"] },
+  { "id": 159, "area": "negocios", "t": "Trabajar como digitador.", "c": ["administracion"] },
+  { "id": 160, "area": "salud", "t": "Participar en competiciones deportivas de diverso tipo.", "c": ["nutricion"] },
+  { "id": 161, "area": "naturaleza", "t": "Trabajar como cuidador de caballos de carreras.", "c": ["veterinaria"] },
+  { "id": 162, "area": "salud", "t": "Ser entrenador de fútbol.", "c": ["nutricion"] },
+  { "id": 163, "area": "naturaleza", "t": "Cultivar hortalizas, flores o árboles para comercializar sus productos.", "c": ["agronomia"] },
+  { "id": 164, "area": "naturaleza", "t": "Trabajar como director de una granja ganadera.", "c": ["agronomia", "administracion"] },
+  { "id": 165, "area": "naturaleza", "t": "Ser ingeniero agrónomo.", "c": ["agronomia"] },
+  { "id": 166, "area": "arte", "t": "Idear pasos de baile y enseñar a los bailarines a ejecutarlos. Dirigir los ensayos y representaciones. Bailar en representaciones públicas (teatros, etc.).", "c": ["audiovisual"] },
+  { "id": 167, "area": "arte", "t": "Ser coreógrafo profesional.", "c": ["audiovisual"] },
+  { "id": 168, "area": "arte", "t": "Ser músico.", "c": ["audiovisual"] },
+  { "id": 169, "area": "arte", "t": "Realizar bocetos para amueblar y decorar casas, edificios públicos o teatros. Proyectar la decoración de escaparates.", "c": ["arquitectura", "diseño-grafico"] },
+  { "id": 170, "area": "arte", "t": "Ser pintor artístico.", "c": ["diseño-grafico"] },
+  { "id": 171, "area": "arte", "t": "Trabajar como diseñador de moda.", "c": ["moda"] },
+  { "id": 172, "area": "derecho", "t": "Prevenir, mantener y restaurar la seguridad y el orden público. Velar por la seguridad de las personas y de sus bienes.", "c": ["derecho"] },
+  { "id": 173, "area": "derecho", "t": "Trabajar como oficial de prisiones.", "c": ["derecho"] },
+  { "id": 174, "area": "salud", "t": "Ser salvavidas.", "c": ["enfermeria"] },
+  { "id": 175, "area": "ciencias", "t": "Participar en viajes espaciales, tanto en su preparación como en su realización. Tripular cohetes.", "c": ["fisica"] },
+  { "id": 176, "area": "educacion", "t": "Ser instructor de canotaje.", "c": ["turismo"] },
+  { "id": 177, "area": "arte", "t": "Ser trapecista profesional.", "c": ["audiovisual"] },
+  { "id": 178, "area": "tecnologia", "t": "Preparar y tratar la madera para obtener tablas y tableros o pasta de papel.", "c": ["ing-industrial"] },
+  { "id": 179, "area": "tecnologia", "t": "Ejercer la profesión de gasfitero.", "c": ["ing-civil"] },
+  { "id": 180, "area": "arte", "t": "Trabajar como tejedor.", "c": ["moda"] },
+  { "id": 181, "area": "ciencias", "t": "Realizar experimentos y análisis para estudiar fenómenos químicos y la composición de sustancias.", "c": ["quimica"] },
+  { "id": 182, "area": "ciencias", "t": "Ejercer la profesión de físico.", "c": ["fisica"] },
+  { "id": 183, "area": "tecnologia", "t": "Estudiar, proyectar y construir puentes, presas, túneles, instalaciones telegráficas, fábricas, etc.", "c": ["ing-civil"] },
+  { "id": 184, "area": "tecnologia", "t": "Ser maestro de obra.", "c": ["ing-civil"] },
+  { "id": 185, "area": "salud", "t": "Realizar intervenciones quirúrgicas para curar enfermedades o accidentes.", "c": ["medicina"] },
+  { "id": 186, "area": "ciencias", "t": "Investigar en el laboratorio sobre las causas del desarrollo de las enfermedades.", "c": ["quimica", "biologia"] },
+  { "id": 187, "area": "salud", "t": "Ejercer la profesión de fisioterapeuta.", "c": ["enfermeria"] },
+  { "id": 188, "area": "educacion", "t": "Acompañar a los visitantes de un museo o de los monumentos de una ciudad o un país informándoles, en su idioma, de las características importantes de los mismos.", "c": ["turismo"] },
+  { "id": 189, "area": "educacion", "t": "Ser filósofo.", "c": ["sociologia"] },
+  { "id": 190, "area": "derecho", "t": "Revisar las traducciones de textos que se van a publicar para mejorar su calidad.", "c": ["comunicacion"] },
+  { "id": 191, "area": "derecho", "t": "Ser periodista.", "c": ["periodismo"] },
+  { "id": 192, "area": "derecho", "t": "Trabajar como traductor profesional.", "c": ["comunicacion", "relaciones"] },
+  { "id": 193, "area": "salud", "t": "Aplicar pruebas psicológicas para determinar la inteligencia, las aptitudes y la personalidad de las personas. Establecer tratamientos para resolver o mejorar problemas emocionales o de adaptación.", "c": ["psicologia"] },
+  { "id": 194, "area": "educacion", "t": "Ser profesor de universidad.", "c": ["educacion"] },
+  { "id": 195, "area": "derecho", "t": "Administrar justicia conforme a las leyes. Oír las alegaciones y dictar sentencias.", "c": ["derecho"] },
+  { "id": 196, "area": "derecho", "t": "Ser político profesional.", "c": ["derecho", "relaciones"] },
+  { "id": 197, "area": "negocios", "t": "Representar a una empresa en las negociaciones, decidir o aprobar los nombramientos del personal en la misma.", "c": ["administracion"] },
+  { "id": 198, "area": "negocios", "t": "Aplicar los principios de la teoría económica para solucionar problemas en empresas o en el país.", "c": ["economia"] },
+  { "id": 199, "area": "negocios", "t": "Trabajar como director financiero de una empresa.", "c": ["economia", "contabilidad"] },
+  { "id": 200, "area": "negocios", "t": "Vender haciendas, casas de playa, casas o departamentos, actuando como representante de los propietarios.", "c": ["marketing"] },
+  { "id": 201, "area": "educacion", "t": "Trabajar como recepcionista en un centro.", "c": ["turismo"] },
+  { "id": 202, "area": "negocios", "t": "Utilizar computadoras y máquinas para llevar las cuentas de una empresa, siguiendo instrucciones o manejando programas.", "c": ["contabilidad", "ing-software"] },
+  { "id": 203, "area": "negocios", "t": "Ejercer la profesión de administración.", "c": ["administracion"] },
+  { "id": 204, "area": "negocios", "t": "Trabajar como secretaria.", "c": ["administracion"] }
 ];
 
 export const OPCIONES = [
-  {
-    "id": "like",
-    "label": "Me gusta",
-    "pts": 2,
-    "icon": "ThumbsUp",
-    "tone": "ok"
-  },
-  {
-    "id": "duda",
-    "label": "Tengo dudas",
-    "pts": 1,
-    "icon": "HelpCircle",
-    "tone": "mid"
-  },
-  {
-    "id": "no",
-    "label": "No me gusta",
-    "pts": 0,
-    "icon": "ThumbsDown",
-    "tone": "no"
-  }
+  { "id": "like", "label": "Me gusta", "letra": "A", "pts": 2, "icon": "ThumbsUp", "tone": "ok" },
+  { "id": "duda", "label": "Me es indiferente o tengo dudas", "letra": "B", "pts": 1, "icon": "HelpCircle", "tone": "mid" },
+  { "id": "no", "label": "No me gusta", "letra": "C", "pts": 0, "icon": "ThumbsDown", "tone": "no" },
+  { "id": "unknown", "label": "No conozco esa actividad", "letra": "D", "pts": 0, "icon": "EyeOff", "tone": "dim" }
 ];
 
 
@@ -2900,12 +2928,15 @@ export const PLANS = [
     "moneda": "S/",
     "periodo": "para siempre",
     "features": [
-      { "t": "2 tests vocacionales", "on": true },
+      { "t": "2 tests vocacionales (204 preguntas)", "on": true },
       { "t": "Perfil de tus 8 áreas de afinidad", "on": true },
       { "t": "Carrera recomendada y las 32 carreras", "on": true },
       { "t": "Guardar carreras favoritas", "on": true },
-      { "t": "Tests ilimitados", "on": false },
-      { "t": "Becas y financiamiento", "on": true },
+      { "t": "1 curso del banco de preguntas", "on": true },
+      { "t": "4 becas con detalle completo", "on": true },
+      { "t": "Tests vocacionales ilimitados", "on": false },
+      { "t": "Banco completo y exámenes reales", "on": false },
+      { "t": "Las 8 becas y recomendador por perfil", "on": false },
       { "t": "Comparador de carreras", "on": false }
     ]
   },
@@ -2919,10 +2950,13 @@ export const PLANS = [
     "dias": 30,
     "destacado": true,
     "features": [
-      { "t": "Tests ilimitados", "on": true },
-      { "t": "Becas y financiamiento", "on": true },
+      { "t": "Tests vocacionales ilimitados", "on": true },
+      { "t": "Banco de preguntas completo (6 cursos)", "on": true },
+      { "t": "Prácticas cronometradas de 10 preguntas", "on": true },
+      { "t": "Exámenes reales de las universidades", "on": true },
+      { "t": "Las 8 becas y recomendador por perfil", "on": true },
       { "t": "Comparador de carreras", "on": true },
-      { "t": "Guardar carreras favoritas", "on": true },
+      { "t": "Becas y financiamiento", "on": true },
       { "t": "Soporte prioritario", "on": true },
       { "t": "Acceso anticipado a novedades", "on": true }
     ]
@@ -2996,38 +3030,3 @@ for (const c of CARRERAS) {
    Afinidad de cada pregunta con carreras concretas (además de su área).
    Permite recomendar una carrera distinta según los intereses que la persona
    marcó, incluso dentro de una misma área, en vez de repetir siempre la misma. */
-const CAREER_AFFINITY = {
-  1: ['enfermeria', 'medicina'],
-  2: ['mecatronica', 'ing-industrial'],
-  3: ['quimica', 'biologia'],
-  4: ['administracion', 'marketing'],
-  5: ['educacion'],
-  6: ['diseño-grafico', 'arquitectura'],
-  7: ['derecho'],
-  8: ['agronomia', 'veterinaria'],
-  9: ['medicina', 'biologia'],
-  10: ['ing-software', 'mecatronica'],
-  11: ['matematica', 'economia'],
-  12: ['contabilidad', 'economia'],
-  13: ['psicologia', 'trabajo-social'],
-  14: ['audiovisual', 'diseño-grafico'],
-  15: ['periodismo', 'comunicacion'],
-  16: ['veterinaria', 'biologia-marina'],
-  17: ['enfermeria', 'nutricion'],
-  18: ['ing-civil', 'arquitectura', 'ing-industrial'],
-  19: ['matematica', 'fisica'],
-  20: ['marketing', 'administracion'],
-  21: ['trabajo-social', 'sociologia'],
-  22: ['audiovisual', 'comunicacion'],
-  23: ['comunicacion', 'periodismo'],
-  24: ['agronomia', 'ambiental', 'turismo'],
-  25: ['medicina', 'quimica'],
-  26: ['mecatronica', 'ing-industrial'],
-  27: ['fisica', 'matematica'],
-  28: ['administracion', 'ing-industrial'],
-  29: ['psicologia', 'sociologia'],
-  30: ['moda', 'arquitectura', 'diseño-grafico'],
-  31: ['derecho', 'relaciones'],
-  32: ['ambiental', 'quimica']
-};
-for (const p of PREGUNTAS) { if (CAREER_AFFINITY[p.id]) p.c = CAREER_AFFINITY[p.id]; }

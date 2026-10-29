@@ -138,6 +138,14 @@ if (!metaGet(CAREER_IMAGES_KEY)) {
   metaSet(CAREER_IMAGES_KEY, new Date().toISOString());
 }
 
+/* Migración: reemplaza los planes guardados en el catálogo por los actuales
+   de data.js (features nuevas de Básico/Premium/Super). */
+const PLANS_SYNC_KEY = 'catalog_plans_v3';
+if (!metaGet(PLANS_SYNC_KEY)) {
+  for (const p of PLANS) upsertCatalogItem('plans', p.id, p);
+  metaSet(PLANS_SYNC_KEY, new Date().toISOString());
+}
+
 /* -------------------------- seguridad -------------------------- */
 function hashPassword(password, salt = crypto.randomBytes(16).toString('hex')) {
   const hash = crypto.scryptSync(password, salt, 64).toString('hex');
@@ -514,7 +522,7 @@ app.post('/api/account/test', auth, (req, res) => {
     if (v != null && [0, 1, 2].includes(v)) clean[p.id] = v;
   }
   if (Object.keys(clean).length !== PREGUNTAS.length) {
-    return res.status(400).json({ error: 'Debes responder las 32 preguntas.' });
+    return res.status(400).json({ error: `Debes responder las ${PREGUNTAS.length} preguntas.` });
   }
   req.user.answers = clean;
   req.user.unknown = Array.isArray(unknown) ? [...new Set(unknown)].filter((x) => AREAS.some((a) => a.id === x)) : [];
@@ -551,7 +559,7 @@ app.post('/api/account/subscribe', auth, (req, res) => {
   const plan = PLANS.find((p) => p.id === planId && p.id !== 'free');
   if (!plan) return res.status(400).json({ error: 'Plan no válido.' });
   const now = new Date();
-  const until = new Date(now.getTime() + (PLAN_DAYS[plan.id] || 30) * 24 * 60 * 60 * 1000);
+  const until = new Date(now.getTime() + (Number(plan.dias) || 30) * 24 * 60 * 60 * 1000);
   req.user.plan = plan.id;
   req.user.premiumSince = now.toISOString();
   req.user.planSince = now.toISOString();
@@ -664,6 +672,16 @@ app.delete('/api/admin/users/:email', adminAuth, (req, res) => {
   deleteUser(mail);
   backupUsers();
   res.json({ ok: true, email: mail });
+});
+
+/* Elimina una solicitud de institución desde el panel admin. */
+app.delete('/api/admin/requests/:id', adminAuth, (req, res) => {
+  const id = String(req.params.id || '');
+  const before = db.requests.length;
+  db.requests = db.requests.filter((r) => String(r.id) !== id);
+  if (db.requests.length === before) return res.status(404).json({ error: 'Esa solicitud ya no existe.' });
+  persist();
+  res.json({ ok: true, requests: db.requests.length });
 });
 
 app.get('/api/admin/purchases', adminAuth, (_req, res) => {

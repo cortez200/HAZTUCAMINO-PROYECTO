@@ -2,9 +2,10 @@
 import { Link } from 'react-router-dom';
 import {
   BECAS, tiposBeca, perfilesBeca, getBecasRecomendadas,
-  estadoPostulacion, becasPorUniversidad
+  estadoPostulacion, becasPorUniversidad, esBecaGratis, FREE_BECAS
 } from '../lib/becas.js';
-import { universidad } from '../lib/data.js';
+import { universidad, isPremium } from '../lib/data.js';
+import { useAuth } from '../lib/store.jsx';
 import { Card, Badge } from '../components/ui.jsx';
 import Icon from '../components/Icon.jsx';
 import UniLogo from '../components/UniLogo.jsx';
@@ -46,14 +47,30 @@ const FAQS = [
   }
 ];
 
-function BecaCard({ b }) {
+function BecaCard({ b, bloqueada = false }) {
   const cubre = b.cobertura.slice(0, 3).join(' · ');
   const extra = b.cobertura.length - 3;
   const estado = estadoPostulacion(b);
   const totalUnis = (b.universidades || []).length;
 
   return (
-    <Card className={`card-pad beca-tile${b.destacada ? ' is-featured' : ''}`}>
+    <Card className={`card-pad beca-tile${b.destacada ? ' is-featured' : ''}`} style={bloqueada ? { position: 'relative', overflow: 'hidden' } : undefined}>
+      {bloqueada && (
+        <div style={{ position: 'absolute', inset: 0, zIndex: 2, display: 'grid', placeItems: 'center', textAlign: 'center', padding: 18, background: 'rgba(255,255,255,.78)', backdropFilter: 'blur(4px)' }}>
+          <div>
+            <span style={{ width: 46, height: 46, borderRadius: 14, background: 'var(--primary-soft)', color: 'var(--primary)', display: 'grid', placeItems: 'center', margin: '0 auto 10px' }}>
+              <Icon name="Lock" size={22} />
+            </span>
+            <Badge tone="primary" icon="Sparkles">Contenido Premium</Badge>
+            <p className="small bold" style={{ margin: '10px 0 0', maxWidth: 240 }}>
+              Desbloquea esta y las {BECAS.length} becas con su detalle completo.
+            </p>
+            <Link to="/planes" className="btn btn-primary btn-sm" style={{ marginTop: 12 }}>
+              Ver planes <Icon name="ArrowRight" size={15} />
+            </Link>
+          </div>
+        </div>
+      )}
       <div className="beca-tile-top">
         <div className="row gap-6 wrap">
           <Badge tone="area">{b.tipo}</Badge>
@@ -108,6 +125,8 @@ function BecaCard({ b }) {
 }
 
 export default function Becas() {
+  const { account } = useAuth();
+  const premium = isPremium(account);
   const [tipo, setTipo] = useState('Todos');
   const [q, setQ] = useState('');
   const [perfil, setPerfil] = useState('todas');
@@ -242,11 +261,23 @@ export default function Becas() {
         <h2 className="section-title" style={{ margin: 0, fontSize: '1.3rem' }}>
           {perfil === 'todas' ? 'Todas las opciones' : 'Recomendadas para ti'}
         </h2>
-        <span className="small muted">{list.length} resultado{list.length === 1 ? '' : 's'}</span>
+        <div className="row gap-8 wrap" style={{ alignItems: 'center' }}>
+          <span className="small muted">
+            {list.length} resultado{list.length === 1 ? '' : 's'}
+            {!premium && ` · ves ${FREE_BECAS.length} de ${BECAS.length} becas`}
+          </span>
+          {!premium && (
+            <Link to="/planes" className="small bold row gap-4" style={{ color: 'var(--primary)' }}>
+              <Icon name="Sparkles" size={14} /> Desbloquea las {BECAS.length} con Premium
+            </Link>
+          )}
+        </div>
       </div>
 
       <div className="becas-grid">
-        {list.map((b) => <BecaCard key={b.id} b={b} />)}
+        {list.map((b) => (
+          <BecaCard key={b.id} b={b} bloqueada={!premium && !esBecaGratis(b.id)} />
+        ))}
       </div>
 
       {list.length === 0 && (

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { CARRERAS, area, universidad } from '../lib/data.js';
+import { CARRERAS, PREGUNTAS, area, universidad } from '../lib/data.js';
 import { areaScores, careerScores } from '../lib/scoring.js';
 import { useAuth } from '../lib/store.jsx';
 import { areaVars, Badge, Card, EmptyState } from '../components/ui.jsx';
@@ -28,6 +28,9 @@ export default function Resultados() {
   const rankedCareers = careerScores(account.answers || {}).filter((c) => c.score > 0);
   const careersByIds = rankedCareers.slice(0, 8);
   const recomendada = rankedCareers[0];
+  /* Resultado de la versión anterior del test (32 preguntas): se avisa para
+     que lo repita con el test actual de 204 preguntas. */
+  const desactualizado = PREGUNTAS.length > 0 && Object.keys(account.answers || {}).length !== PREGUNTAS.length;
   const recAr = recomendada ? area(recomendada.area) : null;
   const recDesde = recomendada?.universidades?.length ? Math.min(...recomendada.universidades.map((o) => o.min)) : null;
 
@@ -43,6 +46,20 @@ export default function Resultados() {
           <Link to="/carreras" className="btn btn-primary">Ver carreras</Link>
         </div>
       </div>
+
+      {/* Test de la versión anterior: pedir repetir con las 204 preguntas */}
+      {desactualizado && (
+        <Card className="card-pad mb-24" style={{ borderColor: 'var(--warn)', background: 'var(--warn-soft)' }}>
+          <div className="row gap-8 bold" style={{ color: 'var(--warn)' }}>
+            <Icon name="Sparkles" size={18} /> Actualizamos el test
+          </div>
+          <p className="small mt-8" style={{ color: 'var(--text-2)', maxWidth: 720, lineHeight: 1.55 }}>
+            Este resultado viene de la versión anterior del test. El nuevo tiene {PREGUNTAS.length} preguntas que afinan
+            mucho más tu perfil: repítelo para ver tu carrera recomendada con precisión real.
+          </p>
+          <div className="mt-16"><Link to="/test" className="btn btn-primary"><Icon name="RotateCcw" size={16} /> Repetir test</Link></div>
+        </Card>
+      )}
 
       {/* Carrera recomendada */}
       {!hasSignal && (
